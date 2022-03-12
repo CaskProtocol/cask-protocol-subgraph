@@ -1,0 +1,77 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: CaskSubscriptions
+    network: mumbai
+    source:
+      address: "0x4eA50557859A087c7Ba1E3dEE58ad9B8085Fc113"
+      abi: CaskSubscriptions
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - AdminChanged
+        - Upgraded
+        - Approval
+        - ApprovalForAll
+        - OwnershipTransferred
+        - Paused
+        - SubscriptionCanceled
+        - SubscriptionChangedDiscount
+        - SubscriptionChangedPlan
+        - SubscriptionCreated
+        - SubscriptionPastDue
+        - SubscriptionPaused
+        - SubscriptionPendingCancel
+        - SubscriptionPendingChangePlan
+        - SubscriptionRenewed
+        - SubscriptionResumed
+        - SubscriptionTrialEnded
+        - Transfer
+        - Unpaused
+      abis:
+        - name: CaskSubscriptions
+          file: ./abis/CaskSubscriptions.json
+      eventHandlers:
+        - event: AdminChanged(address,address)
+          handler: handleAdminChanged
+        - event: Upgraded(indexed address)
+          handler: handleUpgraded
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Paused(address)
+          handler: handlePaused
+        - event: SubscriptionCanceled(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionCanceled
+        - event: SubscriptionChangedDiscount(indexed address,indexed address,indexed uint256,bytes32,uint32,bytes32)
+          handler: handleSubscriptionChangedDiscount
+        - event: SubscriptionChangedPlan(indexed address,indexed address,indexed uint256,bytes32,uint32,uint32,bytes32)
+          handler: handleSubscriptionChangedPlan
+        - event: SubscriptionCreated(indexed address,indexed address,indexed uint256,bytes32,uint32,bytes32)
+          handler: handleSubscriptionCreated
+        - event: SubscriptionPastDue(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionPastDue
+        - event: SubscriptionPaused(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionPaused
+        - event: SubscriptionPendingCancel(indexed address,indexed address,indexed uint256,bytes32,uint32,uint32)
+          handler: handleSubscriptionPendingCancel
+        - event: SubscriptionPendingChangePlan(indexed address,indexed address,indexed uint256,bytes32,uint32,uint32)
+          handler: handleSubscriptionPendingChangePlan
+        - event: SubscriptionRenewed(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionRenewed
+        - event: SubscriptionResumed(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionResumed
+        - event: SubscriptionTrialEnded(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionTrialEnded
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+        - event: Unpaused(address)
+          handler: handleUnpaused
+      file: ./src/mapping.ts
