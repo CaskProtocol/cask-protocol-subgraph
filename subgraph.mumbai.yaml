@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 description: Cask is a decentralized non-custodial protocol for managing recurring payment agreements.
-repository: https://github.com/CaskProtocol/cask-subscriptions-subgraph
+repository: https://github.com/CaskProtocol/cask-protocol-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
@@ -21,7 +21,7 @@ dataSources:
         - CaskTransaction
         - CaskConsumer
         - CaskProvider
-        - CaskProviderPlan
+        - CaskSubscriptionPlan
       abis:
         - name: CaskSubscriptions
           file: ./abis/CaskSubscriptions.json
@@ -69,3 +69,7 @@ dataSources:
           handler: handleAssetDeposited
         - event: AssetWithdrawn(indexed address,indexed address,uint256,uint256,uint256)
           handler: handleAssetWithdrawn
+        - event: Payment(indexed address,indexed address,uint256,uint256,uint256,uint256,indexed address,uint256,uint256)
+          handler: handlePayment
+        - event: TransferValue(indexed address,indexed address,uint256,uint256)
+          handler: handleTransferValue

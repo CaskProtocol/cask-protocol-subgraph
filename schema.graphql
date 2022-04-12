@@ -5,6 +5,8 @@ type Cask @entity {
   totalDepositAmount: BigDecimal!
   totalWithdrawCount: BigInt!
   totalWithdrawAmount: BigDecimal!
+  totalProtocolFees: BigDecimal!
+  totalNetworkFees: BigDecimal!
 }
 
 type CaskUser @entity {
@@ -37,7 +39,7 @@ type CaskProvider @entity {
   activeSubscriptionCount: BigInt!
 }
 
-type CaskProviderPlan @entity {
+type CaskSubscriptionPlan @entity {
   id: ID!
   provider: CaskProvider!
   planId: Int!
@@ -65,7 +67,7 @@ type CaskSubscription @entity {
 
   currentOwner: CaskConsumer!
   provider: CaskProvider!
-  providerPlan: CaskProviderPlan!
+  plan: CaskSubscriptionPlan!
 
   createdAt: Int!
   renewAt: Int!

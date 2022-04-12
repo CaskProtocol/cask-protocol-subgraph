@@ -12,7 +12,7 @@ import {
     SubscriptionResumed,
     SubscriptionTrialEnded,
 } from "../types/CaskSubscriptions/CaskSubscriptions"
-import { CaskConsumer, CaskProvider, CaskProviderPlan, CaskSubscription, CaskTransaction } from "../types/schema"
+import { CaskConsumer, CaskProvider, CaskSubscriptionPlan, CaskSubscription, CaskTransaction } from "../types/schema"
 
 function findOrCreateProvider(providerAddress: Bytes, appearedAt: i32): CaskProvider {
     let provider = CaskProvider.load(providerAddress.toHex())
@@ -24,13 +24,13 @@ function findOrCreateProvider(providerAddress: Bytes, appearedAt: i32): CaskProv
     return provider
 }
 
-function findOrCreateProviderPlan(providerAddress: Bytes, planId: i32): CaskProviderPlan {
-    let providerPlan = CaskProviderPlan.load(providerAddress.toHex()+'-'+planId.toString())
-    if (!providerPlan) {
-        providerPlan = new CaskProviderPlan(providerAddress.toHex()+'-'+planId.toString())
-        providerPlan.save()
+function findOrCreateSubscriptionPlan(providerAddress: Bytes, planId: i32): CaskSubscriptionPlan {
+    let subscriptionPlan = CaskSubscriptionPlan.load(providerAddress.toHex()+'-'+planId.toString())
+    if (!subscriptionPlan) {
+        subscriptionPlan = new CaskSubscriptionPlan(providerAddress.toHex()+'-'+planId.toString())
+        subscriptionPlan.save()
     }
-    return providerPlan
+    return subscriptionPlan
 }
 
 function findOrCreateConsumer(consumerAddress: Bytes, appearedAt: i32): CaskConsumer {
@@ -63,7 +63,7 @@ export function handleSubscriptionCreated(event: SubscriptionCreated): void {
 
     const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
-    const plan = findOrCreateProviderPlan(event.params.provider, event.params.planId.toI32())
+    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId.toI32())
 
     let txn = new CaskTransaction(event.transaction.hash.toHex())
     txn.type = 'SubscriptionCreated'
@@ -84,6 +84,7 @@ export function handleSubscriptionCreated(event: SubscriptionCreated): void {
     subscription.status = subscriptionStatus(subscriptionInfo.value0.status)
     subscription.currentOwner = consumer.id
     subscription.provider = provider.id
+    subscription.plan = plan.id
     subscription.createdAt = subscriptionInfo.value0.createdAt.toI32()
     subscription.renewAt = subscriptionInfo.value0.renewAt.toI32()
     subscription.cancelAt = subscriptionInfo.value0.cancelAt.toI32()
@@ -125,8 +126,8 @@ export function handleSubscriptionChangedPlan(event: SubscriptionChangedPlan): v
 
     const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
-    const prevPlan = findOrCreateProviderPlan(event.params.provider, event.params.prevPlanId.toI32())
-    const plan = findOrCreateProviderPlan(event.params.provider, event.params.planId.toI32())
+    const prevPlan = findOrCreateSubscriptionPlan(event.params.provider, event.params.prevPlanId.toI32())
+    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId.toI32())
 
     let txn = new CaskTransaction(event.transaction.hash.toHex())
     txn.type = 'SubscriptionChangedPlan'
@@ -149,7 +150,7 @@ export function handleSubscriptionChangedPlan(event: SubscriptionChangedPlan): v
     }
 
     subscription.status = subscriptionStatus(subscriptionInfo.value0.status)
-    subscription.providerPlan = plan.id
+    subscription.plan = plan.id
     subscription.renewAt = subscriptionInfo.value0.renewAt.toI32()
 
     subscription.save()
@@ -166,7 +167,7 @@ export function handleSubscriptionPaused(event: SubscriptionPaused): void {
 
     const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
-    const plan = findOrCreateProviderPlan(event.params.provider, event.params.planId.toI32())
+    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId.toI32())
 
     let txn = new CaskTransaction(event.transaction.hash.toHex())
     txn.type = 'SubscriptionPaused'
@@ -194,7 +195,7 @@ export function handleSubscriptionResumed(event: SubscriptionResumed): void {
 
     const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
-    const plan = findOrCreateProviderPlan(event.params.provider, event.params.planId.toI32())
+    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId.toI32())
 
     let txn = new CaskTransaction(event.transaction.hash.toHex())
     txn.type = 'SubscriptionResumed'
@@ -300,7 +301,7 @@ export function handleSubscriptionCanceled(event: SubscriptionCanceled): void {
 
     const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
-    const plan = findOrCreateProviderPlan(event.params.provider, event.params.planId.toI32())
+    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId.toI32())
 
     let txn = new CaskTransaction(event.transaction.hash.toHex())
     txn.type = 'SubscriptionCanceled'
@@ -333,7 +334,7 @@ export function handleSubscriptionTrialEnded(event: SubscriptionTrialEnded): voi
 
     const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
-    const plan = findOrCreateProviderPlan(event.params.provider, event.params.planId.toI32())
+    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId.toI32())
 
     let txn = new CaskTransaction(event.transaction.hash.toHex())
     txn.type = 'SubscriptionTrialEnded'

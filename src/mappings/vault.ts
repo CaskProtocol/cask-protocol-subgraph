@@ -3,11 +3,13 @@ import {
     CaskVault,
     AssetDeposited,
     AssetWithdrawn,
+    Payment,
+    TransferValue
 } from "../types/CaskVault/CaskVault"
 import {
     scaleDown,
 } from './helpers/units';
-import {Cask, CaskProvider, CaskUser} from "../types/schema"
+import {Cask, CaskUser} from "../types/schema"
 
 
 const VAULT_DECIMALS = 18
@@ -62,4 +64,39 @@ export function handleAssetWithdrawn(event: AssetWithdrawn): void {
     user.withdrawCount = user.withdrawCount.plus(BigInt.fromI32(1))
     user.balance = user.balance.minus(withdrawAmount)
     user.save()
+}
+
+export function handlePayment(event: Payment): void {
+
+    const cask = loadCask()
+
+    let amount: BigDecimal = scaleDown(event.params.baseAssetAmount, VAULT_DECIMALS);
+    let protocolFeeAmount: BigDecimal = scaleDown(event.params.protocolFee, VAULT_DECIMALS);
+    let networkFeeAmount: BigDecimal = scaleDown(event.params.networkFee, VAULT_DECIMALS);
+
+    cask.totalProtocolFees = cask.totalProtocolFees.plus(protocolFeeAmount)
+    cask.totalNetworkFees = cask.totalNetworkFees.plus(networkFeeAmount)
+    cask.save()
+
+    const fromUser = findOrCreateUser(event.params.from, event.block.timestamp.toI32())
+    fromUser.balance = fromUser.balance.minus(amount)
+    fromUser.save()
+
+    const toUser = findOrCreateUser(event.params.to, event.block.timestamp.toI32())
+    toUser.balance = toUser.balance.plus(amount).minus(protocolFeeAmount).minus(networkFeeAmount)
+    toUser.save()
+}
+
+
+export function handleTransferValue(event: TransferValue): void {
+
+    let amount: BigDecimal = scaleDown(event.params.baseAssetAmount, VAULT_DECIMALS);
+
+    const fromUser = findOrCreateUser(event.params.from, event.block.timestamp.toI32())
+    fromUser.balance = fromUser.balance.minus(amount)
+    fromUser.save()
+
+    const toUser = findOrCreateUser(event.params.to, event.block.timestamp.toI32())
+    toUser.balance = toUser.balance.plus(amount)
+    toUser.save()
 }
