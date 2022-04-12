@@ -1,6 +1,92 @@
-type ExampleEntity @entity {
+type Consumer @entity {
   id: ID!
-  count: BigInt!
-  previousAdmin: Bytes! # address
-  newAdmin: Bytes! # address
+  address: Bytes
+  subscriptionCount: BigInt!
+  appearedAt: Int!
+
+  totalSubscriptionCount: BigInt!
+  activeSubscriptionCount: BigInt!
+}
+
+type Provider @entity {
+  id: ID!
+  address: Bytes
+  paymentAddress: Bytes
+  profileCid: String
+  appearedAt: Int!
+
+  totalSubscriptionCount: BigInt!
+  activeSubscriptionCount: BigInt!
+}
+
+type ProviderPlan @entity {
+  id: ID!
+  provider: Provider!
+  planId: Int!
+  period: Int!
+  price: BigDecimal!
+
+  totalSubscriptionCount: BigInt!
+  activeSubscriptionCount: BigInt!
+  canceledSubscriptionCount: BigInt!
+  pastDueSubscriptionCount: BigInt!
+  pausedSubscriptionCount: BigInt!
+}
+
+enum SubscriptionStatus {
+  None,
+  Trialing
+  Active
+  Paused
+  Canceled
+  PastDue
+}
+
+type Subscription @entity {
+  id: ID!
+  ref: Bytes
+  cid: String
+
+  currentOwner: Consumer!
+  provider: Provider!
+  providerPlan: ProviderPlan!
+
+  createdAt: Int!
+  renewAt: Int!
+  cancelAt: Int!
+
+  status: SubscriptionStatus!
+
+  renewCount: BigInt!
+  transferCount: BigInt!
+}
+
+
+enum TransactionType {
+ SubscriptionCreated
+ SubscriptionPlanChanged
+ SubscriptionPaused
+ SubscriptionResumed
+ SubscriptionPendingCancel
+ SubscriptionCanceled
+ SubscriptionRenewed
+ SubscriptionTrialEnded
+ SubscriptionPastDue
+ AssetDeposit
+ AssetWithdrawal
+}
+
+type Transaction @entity {
+  id: ID!
+  type: TransactionType!
+  timestamp: Int!
+
+  consumer: Consumer
+  provider: Provider
+
+  assetAddress: Bytes
+  assetName: String
+
+  amount: BigDecimal
+
 }

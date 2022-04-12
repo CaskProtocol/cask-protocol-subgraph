@@ -1,0 +1,16 @@
+mainnet:
+  network: mumbai
+  CaskSubscriptions:
+    address: "0x2a94919bC19B8a1Cb88e5E48f1274CE8D468e4Ab"
+    startBlock: 25528158
+  CaskVault:
+    address: "0xE412b1eD00e9a2959A7bfe78B47258f295fc5D90"
+    startBlock: 25528158
+mumbai:
+  network: mumbai
+  CaskSubscriptions:
+    address: "0x2a94919bC19B8a1Cb88e5E48f1274CE8D468e4Ab"
+    startBlock: 25528158
+  CaskVault:
+    address: "0xE412b1eD00e9a2959A7bfe78B47258f295fc5D90"
+    startBlock: 25528158

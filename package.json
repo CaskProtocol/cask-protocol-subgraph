@@ -2,9 +2,11 @@
   "name": "cask-subscriptions-subgraph",
   "license": "UNLICENSED",
   "scripts": {
-    "codegen": "graph codegen",
+    "codegen": "yarn generate-manifests && graph codegen --output-dir src/types/",
+    "generate-manifests": "ts-node ./scripts/generate-manifests",
     "build": "graph build",
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ CaskProtocol/cask-subscriptions-subgraph",
+    "deploy:mumbai": "graph deploy CaskProtocol/cask-subscriptions-subgraph subgraph.mumbai.yaml --node https://api.thegraph.com/deploy/",
     "create-local": "graph create --node http://localhost:8020/ CaskProtocol/cask-subscriptions-subgraph",
     "remove-local": "graph remove --node http://localhost:8020/ CaskProtocol/cask-subscriptions-subgraph",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 CaskProtocol/cask-subscriptions-subgraph"
@@ -12,5 +14,8 @@
   "dependencies": {
     "@graphprotocol/graph-cli": "0.28.0",
     "@graphprotocol/graph-ts": "0.26.0"
+  },
+  "devDependencies": {
+    "handlebars": "^4.7.7"
   }
 }
