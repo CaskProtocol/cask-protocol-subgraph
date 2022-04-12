@@ -6,6 +6,7 @@
     "generate-manifests": "ts-node ./scripts/generate-manifests",
     "build": "graph build",
     "deploy:mumbai": "graph deploy CaskProtocol/cask-protocol-mumbai subgraph.mumbai.yaml --node https://api.thegraph.com/deploy/",
+    "deploy:fuji": "graph deploy CaskProtocol/cask-protocol-fuji subgraph.fuji.yaml --node https://api.thegraph.com/deploy/",
     "deploy:polygon": "graph deploy CaskProtocol/cask-protocol-polygon subgraph.yaml --node https://api.thegraph.com/deploy/",
     "create-local": "graph create --node http://localhost:8020/ CaskProtocol/cask-protocol-subgraph",
     "remove-local": "graph remove --node http://localhost:8020/ CaskProtocol/cask-protocol-subgraph",

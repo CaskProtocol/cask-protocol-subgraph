@@ -14,3 +14,11 @@ mumbai:
   CaskVault:
     address: "0xE412b1eD00e9a2959A7bfe78B47258f295fc5D90"
     startBlock: 25788984
+fuji:
+  network: fuji
+  CaskSubscriptions:
+    address: "0x17052aC8938352AE478d681925c7FC7c73FE917F"
+    startBlock: 8477907
+  CaskVault:
+    address: "0x2B5f728dFd9389Ba81B4F46045f4CCc92b9c484e"
+    startBlock: 8477889
