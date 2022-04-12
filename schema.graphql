@@ -1,6 +1,25 @@
-type Consumer @entity {
+type Cask @entity {
   id: ID!
-  address: Bytes
+
+  totalDepositCount: BigInt!
+  totalDepositAmount: BigDecimal!
+  totalWithdrawCount: BigInt!
+  totalWithdrawAmount: BigDecimal!
+}
+
+type CaskUser @entity {
+  id: ID!
+  appearedAt: Int!
+
+  balance: BigDecimal!
+  depositCount: BigInt!
+  depositAmount: BigDecimal!
+  withdrawCount: BigInt!
+  withdrawAmount: BigDecimal!
+}
+
+type CaskConsumer @entity {
+  id: ID!
   subscriptionCount: BigInt!
   appearedAt: Int!
 
@@ -8,9 +27,8 @@ type Consumer @entity {
   activeSubscriptionCount: BigInt!
 }
 
-type Provider @entity {
+type CaskProvider @entity {
   id: ID!
-  address: Bytes
   paymentAddress: Bytes
   profileCid: String
   appearedAt: Int!
@@ -19,17 +37,15 @@ type Provider @entity {
   activeSubscriptionCount: BigInt!
 }
 
-type ProviderPlan @entity {
+type CaskProviderPlan @entity {
   id: ID!
-  provider: Provider!
+  provider: CaskProvider!
   planId: Int!
-  period: Int!
-  price: BigDecimal!
 
   totalSubscriptionCount: BigInt!
   activeSubscriptionCount: BigInt!
+  trialingSubscriptionCount: BigInt!
   canceledSubscriptionCount: BigInt!
-  pastDueSubscriptionCount: BigInt!
   pausedSubscriptionCount: BigInt!
 }
 
@@ -42,14 +58,14 @@ enum SubscriptionStatus {
   PastDue
 }
 
-type Subscription @entity {
+type CaskSubscription @entity {
   id: ID!
   ref: Bytes
   cid: String
 
-  currentOwner: Consumer!
-  provider: Provider!
-  providerPlan: ProviderPlan!
+  currentOwner: CaskConsumer!
+  provider: CaskProvider!
+  providerPlan: CaskProviderPlan!
 
   createdAt: Int!
   renewAt: Int!
@@ -65,6 +81,7 @@ type Subscription @entity {
 enum TransactionType {
  SubscriptionCreated
  SubscriptionPlanChanged
+ SubscriptionPendingChangePlan
  SubscriptionPaused
  SubscriptionResumed
  SubscriptionPendingCancel
@@ -76,13 +93,13 @@ enum TransactionType {
  AssetWithdrawal
 }
 
-type Transaction @entity {
+type CaskTransaction @entity {
   id: ID!
   type: TransactionType!
   timestamp: Int!
 
-  consumer: Consumer
-  provider: Provider
+  consumer: CaskConsumer
+  provider: CaskProvider
 
   assetAddress: Bytes
   assetName: String

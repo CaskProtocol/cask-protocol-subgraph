@@ -6,21 +6,22 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: CaskSubscriptions
-    network: mumbai
+    network: matic
     source:
       address: "0x2a94919bC19B8a1Cb88e5E48f1274CE8D468e4Ab"
       abi: CaskSubscriptions
+      startBlock: 27030431
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/subscriptions.ts
       entities:
-        - Subscription
-        - Transaction
-        - Consumer
-        - Provider
-        - ProviderPlan
+        - CaskSubscription
+        - CaskTransaction
+        - CaskConsumer
+        - CaskProvider
+        - CaskProviderPlan
       abis:
         - name: CaskSubscriptions
           file: ./abis/CaskSubscriptions.json
@@ -45,3 +46,26 @@ dataSources:
           handler: handleSubscriptionResumed
         - event: SubscriptionTrialEnded(indexed address,indexed address,indexed uint256,bytes32,uint32)
           handler: handleSubscriptionTrialEnded
+  - kind: ethereum/contract
+    name: CaskVault
+    network: matic
+    source:
+      address: "0xE412b1eD00e9a2959A7bfe78B47258f295fc5D90"
+      abi: CaskVault
+      startBlock: 27030431
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/vault.ts
+      entities:
+        - Cask
+        - CaskUser
+      abis:
+        - name: CaskVault
+          file: ./abis/CaskVault.json
+      eventHandlers:
+        - event: AssetDeposited(indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleAssetDeposited
+        - event: AssetWithdrawn(indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleAssetWithdrawn
