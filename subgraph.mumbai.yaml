@@ -10,7 +10,7 @@ dataSources:
     source:
       address: "0x2a94919bC19B8a1Cb88e5E48f1274CE8D468e4Ab"
       abi: CaskSubscriptions
-      startBlock: 25528158
+      startBlock: 25788984
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -52,7 +52,7 @@ dataSources:
     source:
       address: "0xE412b1eD00e9a2959A7bfe78B47258f295fc5D90"
       abi: CaskVault
-      startBlock: 25528158
+      startBlock: 25788984
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5

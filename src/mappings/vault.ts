@@ -9,7 +9,10 @@ import {
 } from './helpers/units';
 import {Cask, CaskProvider, CaskUser} from "../types/schema"
 
+
 const VAULT_DECIMALS = 18
+
+const CASK_ID = '1'
 
 function findOrCreateUser(userAddress: Bytes, appearedAt: i32): CaskUser {
     let user = CaskUser.load(userAddress.toHex())
@@ -21,9 +24,17 @@ function findOrCreateUser(userAddress: Bytes, appearedAt: i32): CaskUser {
     return user
 }
 
+function loadCask(): Cask {
+    let cask = Cask.load(CASK_ID)
+    if (cask == null) {
+        cask = new Cask(CASK_ID)
+    }
+    return cask
+}
+
 export function handleAssetDeposited(event: AssetDeposited): void {
 
-    const cask = Cask.load('1') as Cask
+    const cask = loadCask()
 
     let depositAmount: BigDecimal = scaleDown(event.params.baseAssetAmount, VAULT_DECIMALS);
     cask.totalDepositAmount = cask.totalDepositAmount.plus(depositAmount)
@@ -33,12 +44,13 @@ export function handleAssetDeposited(event: AssetDeposited): void {
     const user = findOrCreateUser(event.params.participant, event.block.timestamp.toI32())
     user.depositAmount = user.depositAmount.plus(depositAmount)
     user.depositCount = user.depositCount.plus(BigInt.fromI32(1))
+    user.balance = user.balance.plus(depositAmount)
     user.save()
 }
 
 export function handleAssetWithdrawn(event: AssetWithdrawn): void {
 
-    const cask = Cask.load('1') as Cask
+    const cask = loadCask()
 
     let withdrawAmount: BigDecimal = scaleDown(event.params.baseAssetAmount, VAULT_DECIMALS);
     cask.totalWithdrawAmount = cask.totalWithdrawAmount.plus(withdrawAmount)
@@ -48,5 +60,6 @@ export function handleAssetWithdrawn(event: AssetWithdrawn): void {
     const user = findOrCreateUser(event.params.participant, event.block.timestamp.toI32())
     user.withdrawAmount = user.withdrawAmount.plus(withdrawAmount)
     user.withdrawCount = user.withdrawCount.plus(BigInt.fromI32(1))
+    user.balance = user.balance.minus(withdrawAmount)
     user.save()
 }
