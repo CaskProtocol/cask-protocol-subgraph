@@ -94,6 +94,8 @@ enum TransactionType {
  SubscriptionPastDue
  AssetDeposit
  AssetWithdrawal
+ Payment
+ TransferValue
 }
 
 type CaskTransaction @entity {
