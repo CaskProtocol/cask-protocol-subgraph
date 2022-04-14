@@ -74,6 +74,8 @@ export function handleAssetDeposited(event: AssetDeposited): void {
     txn.type = 'AssetDeposit'
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
+    txn.assetAddress = event.params.asset
+    txn.amount = depositAmount
     txn.save()
 }
 
@@ -97,6 +99,8 @@ export function handleAssetWithdrawn(event: AssetWithdrawn): void {
     txn.type = 'AssetWithdrawal'
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
+    txn.assetAddress = event.params.asset
+    txn.amount = withdrawAmount
     txn.save()
 }
 
@@ -127,6 +131,7 @@ export function handlePayment(event: Payment): void {
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
+    txn.amount = amount
     txn.save()
 }
 
@@ -150,5 +155,6 @@ export function handleTransferValue(event: TransferValue): void {
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
+    txn.amount = amount
     txn.save()
 }
