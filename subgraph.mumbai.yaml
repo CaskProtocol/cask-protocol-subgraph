@@ -8,7 +8,7 @@ dataSources:
     name: CaskSubscriptions
     network: mumbai
     source:
-      address: "0x2a94919bC19B8a1Cb88e5E48f1274CE8D468e4Ab"
+      address: "0xfA0495DEa6B2eeE44B8b23f5FCDe7Df42591C2Bb"
       abi: CaskSubscriptions
       startBlock: 25788984
     mapping:
@@ -50,7 +50,7 @@ dataSources:
     name: CaskVault
     network: mumbai
     source:
-      address: "0xE412b1eD00e9a2959A7bfe78B47258f295fc5D90"
+      address: "0x57028EBEeD95d66B6248cCaD7Dc763427bc99a46"
       abi: CaskVault
       startBlock: 25788984
     mapping:
