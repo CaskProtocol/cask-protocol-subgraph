@@ -49,6 +49,7 @@ type CaskSubscriptionPlan @entity {
   trialingSubscriptionCount: BigInt!
   canceledSubscriptionCount: BigInt!
   pausedSubscriptionCount: BigInt!
+  pastDueSubscriptionCount: BigInt!
 }
 
 enum SubscriptionStatus {
