@@ -10,7 +10,8 @@
     "deploy:polygon": "graph deploy CaskProtocol/cask-protocol-polygon subgraph.yaml --node https://api.thegraph.com/deploy/",
     "create-local": "graph create --node http://localhost:8020/ CaskProtocol/cask-protocol-subgraph",
     "remove-local": "graph remove --node http://localhost:8020/ CaskProtocol/cask-protocol-subgraph",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 CaskProtocol/cask-protocol-subgraph"
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 CaskProtocol/cask-protocol-subgraph",
+    "import-abis": "ts-node ./scripts/update-abis.ts"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.28.0",
