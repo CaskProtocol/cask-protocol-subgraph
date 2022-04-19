@@ -5,6 +5,7 @@ type Cask @entity {
   totalDepositAmount: BigDecimal!
   totalWithdrawCount: BigInt!
   totalWithdrawAmount: BigDecimal!
+  totalProtocolPayments: BigDecimal!
   totalProtocolFees: BigDecimal!
   totalNetworkFees: BigDecimal!
 }
@@ -35,6 +36,7 @@ type CaskProvider @entity {
   profileCid: String
   appearedAt: Int!
 
+  totalPaymentsReceived: BigDecimal!
   totalSubscriptionCount: BigInt!
   activeSubscriptionCount: BigInt!
 }

@@ -108,10 +108,11 @@ export function handlePayment(event: Payment): void {
 
     const cask = loadCask()
 
-    let amount: BigDecimal = scaleDown(event.params.baseAssetAmount, VAULT_DECIMALS);
-    let protocolFeeAmount: BigDecimal = scaleDown(event.params.protocolFee, VAULT_DECIMALS);
-    let networkFeeAmount: BigDecimal = scaleDown(event.params.networkFee, VAULT_DECIMALS);
+    let amount: BigDecimal = scaleDown(event.params.baseAssetAmount, VAULT_DECIMALS)
+    let protocolFeeAmount: BigDecimal = scaleDown(event.params.protocolFee, VAULT_DECIMALS)
+    let networkFeeAmount: BigDecimal = scaleDown(event.params.networkFee, VAULT_DECIMALS)
 
+    cask.totalProtocolPayments = cask.totalProtocolPayments.plus(amount)
     cask.totalProtocolFees = cask.totalProtocolFees.plus(protocolFeeAmount)
     cask.totalNetworkFees = cask.totalNetworkFees.plus(networkFeeAmount)
     cask.save()
@@ -126,6 +127,10 @@ export function handlePayment(event: Payment): void {
 
     const consumer = findOrCreateConsumer(event.params.from, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.to, event.block.timestamp.toI32())
+
+    provider.totalPaymentsReceived = provider.totalPaymentsReceived.plus(amount)
+    provider.save()
+
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'Payment'
     txn.timestamp = event.block.timestamp.toI32();
