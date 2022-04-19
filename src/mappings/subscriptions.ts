@@ -378,6 +378,8 @@ export function handleTransfer(event: Transfer): void {
     }
 
     subscription.currentOwner = to.id
+    subscription.transferCount = subscription.transferCount.plus(BigInt.fromI32(1))
+
     subscription.save()
 }
 
