@@ -285,6 +285,9 @@ export function handleSubscriptionRenewed(event: SubscriptionRenewed): void {
         plan.activeSubscriptionCount = plan.activeSubscriptionCount.plus(BigInt.fromI32(1))
     }
 
+    consumer.save()
+    provider.save()
+    plan.save()
 
     subscription.status = subscriptionStatus(subscriptionInfo.value0.status)
     subscription.renewAt = subscriptionInfo.value0.renewAt.toI32()
@@ -321,6 +324,8 @@ export function handleSubscriptionPastDue(event: SubscriptionPastDue): void {
     if (subscription.status != 'PastDue') {
         plan.pastDueSubscriptionCount = plan.pastDueSubscriptionCount.plus(BigInt.fromI32(1))
     }
+
+    plan.save()
 
     subscription.status = 'PastDue'
 
