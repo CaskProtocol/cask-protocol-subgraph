@@ -49,6 +49,7 @@ type CaskSubscriptionPlan @entity {
   totalSubscriptionCount: BigInt!
   activeSubscriptionCount: BigInt!
   trialingSubscriptionCount: BigInt!
+  convertedSubscriptionCount: BigInt!
   canceledSubscriptionCount: BigInt!
   pausedSubscriptionCount: BigInt!
   pastDueSubscriptionCount: BigInt!

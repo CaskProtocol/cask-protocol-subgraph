@@ -86,6 +86,7 @@ export function handleSubscriptionCreated(event: SubscriptionCreated): void {
     subscription.currentOwner = consumer.id
     subscription.provider = provider.id
     subscription.plan = plan.id
+    subscription.cid = subscriptionInfo.value0.cid
     subscription.createdAt = subscriptionInfo.value0.createdAt.toI32()
     subscription.renewAt = subscriptionInfo.value0.renewAt.toI32()
     subscription.cancelAt = subscriptionInfo.value0.cancelAt.toI32()
@@ -99,6 +100,7 @@ export function handleSubscriptionCreated(event: SubscriptionCreated): void {
     if (subscription.status == 'Active') {
         provider.activeSubscriptionCount = provider.activeSubscriptionCount.plus(BigInt.fromI32(1))
         plan.activeSubscriptionCount = plan.activeSubscriptionCount.plus(BigInt.fromI32(1))
+        plan.convertedSubscriptionCount = plan.convertedSubscriptionCount.plus(BigInt.fromI32(1))
         consumer.activeSubscriptionCount = consumer.activeSubscriptionCount.plus(BigInt.fromI32(1))
     } else if (subscription.status == 'Trialing') {
         plan.trialingSubscriptionCount = plan.trialingSubscriptionCount.plus(BigInt.fromI32(1))
@@ -121,6 +123,23 @@ export function handleSubscriptionPendingChangePlan(event: SubscriptionPendingCh
     txn.provider = provider.id
     txn.save()
 
+    let subscription = CaskSubscription.load(event.params.subscriptionId.toHex())
+    if (subscription == null) {
+        log.warning('Subscription not found: {}', [event.params.subscriptionId.toHex()])
+        return;
+    }
+
+    let contract = CaskSubscriptions.bind(event.address)
+    let subscriptionInfo = contract.getSubscription(event.params.subscriptionId)
+    if (subscriptionInfo == null) {
+        log.warning('Subscription Info not found: {}', [event.params.subscriptionId.toHex()])
+        return;
+    }
+
+    subscription.status = subscriptionStatus(subscriptionInfo.value0.status)
+    subscription.cid = subscriptionInfo.value0.cid
+
+    subscription.save()
 }
 
 export function handleSubscriptionChangedPlan(event: SubscriptionChangedPlan): void {
@@ -150,18 +169,25 @@ export function handleSubscriptionChangedPlan(event: SubscriptionChangedPlan): v
         return;
     }
 
-    subscription.status = subscriptionStatus(subscriptionInfo.value0.status)
-    subscription.plan = plan.id
-    subscription.renewAt = subscriptionInfo.value0.renewAt.toI32()
-
-    subscription.save()
-
-    prevPlan.activeSubscriptionCount = prevPlan.activeSubscriptionCount.minus(BigInt.fromI32(1))
-    plan.totalSubscriptionCount = plan.totalSubscriptionCount.plus(BigInt.fromI32(1))
-    plan.activeSubscriptionCount = plan.activeSubscriptionCount.plus(BigInt.fromI32(1))
+    if (subscription.status == 'Active') {
+        prevPlan.activeSubscriptionCount = prevPlan.activeSubscriptionCount.minus(BigInt.fromI32(1))
+        plan.totalSubscriptionCount = plan.totalSubscriptionCount.plus(BigInt.fromI32(1))
+        plan.activeSubscriptionCount = plan.activeSubscriptionCount.plus(BigInt.fromI32(1))
+    } else if (subscription.status == 'Trialing') {
+        prevPlan.trialingSubscriptionCount = prevPlan.trialingSubscriptionCount.minus(BigInt.fromI32(1))
+        plan.totalSubscriptionCount = plan.totalSubscriptionCount.plus(BigInt.fromI32(1))
+        plan.trialingSubscriptionCount = plan.trialingSubscriptionCount.plus(BigInt.fromI32(1))
+    }
 
     prevPlan.save()
     plan.save()
+
+    subscription.status = subscriptionStatus(subscriptionInfo.value0.status)
+    subscription.plan = plan.id
+    subscription.cid = subscriptionInfo.value0.cid
+    subscription.renewAt = subscriptionInfo.value0.renewAt.toI32()
+
+    subscription.save()
 }
 
 export function handleSubscriptionPaused(event: SubscriptionPaused): void {
@@ -248,6 +274,7 @@ export function handleSubscriptionRenewed(event: SubscriptionRenewed): void {
 
     if (subscription.status == 'Trialing') {
         plan.trialingSubscriptionCount = plan.trialingSubscriptionCount.minus(BigInt.fromI32(1))
+        plan.convertedSubscriptionCount = plan.convertedSubscriptionCount.plus(BigInt.fromI32(1))
     } else if (subscription.status == 'PastDue') {
         plan.pastDueSubscriptionCount = plan.pastDueSubscriptionCount.minus(BigInt.fromI32(1))
     }
@@ -270,6 +297,7 @@ export function handleSubscriptionPastDue(event: SubscriptionPastDue): void {
 
     const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
+    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId.toI32())
 
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionPastDue'
@@ -282,6 +310,16 @@ export function handleSubscriptionPastDue(event: SubscriptionPastDue): void {
     if (subscription == null) {
         log.warning('Subscription not found: {}', [event.params.subscriptionId.toHex()])
         return;
+    }
+
+    if (subscription.status == 'Active') {
+        plan.activeSubscriptionCount = plan.activeSubscriptionCount.minus(BigInt.fromI32(1))
+    } else if (subscription.status == 'Trialing') {
+        plan.trialingSubscriptionCount = plan.trialingSubscriptionCount.minus(BigInt.fromI32(1))
+    }
+
+    if (subscription.status != 'PastDue') {
+        plan.pastDueSubscriptionCount = plan.pastDueSubscriptionCount.plus(BigInt.fromI32(1))
     }
 
     subscription.status = 'PastDue'
@@ -331,19 +369,25 @@ export function handleSubscriptionCanceled(event: SubscriptionCanceled): void {
         return;
     }
 
-    subscription.status = 'Canceled'
+    if (subscription.status == 'Active') {
+        consumer.activeSubscriptionCount = consumer.activeSubscriptionCount.minus(BigInt.fromI32(1))
+        provider.activeSubscriptionCount = provider.activeSubscriptionCount.minus(BigInt.fromI32(1))
+        plan.activeSubscriptionCount = plan.activeSubscriptionCount.minus(BigInt.fromI32(1))
+    } else if (subscription.status == 'Trialing') {
+        plan.trialingSubscriptionCount = plan.trialingSubscriptionCount.minus(BigInt.fromI32(1))
+    }
 
-    subscription.save()
-
-    consumer.activeSubscriptionCount = consumer.activeSubscriptionCount.minus(BigInt.fromI32(1))
-    provider.activeSubscriptionCount = provider.activeSubscriptionCount.minus(BigInt.fromI32(1))
-    plan.activeSubscriptionCount = plan.activeSubscriptionCount.minus(BigInt.fromI32(1))
-
-    plan.canceledSubscriptionCount = plan.canceledSubscriptionCount.plus(BigInt.fromI32(1))
+    if (subscription.status != 'Canceled') {
+        plan.canceledSubscriptionCount = plan.canceledSubscriptionCount.plus(BigInt.fromI32(1))
+    }
 
     provider.save()
     plan.save()
     consumer.save()
+
+    subscription.status = 'Canceled'
+
+    subscription.save()
 }
 
 export function handleSubscriptionTrialEnded(event: SubscriptionTrialEnded): void {
@@ -357,7 +401,6 @@ export function handleSubscriptionTrialEnded(event: SubscriptionTrialEnded): voi
     txn.consumer = consumer.id
     txn.provider = provider.id
     txn.save()
-
 }
 
 export function handleTransfer(event: Transfer): void {
