@@ -70,7 +70,7 @@ export function handleAssetDeposited(event: AssetDeposited): void {
     user.save()
 
     const consumer = findOrCreateConsumer(event.params.participant, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex())
+    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'AssetDeposit'
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
@@ -95,7 +95,7 @@ export function handleAssetWithdrawn(event: AssetWithdrawn): void {
     user.save()
 
     const consumer = findOrCreateConsumer(event.params.participant, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex())
+    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'AssetWithdrawal'
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
@@ -126,7 +126,7 @@ export function handlePayment(event: Payment): void {
 
     const consumer = findOrCreateConsumer(event.params.from, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.to, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex())
+    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'Payment'
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
@@ -150,7 +150,7 @@ export function handleTransferValue(event: TransferValue): void {
 
     const consumer = findOrCreateConsumer(event.params.from, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.to, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex())
+    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'TransferValue'
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id

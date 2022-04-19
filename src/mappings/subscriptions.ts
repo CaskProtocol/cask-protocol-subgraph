@@ -65,7 +65,7 @@ export function handleSubscriptionCreated(event: SubscriptionCreated): void {
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
     const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId.toI32())
 
-    let txn = new CaskTransaction(event.transaction.hash.toHex())
+    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionCreated'
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
@@ -113,7 +113,7 @@ export function handleSubscriptionPendingChangePlan(event: SubscriptionPendingCh
     const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
 
-    let txn = new CaskTransaction(event.transaction.hash.toHex())
+    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionPendingChangePlan'
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
@@ -129,7 +129,7 @@ export function handleSubscriptionChangedPlan(event: SubscriptionChangedPlan): v
     const prevPlan = findOrCreateSubscriptionPlan(event.params.provider, event.params.prevPlanId.toI32())
     const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId.toI32())
 
-    let txn = new CaskTransaction(event.transaction.hash.toHex())
+    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionChangedPlan'
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
@@ -169,7 +169,7 @@ export function handleSubscriptionPaused(event: SubscriptionPaused): void {
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
     const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId.toI32())
 
-    let txn = new CaskTransaction(event.transaction.hash.toHex())
+    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionPaused'
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
@@ -197,7 +197,7 @@ export function handleSubscriptionResumed(event: SubscriptionResumed): void {
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
     const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId.toI32())
 
-    let txn = new CaskTransaction(event.transaction.hash.toHex())
+    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionResumed'
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
@@ -225,7 +225,7 @@ export function handleSubscriptionRenewed(event: SubscriptionRenewed): void {
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
     const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId.toI32())
 
-    let txn = new CaskTransaction(event.transaction.hash.toHex())
+    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionRenewed'
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
@@ -270,7 +270,7 @@ export function handleSubscriptionPastDue(event: SubscriptionPastDue): void {
     const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
 
-    let txn = new CaskTransaction(event.transaction.hash.toHex())
+    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionPastDue'
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
@@ -293,7 +293,7 @@ export function handleSubscriptionPendingCancel(event: SubscriptionPendingCancel
     const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
 
-    let txn = new CaskTransaction(event.transaction.hash.toHex())
+    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionPendingCancel'
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
@@ -317,7 +317,7 @@ export function handleSubscriptionCanceled(event: SubscriptionCanceled): void {
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
     const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId.toI32())
 
-    let txn = new CaskTransaction(event.transaction.hash.toHex())
+    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionCanceled'
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
@@ -350,7 +350,7 @@ export function handleSubscriptionTrialEnded(event: SubscriptionTrialEnded): voi
     const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
 
-    let txn = new CaskTransaction(event.transaction.hash.toHex())
+    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionTrialEnded'
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
