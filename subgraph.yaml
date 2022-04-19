@@ -46,6 +46,8 @@ dataSources:
           handler: handleSubscriptionResumed
         - event: SubscriptionTrialEnded(indexed address,indexed address,indexed uint256,bytes32,uint32)
           handler: handleSubscriptionTrialEnded
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
   - kind: ethereum/contract
     name: CaskVault
     network: matic

@@ -11,6 +11,7 @@ import {
     SubscriptionRenewed,
     SubscriptionResumed,
     SubscriptionTrialEnded,
+    Transfer,
 } from "../types/CaskSubscriptions/CaskSubscriptions"
 import { CaskConsumer, CaskProvider, CaskSubscriptionPlan, CaskSubscription, CaskTransaction } from "../types/schema"
 
@@ -357,5 +358,26 @@ export function handleSubscriptionTrialEnded(event: SubscriptionTrialEnded): voi
     txn.provider = provider.id
     txn.save()
 
+}
+
+export function handleTransfer(event: Transfer): void {
+
+    const from = findOrCreateConsumer(event.params.from, event.block.timestamp.toI32())
+    const to = findOrCreateConsumer(event.params.to, event.block.timestamp.toI32())
+
+    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    txn.type = 'Transfer'
+    txn.timestamp = event.block.timestamp.toI32();
+    txn.consumer = from.id
+    txn.save()
+
+    let subscription = CaskSubscription.load(event.params.tokenId.toHex())
+    if (subscription == null) {
+        log.warning('Subscription not found: {}', [event.params.tokenId.toHex()])
+        return;
+    }
+
+    subscription.currentOwner = to.id
+    subscription.save()
 }
 
