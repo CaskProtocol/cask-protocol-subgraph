@@ -85,6 +85,7 @@ export function handleSubscriptionCreated(event: SubscriptionCreated): void {
     subscription.status = subscriptionStatus(subscriptionInfo.value0.status)
     subscription.currentOwner = consumer.id
     subscription.provider = provider.id
+    subscription.ref = subscriptionInfo.value0.ref.toHex()
     subscription.plan = plan.id
     subscription.cid = subscriptionInfo.value0.cid
     subscription.createdAt = subscriptionInfo.value0.createdAt.toI32()
