@@ -9,16 +9,16 @@ matic:
 mumbai:
   network: mumbai
   CaskSubscriptions:
-    address: "0xfA0495DEa6B2eeE44B8b23f5FCDe7Df42591C2Bb"
-    startBlock: 25788984
+    address: "0xaC7331DF9CB75beC251b75647AEccdeA8d336e33"
+    startBlock: 26026884
   CaskVault:
-    address: "0x57028EBEeD95d66B6248cCaD7Dc763427bc99a46"
-    startBlock: 25788984
+    address: "0xC040BDBBb2b1AdDaa7586962e9Fcb5585D7e66a9"
+    startBlock: 26026884
 fuji:
   network: fuji
   CaskSubscriptions:
-    address: "0x17052aC8938352AE478d681925c7FC7c73FE917F"
-    startBlock: 8477907
+    address: "0x921ec72BEf414D75F0C6fFee37975BB3ae80d41C"
+    startBlock: 8799480
   CaskVault:
-    address: "0x2B5f728dFd9389Ba81B4F46045f4CCc92b9c484e"
-    startBlock: 8477889
+    address: "0x5e8C289404E9B17be7FfE7FcBa673f5AC802cc06"
+    startBlock: 8799480

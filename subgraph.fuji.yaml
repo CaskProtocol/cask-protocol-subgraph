@@ -8,9 +8,9 @@ dataSources:
     name: CaskSubscriptions
     network: fuji
     source:
-      address: "0x17052aC8938352AE478d681925c7FC7c73FE917F"
+      address: "0x921ec72BEf414D75F0C6fFee37975BB3ae80d41C"
       abi: CaskSubscriptions
-      startBlock: 8477907
+      startBlock: 8799480
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -52,9 +52,9 @@ dataSources:
     name: CaskVault
     network: fuji
     source:
-      address: "0x2B5f728dFd9389Ba81B4F46045f4CCc92b9c484e"
+      address: "0x5e8C289404E9B17be7FfE7FcBa673f5AC802cc06"
       abi: CaskVault
-      startBlock: 8477889
+      startBlock: 8799480
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
