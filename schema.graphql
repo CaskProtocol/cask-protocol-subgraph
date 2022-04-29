@@ -71,7 +71,13 @@ type CaskSubscription @entity {
 
   currentOwner: CaskConsumer!
   provider: CaskProvider!
+
   plan: CaskSubscriptionPlan!
+  planData: Bytes!
+  period: Int!
+  price: BigDecimal!
+  discountId: Bytes
+  discountData: Bytes
 
   createdAt: Int!
   renewAt: Int!

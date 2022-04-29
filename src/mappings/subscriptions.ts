@@ -1,4 +1,10 @@
-import { BigInt, Address, BigDecimal, Bytes, log } from "@graphprotocol/graph-ts"
+import {
+    BigInt,
+    Address,
+    BigDecimal,
+    Bytes,
+    log
+} from "@graphprotocol/graph-ts"
 import {
     CaskSubscriptions,
     SubscriptionCanceled,
@@ -13,7 +19,22 @@ import {
     SubscriptionTrialEnded,
     Transfer,
 } from "../types/CaskSubscriptions/CaskSubscriptions"
-import { CaskConsumer, CaskProvider, CaskSubscriptionPlan, CaskSubscription, CaskTransaction } from "../types/schema"
+import {
+    CaskConsumer,
+    CaskProvider,
+    CaskSubscriptionPlan,
+    CaskSubscription,
+    CaskTransaction
+} from "../types/schema"
+
+import {
+    VAULT_DECIMALS,
+    scaleDown
+} from "./helpers/units"
+import {
+    PlanInfo,
+    parsePlanData
+} from "./helpers/plans"
 
 function findOrCreateProvider(providerAddress: Bytes, appearedAt: i32): CaskProvider {
     let provider = CaskProvider.load(providerAddress.toHex())
@@ -82,11 +103,18 @@ export function handleSubscriptionCreated(event: SubscriptionCreated): void {
         return;
     }
 
+    let planInfo = parsePlanData(subscriptionInfo.value0.planData)
+
     subscription.status = subscriptionStatus(subscriptionInfo.value0.status)
     subscription.currentOwner = consumer.id
     subscription.provider = provider.id
     subscription.ref = subscriptionInfo.value0.ref.toHex()
     subscription.plan = plan.id
+    subscription.planData = subscriptionInfo.value0.planData
+    subscription.price = planInfo.price
+    subscription.period = planInfo.period
+    subscription.discountId = subscriptionInfo.value0.discountId
+    subscription.discountData = subscriptionInfo.value0.discountData
     subscription.cid = subscriptionInfo.value0.cid
     subscription.createdAt = subscriptionInfo.value0.createdAt.toI32()
     subscription.renewAt = subscriptionInfo.value0.renewAt.toI32()

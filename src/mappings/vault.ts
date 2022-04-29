@@ -1,4 +1,10 @@
-import { BigInt, Address, BigDecimal, Bytes, log } from "@graphprotocol/graph-ts"
+import {
+    BigInt,
+    Address,
+    BigDecimal,
+    Bytes,
+    log
+} from "@graphprotocol/graph-ts"
 import {
     CaskVault,
     AssetDeposited,
@@ -7,12 +13,17 @@ import {
     TransferValue
 } from "../types/CaskVault/CaskVault"
 import {
+    VAULT_DECIMALS,
     scaleDown,
 } from './helpers/units';
-import {Cask, CaskConsumer, CaskProvider, CaskTransaction, CaskUser} from "../types/schema"
+import {
+    Cask,
+    CaskConsumer,
+    CaskProvider,
+    CaskTransaction,
+    CaskUser
+} from "../types/schema"
 
-
-const VAULT_DECIMALS = 6
 
 const CASK_ID = '1'
 
