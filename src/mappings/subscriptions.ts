@@ -411,6 +411,13 @@ export function handleSubscriptionTrialEnded(event: SubscriptionTrialEnded): voi
 
 export function handleTransfer(event: Transfer): void {
 
+    // ignore mint/burn transfers
+    if (event.params.from.toHex() == '0x0000000000000000000000000000000000000000' ||
+        event.params.to.toHex() == '0x0000000000000000000000000000000000000000')
+    {
+        return;
+    }
+
     const from = findOrCreateConsumer(event.params.from, event.block.timestamp.toI32())
     const to = findOrCreateConsumer(event.params.to, event.block.timestamp.toI32())
 

@@ -12,7 +12,7 @@ import {
 import {Cask, CaskConsumer, CaskProvider, CaskTransaction, CaskUser} from "../types/schema"
 
 
-const VAULT_DECIMALS = 18
+const VAULT_DECIMALS = 6
 
 const CASK_ID = '1'
 
