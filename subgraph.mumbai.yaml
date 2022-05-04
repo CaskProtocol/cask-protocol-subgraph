@@ -8,9 +8,9 @@ dataSources:
     name: CaskSubscriptions
     network: mumbai
     source:
-      address: "0xaC7331DF9CB75beC251b75647AEccdeA8d336e33"
+      address: "0x7899118A8A3EAe4cDd97Cb2Ea9E52a5b78da3cB6"
       abi: CaskSubscriptions
-      startBlock: 26026884
+      startBlock: 26201935
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -52,9 +52,9 @@ dataSources:
     name: CaskVault
     network: mumbai
     source:
-      address: "0xC040BDBBb2b1AdDaa7586962e9Fcb5585D7e66a9"
+      address: "0xc924CaAFe6759F92215Dadf326FF4fAb158f6C41"
       abi: CaskVault
-      startBlock: 26026884
+      startBlock: 26201929
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
