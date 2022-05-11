@@ -4,11 +4,10 @@
   "scripts": {
     "codegen": "yarn generate-manifests && graph codegen --output-dir src/types/",
     "generate-manifests": "ts-node ./scripts/generate-manifests",
-    "build": "graph build",
-    "deploy": "graph deploy CaskProtocol/cask-protocol-mumbai --node https://api.thegraph.com/deploy/",
+    "build": "graph build subgraph.polygon.yaml",
     "deploy:mumbai": "graph deploy CaskProtocol/cask-protocol-mumbai subgraph.mumbai.yaml --node https://api.thegraph.com/deploy/",
     "deploy:fuji": "graph deploy CaskProtocol/cask-protocol-fuji subgraph.fuji.yaml --node https://api.thegraph.com/deploy/",
-    "deploy:polygon": "graph deploy CaskProtocol/cask-protocol-polygon subgraph.yaml --node https://api.thegraph.com/deploy/",
+    "deploy:polygon": "graph deploy CaskProtocol/cask-protocol-polygon subgraph.polygon.yaml --node https://api.thegraph.com/deploy/",
     "create-local": "graph create --node http://localhost:8020/ CaskProtocol/cask-protocol-subgraph",
     "remove-local": "graph remove --node http://localhost:8020/ CaskProtocol/cask-protocol-subgraph",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 CaskProtocol/cask-protocol-subgraph",

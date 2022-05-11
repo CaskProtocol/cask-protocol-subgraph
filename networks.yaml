@@ -1,11 +1,11 @@
-matic:
+polygon:
   network: matic
   CaskSubscriptions:
-    address: "0x2a94919bC19B8a1Cb88e5E48f1274CE8D468e4Ab"
-    startBlock: 27030431
+    address: "0x4A6f232552E0fd76787006Bb688bFBCB931cc3d0"
+    startBlock: 28174407
   CaskVault:
-    address: "0xE412b1eD00e9a2959A7bfe78B47258f295fc5D90"
-    startBlock: 27030431
+    address: "0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff"
+    startBlock: 28174388
 mumbai:
   network: mumbai
   CaskSubscriptions:
