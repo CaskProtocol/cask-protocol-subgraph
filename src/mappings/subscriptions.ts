@@ -92,6 +92,7 @@ export function handleSubscriptionCreated(event: SubscriptionCreated): void {
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
+    txn.subscriptionId = event.params.subscriptionId
     txn.save()
 
     let subscription = new CaskSubscription(event.params.subscriptionId.toHex())
@@ -150,6 +151,7 @@ export function handleSubscriptionPendingChangePlan(event: SubscriptionPendingCh
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
+    txn.subscriptionId = event.params.subscriptionId
     txn.save()
 
     let subscription = CaskSubscription.load(event.params.subscriptionId.toHex())
@@ -183,6 +185,7 @@ export function handleSubscriptionChangedPlan(event: SubscriptionChangedPlan): v
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
+    txn.subscriptionId = event.params.subscriptionId
     txn.save()
 
     let subscription = CaskSubscription.load(event.params.subscriptionId.toHex())
@@ -230,6 +233,7 @@ export function handleSubscriptionPaused(event: SubscriptionPaused): void {
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
+    txn.subscriptionId = event.params.subscriptionId
     txn.save()
 
     let subscription = CaskSubscription.load(event.params.subscriptionId.toHex())
@@ -258,6 +262,7 @@ export function handleSubscriptionResumed(event: SubscriptionResumed): void {
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
+    txn.subscriptionId = event.params.subscriptionId
     txn.save()
 
     let subscription = CaskSubscription.load(event.params.subscriptionId.toHex())
@@ -286,6 +291,7 @@ export function handleSubscriptionRenewed(event: SubscriptionRenewed): void {
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
+    txn.subscriptionId = event.params.subscriptionId
     txn.save()
 
     let subscription = CaskSubscription.load(event.params.subscriptionId.toHex())
@@ -336,6 +342,7 @@ export function handleSubscriptionPastDue(event: SubscriptionPastDue): void {
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
+    txn.subscriptionId = event.params.subscriptionId
     txn.save()
 
     let subscription = CaskSubscription.load(event.params.subscriptionId.toHex())
@@ -371,6 +378,7 @@ export function handleSubscriptionPendingCancel(event: SubscriptionPendingCancel
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
+    txn.subscriptionId = event.params.subscriptionId
     txn.save()
 
     let subscription = CaskSubscription.load(event.params.subscriptionId.toHex())
@@ -395,6 +403,7 @@ export function handleSubscriptionCanceled(event: SubscriptionCanceled): void {
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
+    txn.subscriptionId = event.params.subscriptionId
     txn.save()
 
     let subscription = CaskSubscription.load(event.params.subscriptionId.toHex())
@@ -434,6 +443,7 @@ export function handleSubscriptionTrialEnded(event: SubscriptionTrialEnded): voi
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
+    txn.subscriptionId = event.params.subscriptionId
     txn.save()
 }
 
@@ -453,6 +463,7 @@ export function handleTransfer(event: Transfer): void {
     txn.type = 'Transfer'
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = from.id
+    txn.subscriptionId = event.params.tokenId
     txn.save()
 
     let subscription = CaskSubscription.load(event.params.tokenId.toHex())

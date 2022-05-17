@@ -2,7 +2,7 @@
   "name": "cask-protocol-subgraph",
   "license": "UNLICENSED",
   "scripts": {
-    "codegen": "yarn generate-manifests && graph codegen --output-dir src/types/",
+    "codegen": "yarn generate-manifests && graph codegen --output-dir src/types/ subgraph.polygon.yaml",
     "generate-manifests": "ts-node ./scripts/generate-manifests",
     "build": "graph build subgraph.polygon.yaml",
     "deploy:mumbai": "graph deploy CaskProtocol/cask-protocol-mumbai subgraph.mumbai.yaml --node https://api.thegraph.com/deploy/",
