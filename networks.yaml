@@ -6,6 +6,14 @@ polygon:
   CaskVault:
     address: "0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff"
     startBlock: 28174388
+avalanche:
+  network: avalanche
+  CaskSubscriptions:
+    address: "0x4A6f232552E0fd76787006Bb688bFBCB931cc3d0"
+    startBlock: 15521672
+  CaskVault:
+    address: "0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff"
+    startBlock: 15521652
 mumbai:
   network: mumbai
   CaskSubscriptions:

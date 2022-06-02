@@ -1,0 +1,77 @@
+specVersion: 0.0.2
+description: Cask is a decentralized non-custodial protocol for managing recurring payment agreements.
+repository: https://github.com/CaskProtocol/cask-protocol-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: CaskSubscriptions
+    network: avalanche
+    source:
+      address: "0x4A6f232552E0fd76787006Bb688bFBCB931cc3d0"
+      abi: CaskSubscriptions
+      startBlock: 15521672
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/subscriptions.ts
+      entities:
+        - CaskSubscription
+        - CaskTransaction
+        - CaskConsumer
+        - CaskProvider
+        - CaskSubscriptionPlan
+      abis:
+        - name: CaskSubscriptions
+          file: ./abis/CaskSubscriptions.json
+      eventHandlers:
+        - event: SubscriptionCanceled(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionCanceled
+        - event: SubscriptionChangedPlan(indexed address,indexed address,indexed uint256,bytes32,uint32,uint32,bytes32)
+          handler: handleSubscriptionChangedPlan
+        - event: SubscriptionCreated(indexed address,indexed address,indexed uint256,bytes32,uint32,bytes32)
+          handler: handleSubscriptionCreated
+        - event: SubscriptionPastDue(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionPastDue
+        - event: SubscriptionPaused(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionPaused
+        - event: SubscriptionPendingCancel(indexed address,indexed address,indexed uint256,bytes32,uint32,uint32)
+          handler: handleSubscriptionPendingCancel
+        - event: SubscriptionPendingChangePlan(indexed address,indexed address,indexed uint256,bytes32,uint32,uint32)
+          handler: handleSubscriptionPendingChangePlan
+        - event: SubscriptionRenewed(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionRenewed
+        - event: SubscriptionResumed(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionResumed
+        - event: SubscriptionTrialEnded(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionTrialEnded
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+  - kind: ethereum/contract
+    name: CaskVault
+    network: avalanche
+    source:
+      address: "0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff"
+      abi: CaskVault
+      startBlock: 15521652
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/vault.ts
+      entities:
+        - Cask
+        - CaskUser
+      abis:
+        - name: CaskVault
+          file: ./abis/CaskVault.json
+      eventHandlers:
+        - event: AssetDeposited(indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleAssetDeposited
+        - event: AssetWithdrawn(indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleAssetWithdrawn
+        - event: Payment(indexed address,indexed address,uint256,uint256,uint256,uint256,indexed address,uint256,uint256)
+          handler: handlePayment
+        - event: TransferValue(indexed address,indexed address,uint256,uint256)
+          handler: handleTransferValue
