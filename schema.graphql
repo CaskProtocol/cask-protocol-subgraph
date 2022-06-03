@@ -94,6 +94,7 @@ enum TransactionType {
  SubscriptionCreated
  SubscriptionPlanChanged
  SubscriptionPendingChangePlan
+ SubscriptionPendingPause
  SubscriptionPaused
  SubscriptionResumed
  SubscriptionPendingCancel

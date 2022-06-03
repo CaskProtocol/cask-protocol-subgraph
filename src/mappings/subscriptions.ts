@@ -11,6 +11,7 @@ import {
     SubscriptionChangedPlan,
     SubscriptionCreated,
     SubscriptionPastDue,
+    SubscriptionPendingPause,
     SubscriptionPaused,
     SubscriptionPendingCancel,
     SubscriptionPendingChangePlan,
@@ -76,6 +77,8 @@ function subscriptionStatus(statusId: i32): string {
         return 'Canceled'
     } else if (statusId == 5) {
         return 'PastDue'
+    } else if (statusId == 6) {
+        return 'PendingPause'
     } else {
         return 'None'
     }
@@ -243,6 +246,35 @@ export function handleSubscriptionPaused(event: SubscriptionPaused): void {
     }
 
     subscription.status = 'Paused'
+
+    subscription.save()
+
+    plan.activeSubscriptionCount = plan.activeSubscriptionCount.minus(BigInt.fromI32(1))
+    plan.pausedSubscriptionCount = plan.pausedSubscriptionCount.plus(BigInt.fromI32(1))
+    plan.save()
+}
+
+export function handleSubscriptionPendingPause(event: SubscriptionPendingPause): void {
+
+    const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
+    const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
+    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId.toI32())
+
+    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    txn.type = 'SubscriptionPendingPause'
+    txn.timestamp = event.block.timestamp.toI32();
+    txn.consumer = consumer.id
+    txn.provider = provider.id
+    txn.subscriptionId = event.params.subscriptionId
+    txn.save()
+
+    let subscription = CaskSubscription.load(event.params.subscriptionId.toHex())
+    if (subscription == null) {
+        log.warning('Subscription not found: {}', [event.params.subscriptionId.toHex()])
+        return;
+    }
+
+    subscription.status = 'PendingPause'
 
     subscription.save()
 

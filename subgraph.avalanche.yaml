@@ -36,6 +36,8 @@ dataSources:
           handler: handleSubscriptionPastDue
         - event: SubscriptionPaused(indexed address,indexed address,indexed uint256,bytes32,uint32)
           handler: handleSubscriptionPaused
+        - event: SubscriptionPendingPause(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionPendingPause
         - event: SubscriptionPendingCancel(indexed address,indexed address,indexed uint256,bytes32,uint32,uint32)
           handler: handleSubscriptionPendingCancel
         - event: SubscriptionPendingChangePlan(indexed address,indexed address,indexed uint256,bytes32,uint32,uint32)
