@@ -51,6 +51,7 @@ function findOrCreateSubscriptionPlan(providerAddress: Bytes, planId: i32): Cask
     let subscriptionPlan = CaskSubscriptionPlan.load(providerAddress.toHex()+'-'+planId.toString())
     if (!subscriptionPlan) {
         subscriptionPlan = new CaskSubscriptionPlan(providerAddress.toHex()+'-'+planId.toString())
+        subscriptionPlan.planId = planId
         subscriptionPlan.save()
     }
     return subscriptionPlan
