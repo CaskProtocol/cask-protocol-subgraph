@@ -77,3 +77,71 @@ dataSources:
           handler: handlePayment
         - event: TransferValue(indexed address,indexed address,uint256,uint256)
           handler: handleTransferValue
+  - kind: ethereum/contract
+    name: CaskDCA
+    network: mumbai
+    source:
+      address: "0xC040BDBBb2b1AdDaa7586962e9Fcb5585D7e66a9"
+      abi: CaskDCA
+      startBlock: 26026872
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/dca.ts
+      entities:
+        - CaskTransaction
+        - CaskDCA
+        - CaskConsumer
+      abis:
+        - name: CaskDCA
+          file: ./abis/CaskDCA.json
+      eventHandlers:
+        - event: DCACreated(indexed bytes32,indexed address,indexed address,address,address,uint256,uint256,uint32)
+          handler: handleDCACreated
+        - event: DCAPaused(indexed bytes32,indexed address)
+          handler: handleDCAPaused
+        - event: DCAResumed(indexed bytes32,indexed address)
+          handler: handleDCAResumed
+        - event: DCASkipped(indexed bytes32,indexed address)
+          handler: handleDCASkipped
+        - event: DCAProcessed(indexed bytes32,indexed address,uint256,uint256,uint256)
+          handler: handleDCAProcessed
+        - event: DCACanceled(indexed bytes32,indexed address)
+          handler: handleDCACanceled
+        - event: DCACompleted(indexed bytes32,indexed address)
+          handler: handleDCACompleted
+  - kind: ethereum/contract
+    name: CaskP2P
+    network: mumbai
+    source:
+      address: "0xC040BDBBb2b1AdDaa7586962e9Fcb5585D7e66a9"
+      abi: CaskP2P
+      startBlock: 26026872
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/p2p.ts
+      entities:
+        - CaskTransaction
+        - CaskP2P
+        - CaskConsumer
+      abis:
+        - name: CaskP2P
+          file: ./abis/CaskP2P.json
+      eventHandlers:
+        - event: P2PCreated(indexed bytes32,indexed address,indexed address,uint256,uint256,uint32)
+          handler: handleP2PCreated
+        - event: P2PPaused(indexed bytes32,indexed address)
+          handler: handleP2PPaused
+        - event: P2PResumed(indexed bytes32,indexed address)
+          handler: handleP2PResumed
+        - event: P2PSkipped(indexed bytes32,indexed address)
+          handler: handleP2PSkipped
+        - event: P2PProcessed(indexed bytes32,indexed address,uint256,uint256)
+          handler: handleP2PProcessed
+        - event: P2PCanceled(indexed bytes32,indexed address)
+          handler: handleP2PCanceled
+        - event: P2PCompleted(indexed bytes32,indexed address)
+          handler: handleP2PCompleted

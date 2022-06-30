@@ -56,7 +56,7 @@ type CaskSubscriptionPlan @entity {
 }
 
 enum SubscriptionStatus {
-  None,
+  None
   Trialing
   Active
   Paused
@@ -89,6 +89,71 @@ type CaskSubscription @entity {
   transferCount: BigInt!
 }
 
+enum DCAStatus {
+  None
+  Active
+  Paused
+  Canceled
+  Complete
+}
+
+type CaskDCA @entity {
+  id: ID!
+
+  user: CaskUser!
+  to: Bytes!
+
+  router: Bytes!
+  priceFeed: Bytes
+  inputAsset: Bytes!
+  outputAsset: Bytes!
+  amount: BigDecimal!
+  totalAmount: BigDecimal!
+  currentAmount: BigDecimal!
+  currentQty: BigInt!
+  period: Int!
+  slippageBps: BigInt!
+  minPrice: BigInt
+  maxPrice: BigInt
+
+  createdAt: Int!
+  processAt: Int!
+  cancelAt: Int!
+
+  status: DCAStatus!
+
+  numBuys: BigInt!
+  numSkips: BigInt!
+}
+
+enum P2PStatus {
+  None
+  Active
+  Paused
+  Canceled
+  Complete
+}
+
+type CaskP2P @entity {
+  id: ID!
+
+  user: CaskUser!
+  to: Bytes!
+
+  amount: BigDecimal!
+  totalAmount: BigDecimal!
+  currentAmount: BigDecimal!
+  period: Int!
+
+  createdAt: Int!
+  processAt: Int!
+  cancelAt: Int!
+
+  status: P2PStatus!
+
+  numPayments: BigInt!
+  numSkips: BigInt!
+}
 
 enum TransactionType {
  SubscriptionCreated
@@ -107,6 +172,20 @@ enum TransactionType {
  Payment
  TransferValue
  Transfer
+ DCACreated
+ DCAPaused
+ DCAResumed
+ DCASkipped
+ DCAProcessed
+ DCACanceled
+ DCACompleted
+ P2PCreated
+ P2PPaused
+ P2PResumed
+ P2PSkipped
+ P2PProcessed
+ P2PCanceled
+ P2PCompleted
 }
 
 type CaskTransaction @entity {
