@@ -124,7 +124,6 @@ export function handleSubscriptionCreated(event: SubscriptionCreated): void {
     subscription.createdAt = subscriptionInfo.value0.createdAt.toI32()
     subscription.renewAt = subscriptionInfo.value0.renewAt.toI32()
     subscription.cancelAt = subscriptionInfo.value0.cancelAt.toI32()
-
     subscription.save()
 
     provider.totalSubscriptionCount = provider.totalSubscriptionCount.plus(BigInt.fromI32(1))
@@ -173,7 +172,6 @@ export function handleSubscriptionPendingChangePlan(event: SubscriptionPendingCh
 
     subscription.status = subscriptionStatus(subscriptionInfo.value0.status)
     subscription.cid = subscriptionInfo.value0.cid
-
     subscription.save()
 }
 
@@ -222,7 +220,6 @@ export function handleSubscriptionChangedPlan(event: SubscriptionChangedPlan): v
     subscription.plan = plan.id
     subscription.cid = subscriptionInfo.value0.cid
     subscription.renewAt = subscriptionInfo.value0.renewAt.toI32()
-
     subscription.save()
 }
 
@@ -246,12 +243,18 @@ export function handleSubscriptionPaused(event: SubscriptionPaused): void {
         return;
     }
 
-    subscription.status = 'Paused'
+    if (subscription.status != 'Paused') {
+        consumer.activeSubscriptionCount = consumer.activeSubscriptionCount.minus(BigInt.fromI32(1))
+        provider.activeSubscriptionCount = provider.activeSubscriptionCount.minus(BigInt.fromI32(1))
+        plan.activeSubscriptionCount = plan.activeSubscriptionCount.minus(BigInt.fromI32(1))
+        plan.pausedSubscriptionCount = plan.pausedSubscriptionCount.plus(BigInt.fromI32(1))
+    }
 
+    subscription.status = 'Paused'
     subscription.save()
 
-    plan.activeSubscriptionCount = plan.activeSubscriptionCount.minus(BigInt.fromI32(1))
-    plan.pausedSubscriptionCount = plan.pausedSubscriptionCount.plus(BigInt.fromI32(1))
+    consumer.save()
+    provider.save()
     plan.save()
 }
 
@@ -259,7 +262,6 @@ export function handleSubscriptionPendingPause(event: SubscriptionPendingPause):
 
     const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
-    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId.toI32())
 
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionPendingPause'
@@ -268,20 +270,6 @@ export function handleSubscriptionPendingPause(event: SubscriptionPendingPause):
     txn.provider = provider.id
     txn.subscriptionId = event.params.subscriptionId
     txn.save()
-
-    let subscription = CaskSubscription.load(event.params.subscriptionId.toHex())
-    if (subscription == null) {
-        log.warning('Subscription not found: {}', [event.params.subscriptionId.toHex()])
-        return;
-    }
-
-    subscription.status = 'PendingPause'
-
-    subscription.save()
-
-    plan.activeSubscriptionCount = plan.activeSubscriptionCount.minus(BigInt.fromI32(1))
-    plan.pausedSubscriptionCount = plan.pausedSubscriptionCount.plus(BigInt.fromI32(1))
-    plan.save()
 }
 
 export function handleSubscriptionResumed(event: SubscriptionResumed): void {
@@ -304,12 +292,18 @@ export function handleSubscriptionResumed(event: SubscriptionResumed): void {
         return;
     }
 
-    subscription.status = 'Active'
+    if (subscription.status != 'Active') {
+        consumer.activeSubscriptionCount = consumer.activeSubscriptionCount.plus(BigInt.fromI32(1))
+        provider.activeSubscriptionCount = provider.activeSubscriptionCount.plus(BigInt.fromI32(1))
+        plan.activeSubscriptionCount = plan.activeSubscriptionCount.plus(BigInt.fromI32(1))
+        plan.pausedSubscriptionCount = plan.pausedSubscriptionCount.minus(BigInt.fromI32(1))
+    }
 
+    subscription.status = 'Active'
     subscription.save()
 
-    plan.activeSubscriptionCount = plan.activeSubscriptionCount.plus(BigInt.fromI32(1))
-    plan.pausedSubscriptionCount = plan.pausedSubscriptionCount.minus(BigInt.fromI32(1))
+    consumer.save()
+    provider.save()
     plan.save()
 }
 
@@ -360,7 +354,6 @@ export function handleSubscriptionRenewed(event: SubscriptionRenewed): void {
     subscription.status = subscriptionStatus(subscriptionInfo.value0.status)
     subscription.renewAt = subscriptionInfo.value0.renewAt.toI32()
     subscription.renewCount = subscription.renewCount.plus(BigInt.fromI32(1))
-
     subscription.save()
 }
 
@@ -385,6 +378,8 @@ export function handleSubscriptionPastDue(event: SubscriptionPastDue): void {
     }
 
     if (subscription.status == 'Active') {
+        consumer.activeSubscriptionCount = consumer.activeSubscriptionCount.minus(BigInt.fromI32(1))
+        provider.activeSubscriptionCount = provider.activeSubscriptionCount.minus(BigInt.fromI32(1))
         plan.activeSubscriptionCount = plan.activeSubscriptionCount.minus(BigInt.fromI32(1))
     } else if (subscription.status == 'Trialing') {
         plan.trialingSubscriptionCount = plan.trialingSubscriptionCount.minus(BigInt.fromI32(1))
@@ -397,7 +392,6 @@ export function handleSubscriptionPastDue(event: SubscriptionPastDue): void {
     plan.save()
 
     subscription.status = 'PastDue'
-
     subscription.save()
 }
 
@@ -421,7 +415,6 @@ export function handleSubscriptionPendingCancel(event: SubscriptionPendingCancel
     }
 
     subscription.cancelAt = event.params.cancelAt.toI32()
-
     subscription.save()
 }
 
@@ -462,7 +455,6 @@ export function handleSubscriptionCanceled(event: SubscriptionCanceled): void {
     consumer.save()
 
     subscription.status = 'Canceled'
-
     subscription.save()
 }
 
@@ -507,7 +499,6 @@ export function handleTransfer(event: Transfer): void {
 
     subscription.currentOwner = to.id
     subscription.transferCount = subscription.transferCount.plus(BigInt.fromI32(1))
-
     subscription.save()
 }
 

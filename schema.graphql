@@ -28,6 +28,12 @@ type CaskConsumer @entity {
 
   totalSubscriptionCount: BigInt!
   activeSubscriptionCount: BigInt!
+
+  totalDCACount: BigInt!
+  activeDCACount: BigInt!
+
+  totalP2PCount: BigInt!
+  activeP2PCount: BigInt!
 }
 
 type CaskProvider @entity {

@@ -77,10 +77,12 @@ export function handleP2PCreated(event: P2PCreated): void {
     p2p.totalAmount = p2pTotalAmount
     p2p.createdAt = p2pInfo.createdAt.toI32()
     p2p.processAt = p2pInfo.processAt.toI32()
-
     p2p.status = 'Active'
-
     p2p.save()
+
+    consumer.totalP2PCount = consumer.totalP2PCount.plus(BigInt.fromI32(1))
+    consumer.activeP2PCount = consumer.activeP2PCount.plus(BigInt.fromI32(1))
+    consumer.save()
 }
 
 export function handleP2PPaused(event: P2PPaused): void {
@@ -106,8 +108,10 @@ export function handleP2PPaused(event: P2PPaused): void {
     }
 
     p2p.status = p2pStatus(p2pInfo.status)
-
     p2p.save()
+
+    consumer.activeP2PCount = consumer.activeP2PCount.minus(BigInt.fromI32(1))
+    consumer.save()
 }
 
 export function handleP2PResumed(event: P2PResumed): void {
@@ -133,8 +137,10 @@ export function handleP2PResumed(event: P2PResumed): void {
     }
 
     p2p.status = p2pStatus(p2pInfo.status)
-
     p2p.save()
+
+    consumer.activeP2PCount = consumer.activeP2PCount.plus(BigInt.fromI32(1))
+    consumer.save()
 }
 
 export function handleP2PSkipped(event: P2PSkipped): void {
@@ -161,7 +167,6 @@ export function handleP2PSkipped(event: P2PSkipped): void {
 
     p2p.status = p2pStatus(p2pInfo.status)
     p2p.numSkips = p2pInfo.numSkips
-
     p2p.save()
 }
 
@@ -191,7 +196,6 @@ export function handleP2PProcessed(event: P2PProcessed): void {
     p2p.numPayments = p2pInfo.numPayments
     p2p.numSkips = p2pInfo.numSkips
     p2p.currentAmount = scaleDown(p2pInfo.currentAmount, VAULT_DECIMALS)
-
     p2p.save()
 }
 
@@ -218,8 +222,10 @@ export function handleP2PCanceled(event: P2PCanceled): void {
     }
 
     p2p.status = p2pStatus(p2pInfo.status)
-
     p2p.save()
+
+    consumer.activeP2PCount = consumer.activeP2PCount.minus(BigInt.fromI32(1))
+    consumer.save()
 }
 
 export function handleP2PComplete(event: P2PCompleted): void {
@@ -245,6 +251,8 @@ export function handleP2PComplete(event: P2PCompleted): void {
     }
 
     p2p.status = p2pStatus(p2pInfo.status)
-
     p2p.save()
+
+    consumer.activeP2PCount = consumer.activeP2PCount.minus(BigInt.fromI32(1))
+    consumer.save()
 }

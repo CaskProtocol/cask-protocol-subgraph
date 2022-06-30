@@ -83,10 +83,12 @@ export function handleDCACreated(event: DCACreated): void {
     dca.slippageBps = dcaInfo.slippageBps
     dca.createdAt = dcaInfo.createdAt.toI32()
     dca.processAt = dcaInfo.processAt.toI32()
-
     dca.status = 'Active'
-
     dca.save()
+
+    consumer.totalDCACount = consumer.totalDCACount.plus(BigInt.fromI32(1))
+    consumer.activeDCACount = consumer.activeDCACount.plus(BigInt.fromI32(1))
+    consumer.save()
 }
 
 export function handleDCAPaused(event: DCAPaused): void {
@@ -112,8 +114,10 @@ export function handleDCAPaused(event: DCAPaused): void {
     }
 
     dca.status = dcaStatus(dcaInfo.status)
-
     dca.save()
+
+    consumer.activeDCACount = consumer.activeDCACount.minus(BigInt.fromI32(1))
+    consumer.save()
 }
 
 export function handleDCAResumed(event: DCAResumed): void {
@@ -139,8 +143,10 @@ export function handleDCAResumed(event: DCAResumed): void {
     }
 
     dca.status = dcaStatus(dcaInfo.status)
-
     dca.save()
+
+    consumer.activeDCACount = consumer.activeDCACount.plus(BigInt.fromI32(1))
+    consumer.save()
 }
 
 export function handleDCASkipped(event: DCASkipped): void {
@@ -198,7 +204,6 @@ export function handleDCAProcessed(event: DCAProcessed): void {
     dca.numSkips = dcaInfo.numSkips
     dca.currentAmount = scaleDown(dcaInfo.currentAmount, VAULT_DECIMALS)
     dca.currentQty = dcaInfo.currentQty
-
     dca.save()
 }
 
@@ -225,8 +230,10 @@ export function handleDCACanceled(event: DCACanceled): void {
     }
 
     dca.status = dcaStatus(dcaInfo.status)
-
     dca.save()
+
+    consumer.activeDCACount = consumer.activeDCACount.minus(BigInt.fromI32(1))
+    consumer.save()
 }
 
 export function handleDCAComplete(event: DCACompleted): void {
@@ -252,6 +259,8 @@ export function handleDCAComplete(event: DCACompleted): void {
     }
 
     dca.status = dcaStatus(dcaInfo.status)
-
     dca.save()
+
+    consumer.activeDCACount = consumer.activeDCACount.minus(BigInt.fromI32(1))
+    consumer.save()
 }
