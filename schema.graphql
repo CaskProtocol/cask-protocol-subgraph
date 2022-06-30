@@ -113,7 +113,7 @@ enum DCAStatus {
 type CaskDCA @entity {
   id: ID!
 
-  user: CaskUser!
+  user: CaskConsumer!
   to: Bytes!
 
   router: Bytes!
@@ -150,7 +150,7 @@ enum P2PStatus {
 type CaskP2P @entity {
   id: ID!
 
-  user: CaskUser!
+  user: CaskConsumer!
   to: Bytes!
 
   amount: BigDecimal!

@@ -81,6 +81,7 @@ export function handleDCACreated(event: DCACreated): void {
         return;
     }
 
+    dca.user = consumer.id
     dca.to = dcaInfo.to
     dca.router = dcaInfo.router
     dca.priceFeed = dcaInfo.priceFeed

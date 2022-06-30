@@ -80,6 +80,7 @@ export function handleP2PCreated(event: P2PCreated): void {
         return;
     }
 
+    p2p.user = consumer.id
     p2p.to = p2pInfo.to
     p2p.amount = p2pAmount
     p2p.period = p2pInfo.period.toI32()
