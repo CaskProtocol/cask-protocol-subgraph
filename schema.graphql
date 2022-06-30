@@ -95,6 +95,13 @@ type CaskSubscription @entity {
   transferCount: BigInt!
 }
 
+type CaskDiscount @entity {
+    id: ID!
+
+    provider: CaskProvider!
+    redemptions: BigInt!
+}
+
 enum DCAStatus {
   None
   Active

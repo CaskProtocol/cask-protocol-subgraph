@@ -25,7 +25,8 @@ import {
     CaskProvider,
     CaskSubscriptionPlan,
     CaskSubscription,
-    CaskTransaction
+    CaskTransaction,
+    CaskDiscount
 } from "../types/schema"
 
 import {
@@ -65,6 +66,16 @@ function findOrCreateConsumer(consumerAddress: Bytes, appearedAt: i32): CaskCons
         consumer.save()
     }
     return consumer
+}
+
+function findOrCreateDiscount(provider: CaskProvider, discountId: Bytes): CaskDiscount {
+    let discount = CaskDiscount.load(provider.id+'-'+discountId.toHex())
+    if (!discount) {
+        discount = new CaskDiscount(provider.id+'-'+discountId.toHex())
+        discount.provider = provider.id
+        discount.save()
+    }
+    return discount
 }
 
 function subscriptionStatus(statusId: i32): string {
@@ -142,6 +153,12 @@ export function handleSubscriptionCreated(event: SubscriptionCreated): void {
     plan.save()
     consumer.save()
     provider.save()
+
+    if (subscriptionInfo.value0.discountId.toHex() != "0x0000000000000000000000000000000000000000000000000000000000000000") {
+        const discount = findOrCreateDiscount(provider, subscriptionInfo.value0.discountId);
+        discount.redemptions = discount.redemptions.plus(BigInt.fromI32(1))
+        discount.save()
+    }
 }
 
 export function handleSubscriptionPendingChangePlan(event: SubscriptionPendingChangePlan): void {
@@ -216,8 +233,17 @@ export function handleSubscriptionChangedPlan(event: SubscriptionChangedPlan): v
     prevPlan.save()
     plan.save()
 
+    if (subscriptionInfo.value0.discountId.toHex() != "0x0000000000000000000000000000000000000000000000000000000000000000" &&
+        subscription.discountId != subscriptionInfo.value0.discountId)
+    {
+        const discount = findOrCreateDiscount(provider, subscriptionInfo.value0.discountId);
+        discount.redemptions = discount.redemptions.plus(BigInt.fromI32(1))
+        discount.save()
+    }
+
     subscription.status = subscriptionStatus(subscriptionInfo.value0.status)
     subscription.plan = plan.id
+    subscription.discountId = subscriptionInfo.value0.discountId
     subscription.cid = subscriptionInfo.value0.cid
     subscription.renewAt = subscriptionInfo.value0.renewAt.toI32()
     subscription.save()

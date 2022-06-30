@@ -22,6 +22,7 @@ dataSources:
         - CaskConsumer
         - CaskProvider
         - CaskSubscriptionPlan
+        - CaskDiscount
       abis:
         - name: CaskSubscriptions
           file: ./abis/CaskSubscriptions.json
