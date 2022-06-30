@@ -81,9 +81,9 @@ dataSources:
     name: CaskDCA
     network: mumbai
     source:
-      address: "0xC040BDBBb2b1AdDaa7586962e9Fcb5585D7e66a9"
+      address: "0x41Eb18BA90c2c955f1987BD3AeA6feb0F70e0e49"
       abi: CaskDCA
-      startBlock: 26026872
+      startBlock: 26974719
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -115,9 +115,9 @@ dataSources:
     name: CaskP2P
     network: mumbai
     source:
-      address: "0xC040BDBBb2b1AdDaa7586962e9Fcb5585D7e66a9"
+      address: "0x92b34C07bD6B77A88d91919469c540a7e1b269e4"
       abi: CaskP2P
-      startBlock: 26026872
+      startBlock: 26974686
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5

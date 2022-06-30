@@ -81,9 +81,9 @@ dataSources:
     name: CaskDCA
     network: fuji
     source:
-      address: "0x5e8C289404E9B17be7FfE7FcBa673f5AC802cc06"
+      address: "0x02b5953b90087d5e0A8e9a74364a3e60cfbc9872"
       abi: CaskDCA
-      startBlock: 8799462
+      startBlock: 11126437
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -115,9 +115,9 @@ dataSources:
     name: CaskP2P
     network: fuji
     source:
-      address: "0x5e8C289404E9B17be7FfE7FcBa673f5AC802cc06"
+      address: "0xDa70B55FEF2Ad61a289eC57d27E8e9f85144A298"
       abi: CaskP2P
-      startBlock: 8799462
+      startBlock: 11126564
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5

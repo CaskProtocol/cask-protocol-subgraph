@@ -39,11 +39,11 @@ internal.mumbai:
     address: "0xC040BDBBb2b1AdDaa7586962e9Fcb5585D7e66a9"
     startBlock: 26026872
   CaskDCA:
-    address: "0xC040BDBBb2b1AdDaa7586962e9Fcb5585D7e66a9"
-    startBlock: 26026872
+    address: "0x41Eb18BA90c2c955f1987BD3AeA6feb0F70e0e49"
+    startBlock: 26974719
   CaskP2P:
-    address: "0xC040BDBBb2b1AdDaa7586962e9Fcb5585D7e66a9"
-    startBlock: 26026872
+    address: "0x92b34C07bD6B77A88d91919469c540a7e1b269e4"
+    startBlock: 26974686
 internal.fuji:
   network: fuji
   CaskSubscriptions:
@@ -53,8 +53,8 @@ internal.fuji:
     address: "0x5e8C289404E9B17be7FfE7FcBa673f5AC802cc06"
     startBlock: 8799462
   CaskDCA:
-    address: "0x5e8C289404E9B17be7FfE7FcBa673f5AC802cc06"
-    startBlock: 8799462
+    address: "0x02b5953b90087d5e0A8e9a74364a3e60cfbc9872"
+    startBlock: 11126437
   CaskP2P:
-    address: "0x5e8C289404E9B17be7FfE7FcBa673f5AC802cc06"
-    startBlock: 8799462
+    address: "0xDa70B55FEF2Ad61a289eC57d27E8e9f85144A298"
+    startBlock: 11126564
