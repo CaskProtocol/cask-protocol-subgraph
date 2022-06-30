@@ -25,6 +25,15 @@ import {
     CaskDCA,
 } from "../types/schema"
 
+function findOrCreateDCA(dcaId: Bytes): CaskDCA {
+    let dca = CaskDCA.load(dcaId.toHex())
+    if (!dca) {
+        dca = new CaskDCA(dcaId.toHex())
+        dca.save()
+    }
+    return dca
+}
+
 function findOrCreateConsumer(consumerAddress: Bytes, appearedAt: i32): CaskConsumer {
     let consumer = CaskConsumer.load(consumerAddress.toHex())
     if (!consumer) {
@@ -63,7 +72,7 @@ export function handleDCACreated(event: DCACreated): void {
     txn.amount = dcaAmount
     txn.save()
 
-    let dca = new CaskDCA(event.params.dcaId.toHex())
+    let dca = findOrCreateDCA(event.params.dcaId)
 
     let contract = CaskDCAContract.bind(event.address)
     let dcaInfo = contract.getDCA(event.params.dcaId)
@@ -75,6 +84,8 @@ export function handleDCACreated(event: DCACreated): void {
     dca.to = dcaInfo.to
     dca.router = dcaInfo.router
     dca.priceFeed = dcaInfo.priceFeed
+    dca.inputAsset = dcaInfo.path[0]
+    dca.outputAsset = dcaInfo.path[dcaInfo.path.length-1]
     dca.amount = dcaAmount
     dca.period = dcaInfo.period.toI32()
     dca.totalAmount = dcaTotalAmount
@@ -186,11 +197,7 @@ export function handleDCAProcessed(event: DCAProcessed): void {
     txn.consumer = consumer.id
     txn.save()
 
-    let dca = CaskDCA.load(event.params.dcaId.toHex())
-    if (dca == null) {
-        log.warning('DCA not found: {}', [event.params.dcaId.toHex()])
-        return;
-    }
+    let dca = findOrCreateDCA(event.params.dcaId)
 
     let contract = CaskDCAContract.bind(event.address)
     let dcaInfo = contract.getDCA(event.params.dcaId)
@@ -202,6 +209,7 @@ export function handleDCAProcessed(event: DCAProcessed): void {
     dca.status = dcaStatus(dcaInfo.status)
     dca.numBuys = dcaInfo.numBuys
     dca.numSkips = dcaInfo.numSkips
+    dca.processAt = dcaInfo.processAt.toI32()
     dca.currentAmount = scaleDown(dcaInfo.currentAmount, VAULT_DECIMALS)
     dca.currentQty = dcaInfo.currentQty
     dca.save()

@@ -25,6 +25,15 @@ import {
     CaskP2P,
 } from "../types/schema"
 
+function findOrCreateP2P(p2pId: Bytes): CaskP2P {
+    let p2p = CaskP2P.load(p2pId.toHex())
+    if (!p2p) {
+        p2p = new CaskP2P(p2pId.toHex())
+        p2p.save()
+    }
+    return p2p
+}
+
 function findOrCreateConsumer(consumerAddress: Bytes, appearedAt: i32): CaskConsumer {
     let consumer = CaskConsumer.load(consumerAddress.toHex())
     if (!consumer) {
@@ -62,7 +71,7 @@ export function handleP2PCreated(event: P2PCreated): void {
     txn.amount = p2pAmount
     txn.save()
 
-    let p2p = new CaskP2P(event.params.p2pId.toHex())
+    let p2p = findOrCreateP2P(event.params.p2pId);
 
     let contract = CaskP2PContract.bind(event.address)
     let p2pInfo = contract.getP2P(event.params.p2pId)
@@ -179,11 +188,7 @@ export function handleP2PProcessed(event: P2PProcessed): void {
     txn.consumer = consumer.id
     txn.save()
 
-    let p2p = CaskP2P.load(event.params.p2pId.toHex())
-    if (p2p == null) {
-        log.warning('P2P not found: {}', [event.params.p2pId.toHex()])
-        return;
-    }
+    let p2p = findOrCreateP2P(event.params.p2pId);
 
     let contract = CaskP2PContract.bind(event.address)
     let p2pInfo = contract.getP2P(event.params.p2pId)
@@ -195,6 +200,7 @@ export function handleP2PProcessed(event: P2PProcessed): void {
     p2p.status = p2pStatus(p2pInfo.status)
     p2p.numPayments = p2pInfo.numPayments
     p2p.numSkips = p2pInfo.numSkips
+    p2p.processAt = p2pInfo.processAt.toI32()
     p2p.currentAmount = scaleDown(p2pInfo.currentAmount, VAULT_DECIMALS)
     p2p.save()
 }
