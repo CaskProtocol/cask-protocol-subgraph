@@ -110,6 +110,14 @@ enum DCAStatus {
   Complete
 }
 
+enum DCASkipReason {
+  None
+  AssetNotAllowed
+  PaymentFailed
+  OutsideLimits
+  SwapFailed
+}
+
 type CaskDCA @entity {
   id: ID!
 
@@ -216,4 +224,5 @@ type CaskTransaction @entity {
 
   amount: BigDecimal
 
+  skipReason: DCASkipReason
 }

@@ -181,6 +181,12 @@
         "internalType": "address",
         "name": "user",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum ICaskDCA.SkipReason",
+        "name": "skipReason",
+        "type": "uint8"
       }
     ],
     "name": "DCASkipped",
@@ -375,14 +381,19 @@
         "internalType": "address",
         "name": "_user",
         "type": "address"
-      }
-    ],
-    "name": "getUserDCACount",
-    "outputs": [
+      },
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "_idx",
         "type": "uint256"
+      }
+    ],
+    "name": "getUserDCA",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
@@ -394,24 +405,14 @@
         "internalType": "address",
         "name": "_user",
         "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_limit",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_offset",
-        "type": "uint256"
       }
     ],
-    "name": "getUserDCAList",
+    "name": "getUserDCACount",
     "outputs": [
       {
-        "internalType": "bytes32[]",
+        "internalType": "uint256",
         "name": "",
-        "type": "bytes32[]"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -459,6 +460,24 @@
       }
     ],
     "name": "managerProcessed",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_dcaId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "enum ICaskDCA.SkipReason",
+        "name": "_skipReason",
+        "type": "uint8"
+      }
+    ],
+    "name": "managerSkipped",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -58,6 +58,20 @@ function dcaStatus(statusId: i32): string {
     }
 }
 
+function dcaSkipReason(reasonId: i32): string {
+    if (reasonId == 1) {
+        return 'AssetNotAllowed'
+    } else if (reasonId == 2) {
+        return 'PaymentFailed'
+    } else if (reasonId == 3) {
+        return 'OutsideLimits'
+    } else if (reasonId == 4) {
+        return 'SwapFailed'
+    } else {
+        return 'None'
+    }
+}
+
 export function handleDCACreated(event: DCACreated): void {
 
     let dcaAmount: BigDecimal = scaleDown(event.params.amount, VAULT_DECIMALS);
@@ -168,6 +182,7 @@ export function handleDCASkipped(event: DCASkipped): void {
     txn.type = 'DCASkipped'
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
+    txn.skipReason = dcaSkipReason(event.params.skipReason)
     txn.save()
 
     let dca = CaskDCA.load(event.params.dcaId.toHex())

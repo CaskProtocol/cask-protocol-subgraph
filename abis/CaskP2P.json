@@ -297,14 +297,19 @@
         "internalType": "address",
         "name": "_user",
         "type": "address"
-      }
-    ],
-    "name": "getUserP2PCount",
-    "outputs": [
+      },
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "_idx",
         "type": "uint256"
+      }
+    ],
+    "name": "getUserP2P",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
@@ -316,24 +321,14 @@
         "internalType": "address",
         "name": "_user",
         "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_limit",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_offset",
-        "type": "uint256"
       }
     ],
-    "name": "getUserP2PList",
+    "name": "getUserP2PCount",
     "outputs": [
       {
-        "internalType": "bytes32[]",
+        "internalType": "uint256",
         "name": "",
-        "type": "bytes32[]"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",

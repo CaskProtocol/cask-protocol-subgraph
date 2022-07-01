@@ -762,6 +762,30 @@
         "internalType": "address",
         "name": "_consumer",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_idx",
+        "type": "uint256"
+      }
+    ],
+    "name": "getConsumerSubscription",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_consumer",
+        "type": "address"
       }
     ],
     "name": "getConsumerSubscriptionCount",
@@ -789,6 +813,30 @@
         "internalType": "bytes32",
         "name": "",
         "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_provider",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_idx",
+        "type": "uint256"
+      }
+    ],
+    "name": "getProviderSubscription",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",

@@ -105,7 +105,7 @@ dataSources:
           handler: handleDCAPaused
         - event: DCAResumed(indexed bytes32,indexed address)
           handler: handleDCAResumed
-        - event: DCASkipped(indexed bytes32,indexed address)
+        - event: DCASkipped(indexed bytes32,indexed address,uint8)
           handler: handleDCASkipped
         - event: DCAProcessed(indexed bytes32,indexed address,uint256,uint256,uint256)
           handler: handleDCAProcessed
