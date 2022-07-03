@@ -24,11 +24,13 @@ export function incrementMetric(name: string, timestamp: BigInt,
 {
     let metric = findOrCreateMetricDate(name, timestamp)
     metric.value = metric.value.plus(value)
+    metric.save()
 }
 
 export function setMetric(name: string, timestamp: BigInt, value: BigDecimal): void {
     let metric = findOrCreateMetricDate(name, timestamp)
     metric.value = value
+    metric.save()
 }
 
 export function addressMetricName(name: string, address: Bytes): string {
