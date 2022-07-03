@@ -221,6 +221,7 @@ enum TransactionType {
 type CaskTransaction @entity {
   id: ID!
   type: TransactionType!
+  txnId: Bytes!
   timestamp: Int!
 
   consumer: CaskConsumer

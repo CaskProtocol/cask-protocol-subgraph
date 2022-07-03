@@ -67,6 +67,7 @@ export function handleP2PCreated(event: P2PCreated): void {
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'P2PCreated'
     txn.p2pId = event.params.p2pId
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.amount = p2pAmount
@@ -104,6 +105,7 @@ export function handleP2PPaused(event: P2PPaused): void {
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'P2PPaused'
     txn.p2pId = event.params.p2pId
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.save()
@@ -134,6 +136,7 @@ export function handleP2PResumed(event: P2PResumed): void {
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'P2PResumed'
     txn.p2pId = event.params.p2pId
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.save()
@@ -164,6 +167,7 @@ export function handleP2PSkipped(event: P2PSkipped): void {
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'P2PSkipped'
     txn.p2pId = event.params.p2pId
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.save()
@@ -192,6 +196,7 @@ export function handleP2PProcessed(event: P2PProcessed): void {
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'P2PProcessed'
     txn.p2pId = event.params.p2pId
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.save()
@@ -221,6 +226,7 @@ export function handleP2PCanceled(event: P2PCanceled): void {
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'P2PCanceled'
     txn.p2pId = event.params.p2pId
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.save()
@@ -251,6 +257,7 @@ export function handleP2PComplete(event: P2PCompleted): void {
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'P2PCanceled'
     txn.p2pId = event.params.p2pId
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.save()

@@ -101,6 +101,7 @@ export function handleSubscriptionCreated(event: SubscriptionCreated): void {
 
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionCreated'
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
@@ -168,6 +169,7 @@ export function handleSubscriptionPendingChangePlan(event: SubscriptionPendingCh
 
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionPendingChangePlan'
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
@@ -201,6 +203,7 @@ export function handleSubscriptionChangedPlan(event: SubscriptionChangedPlan): v
 
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionChangedPlan'
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
@@ -257,6 +260,7 @@ export function handleSubscriptionPaused(event: SubscriptionPaused): void {
 
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionPaused'
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
@@ -291,6 +295,7 @@ export function handleSubscriptionPendingPause(event: SubscriptionPendingPause):
 
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionPendingPause'
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
@@ -306,6 +311,7 @@ export function handleSubscriptionResumed(event: SubscriptionResumed): void {
 
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionResumed'
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
@@ -341,6 +347,7 @@ export function handleSubscriptionRenewed(event: SubscriptionRenewed): void {
 
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionRenewed'
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
@@ -394,6 +401,7 @@ export function handleSubscriptionPastDue(event: SubscriptionPastDue): void {
 
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionPastDue'
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
@@ -431,6 +439,7 @@ export function handleSubscriptionPendingCancel(event: SubscriptionPendingCancel
 
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionPendingCancel'
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
@@ -455,6 +464,7 @@ export function handleSubscriptionCanceled(event: SubscriptionCanceled): void {
 
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionCanceled'
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
@@ -494,6 +504,7 @@ export function handleSubscriptionTrialEnded(event: SubscriptionTrialEnded): voi
 
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'SubscriptionTrialEnded'
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.provider = provider.id
@@ -515,6 +526,7 @@ export function handleTransfer(event: Transfer): void {
 
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'Transfer'
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = from.id
     txn.subscriptionId = event.params.tokenId

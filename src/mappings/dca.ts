@@ -83,6 +83,7 @@ export function handleDCACreated(event: DCACreated): void {
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'DCACreated'
     txn.dcaId = event.params.dcaId
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.assetAddress = event.params.outputAsset
@@ -128,6 +129,7 @@ export function handleDCAPaused(event: DCAPaused): void {
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'DCAPaused'
     txn.dcaId = event.params.dcaId
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.save()
@@ -158,6 +160,7 @@ export function handleDCAResumed(event: DCAResumed): void {
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'DCAResumed'
     txn.dcaId = event.params.dcaId
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.save()
@@ -188,6 +191,7 @@ export function handleDCASkipped(event: DCASkipped): void {
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'DCASkipped'
     txn.dcaId = event.params.dcaId
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.skipReason = dcaSkipReason(event.params.skipReason)
@@ -218,6 +222,7 @@ export function handleDCAProcessed(event: DCAProcessed): void {
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'DCAProcessed'
     txn.dcaId = event.params.dcaId
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.save()
@@ -248,6 +253,7 @@ export function handleDCACanceled(event: DCACanceled): void {
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'DCACanceled'
     txn.dcaId = event.params.dcaId
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.save()
@@ -278,6 +284,7 @@ export function handleDCAComplete(event: DCACompleted): void {
     let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'DCACanceled'
     txn.dcaId = event.params.dcaId
+    txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
     txn.consumer = consumer.id
     txn.save()
