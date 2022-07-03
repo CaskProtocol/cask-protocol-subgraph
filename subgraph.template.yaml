@@ -23,6 +23,7 @@ dataSources:
         - CaskProvider
         - CaskSubscriptionPlan
         - CaskDiscount
+        - CaskMetric
       abis:
         - name: CaskSubscriptions
           file: ./abis/CaskSubscriptions.json
@@ -66,6 +67,7 @@ dataSources:
       entities:
         - Cask
         - CaskUser
+        - CaskMetric
       abis:
         - name: CaskVault
           file: ./abis/CaskVault.json
@@ -95,6 +97,7 @@ dataSources:
         - CaskTransaction
         - CaskDCA
         - CaskConsumer
+        - CaskMetric
       abis:
         - name: CaskDCA
           file: ./abis/CaskDCA.json
@@ -131,6 +134,7 @@ dataSources:
         - CaskTransaction
         - CaskP2P
         - CaskConsumer
+        - CaskMetric
       abis:
         - name: CaskP2P
           file: ./abis/CaskP2P.json

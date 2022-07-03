@@ -1,7 +1,5 @@
 import {
     BigInt,
-    Address,
-    BigDecimal,
     Bytes,
     log
 } from "@graphprotocol/graph-ts"
@@ -28,13 +26,11 @@ import {
     CaskTransaction,
     CaskDiscount
 } from "../types/schema"
-
 import {
-    VAULT_DECIMALS,
-    scaleDown
-} from "./helpers/units"
+    addressMetricName,
+    incrementMetric
+} from "./helpers/metrics"
 import {
-    PlanInfo,
     parsePlanData
 } from "./helpers/plans"
 
@@ -73,6 +69,7 @@ function findOrCreateDiscount(provider: CaskProvider, discountId: Bytes): CaskDi
     if (!discount) {
         discount = new CaskDiscount(provider.id+'-'+discountId.toHex())
         discount.provider = provider.id
+        discount.discountId = discountId
         discount.save()
     }
     return discount
@@ -159,6 +156,9 @@ export function handleSubscriptionCreated(event: SubscriptionCreated): void {
         discount.redemptions = discount.redemptions.plus(BigInt.fromI32(1))
         discount.save()
     }
+
+    incrementMetric(addressMetricName('subscription.created', event.params.provider), event.block.timestamp)
+    incrementMetric('subscription.created', event.block.timestamp)
 }
 
 export function handleSubscriptionPendingChangePlan(event: SubscriptionPendingChangePlan): void {
@@ -381,6 +381,9 @@ export function handleSubscriptionRenewed(event: SubscriptionRenewed): void {
     subscription.renewAt = subscriptionInfo.value0.renewAt.toI32()
     subscription.renewCount = subscription.renewCount.plus(BigInt.fromI32(1))
     subscription.save()
+
+    incrementMetric(addressMetricName('subscription.renewed', event.params.provider), event.block.timestamp)
+    incrementMetric('subscription.renewed', event.block.timestamp)
 }
 
 export function handleSubscriptionPastDue(event: SubscriptionPastDue): void {

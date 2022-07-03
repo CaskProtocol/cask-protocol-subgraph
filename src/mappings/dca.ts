@@ -1,6 +1,5 @@
 import {
     BigInt,
-    Address,
     BigDecimal,
     Bytes,
     log
@@ -18,7 +17,10 @@ import {
 import {
     VAULT_DECIMALS,
     scaleDown,
-} from './helpers/units';
+} from './helpers/units'
+import {
+    incrementMetric
+} from "./helpers/metrics"
 import {
     CaskTransaction,
     CaskConsumer,
@@ -111,6 +113,8 @@ export function handleDCACreated(event: DCACreated): void {
     dca.processAt = dcaInfo.processAt.toI32()
     dca.status = 'Active'
     dca.save()
+
+    incrementMetric('dca.created', event.block.timestamp)
 
     consumer.totalDCACount = consumer.totalDCACount.plus(BigInt.fromI32(1))
     consumer.activeDCACount = consumer.activeDCACount.plus(BigInt.fromI32(1))
@@ -229,6 +233,8 @@ export function handleDCAProcessed(event: DCAProcessed): void {
     dca.currentAmount = scaleDown(dcaInfo.currentAmount, VAULT_DECIMALS)
     dca.currentQty = dcaInfo.currentQty
     dca.save()
+
+    incrementMetric('dca.processed', event.block.timestamp)
 }
 
 export function handleDCACanceled(event: DCACanceled): void {

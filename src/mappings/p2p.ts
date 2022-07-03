@@ -1,6 +1,5 @@
 import {
     BigInt,
-    Address,
     BigDecimal,
     Bytes,
     log
@@ -24,6 +23,7 @@ import {
     CaskConsumer,
     CaskP2P,
 } from "../types/schema"
+import {addressMetricName, incrementMetric} from "./helpers/metrics";
 
 function findOrCreateP2P(p2pId: Bytes): CaskP2P {
     let p2p = CaskP2P.load(p2pId.toHex())
@@ -93,6 +93,8 @@ export function handleP2PCreated(event: P2PCreated): void {
     consumer.totalP2PCount = consumer.totalP2PCount.plus(BigInt.fromI32(1))
     consumer.activeP2PCount = consumer.activeP2PCount.plus(BigInt.fromI32(1))
     consumer.save()
+
+    incrementMetric('p2p.created', event.block.timestamp)
 }
 
 export function handleP2PPaused(event: P2PPaused): void {
@@ -204,6 +206,8 @@ export function handleP2PProcessed(event: P2PProcessed): void {
     p2p.processAt = p2pInfo.processAt.toI32()
     p2p.currentAmount = scaleDown(p2pInfo.currentAmount, VAULT_DECIMALS)
     p2p.save()
+
+    incrementMetric('p2p.processed', event.block.timestamp)
 }
 
 export function handleP2PCanceled(event: P2PCanceled): void {

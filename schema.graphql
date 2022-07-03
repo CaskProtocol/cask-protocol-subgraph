@@ -10,6 +10,14 @@ type Cask @entity {
   totalNetworkFees: BigDecimal!
 }
 
+type CaskMetric @entity {
+  id: ID!
+
+  name: String
+  date: Int!
+  value: BigDecimal!
+}
+
 type CaskUser @entity {
   id: ID!
   appearedAt: Int!
@@ -99,6 +107,7 @@ type CaskDiscount @entity {
     id: ID!
 
     provider: CaskProvider!
+    discountId: Bytes!
     redemptions: BigInt!
 }
 
