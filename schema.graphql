@@ -227,6 +227,8 @@ type CaskTransaction @entity {
   provider: CaskProvider
 
   subscriptionId: BigInt
+  dcaId: Bytes
+  p2pId: Bytes
 
   assetAddress: Bytes
   assetName: String
