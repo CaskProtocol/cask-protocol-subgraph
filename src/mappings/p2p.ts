@@ -21,9 +21,9 @@ import {
 import {
     CaskTransaction,
     CaskConsumer,
-    CaskP2P,
+    CaskP2P, CaskP2PEvent,
 } from "../types/schema"
-import {addressMetricName, incrementMetric} from "./helpers/metrics";
+import {incrementMetric} from "./helpers/metrics";
 
 function findOrCreateP2P(p2pId: Bytes): CaskP2P {
     let p2p = CaskP2P.load(p2pId.toHex())
@@ -64,12 +64,12 @@ export function handleP2PCreated(event: P2PCreated): void {
     let p2pTotalAmount: BigDecimal = scaleDown(event.params.totalAmount, VAULT_DECIMALS);
 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    let txn = new CaskP2PEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'P2PCreated'
     txn.p2pId = event.params.p2pId
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
-    txn.consumer = consumer.id
+    txn.user = consumer.id
     txn.amount = p2pAmount
     txn.save()
 
@@ -102,12 +102,12 @@ export function handleP2PCreated(event: P2PCreated): void {
 export function handleP2PPaused(event: P2PPaused): void {
 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    let txn = new CaskP2PEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'P2PPaused'
     txn.p2pId = event.params.p2pId
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
-    txn.consumer = consumer.id
+    txn.user = consumer.id
     txn.save()
 
     let p2p = CaskP2P.load(event.params.p2pId.toHex())
@@ -133,12 +133,12 @@ export function handleP2PPaused(event: P2PPaused): void {
 export function handleP2PResumed(event: P2PResumed): void {
 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    let txn = new CaskP2PEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'P2PResumed'
     txn.p2pId = event.params.p2pId
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
-    txn.consumer = consumer.id
+    txn.user = consumer.id
     txn.save()
 
     let p2p = CaskP2P.load(event.params.p2pId.toHex())
@@ -164,12 +164,12 @@ export function handleP2PResumed(event: P2PResumed): void {
 export function handleP2PSkipped(event: P2PSkipped): void {
 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    let txn = new CaskP2PEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'P2PSkipped'
     txn.p2pId = event.params.p2pId
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
-    txn.consumer = consumer.id
+    txn.user = consumer.id
     txn.save()
 
     let p2p = CaskP2P.load(event.params.p2pId.toHex())
@@ -193,12 +193,13 @@ export function handleP2PSkipped(event: P2PSkipped): void {
 export function handleP2PProcessed(event: P2PProcessed): void {
 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    let txn = new CaskP2PEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'P2PProcessed'
     txn.p2pId = event.params.p2pId
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
-    txn.consumer = consumer.id
+    txn.user = consumer.id
+    txn.amount = scaleDown(event.params.amount, VAULT_DECIMALS)
     txn.save()
 
     let p2p = findOrCreateP2P(event.params.p2pId);
@@ -223,12 +224,12 @@ export function handleP2PProcessed(event: P2PProcessed): void {
 export function handleP2PCanceled(event: P2PCanceled): void {
 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    let txn = new CaskP2PEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'P2PCanceled'
     txn.p2pId = event.params.p2pId
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
-    txn.consumer = consumer.id
+    txn.user = consumer.id
     txn.save()
 
     let p2p = CaskP2P.load(event.params.p2pId.toHex())
@@ -254,12 +255,12 @@ export function handleP2PCanceled(event: P2PCanceled): void {
 export function handleP2PComplete(event: P2PCompleted): void {
 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    let txn = new CaskP2PEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'P2PCanceled'
     txn.p2pId = event.params.p2pId
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
-    txn.consumer = consumer.id
+    txn.user = consumer.id
     txn.save()
 
     let p2p = CaskP2P.load(event.params.p2pId.toHex())

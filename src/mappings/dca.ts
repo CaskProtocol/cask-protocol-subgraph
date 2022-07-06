@@ -24,7 +24,7 @@ import {
 import {
     CaskTransaction,
     CaskConsumer,
-    CaskDCA,
+    CaskDCA, CaskDCAEvent,
 } from "../types/schema"
 
 function findOrCreateDCA(dcaId: Bytes): CaskDCA {
@@ -80,12 +80,12 @@ export function handleDCACreated(event: DCACreated): void {
     let dcaTotalAmount: BigDecimal = scaleDown(event.params.totalAmount, VAULT_DECIMALS);
 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    let txn = new CaskDCAEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'DCACreated'
     txn.dcaId = event.params.dcaId
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
-    txn.consumer = consumer.id
+    txn.user = consumer.id
     txn.assetAddress = event.params.outputAsset
     txn.amount = dcaAmount
     txn.save()
@@ -126,12 +126,12 @@ export function handleDCACreated(event: DCACreated): void {
 export function handleDCAPaused(event: DCAPaused): void {
 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    let txn = new CaskDCAEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'DCAPaused'
     txn.dcaId = event.params.dcaId
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
-    txn.consumer = consumer.id
+    txn.user = consumer.id
     txn.save()
 
     let dca = CaskDCA.load(event.params.dcaId.toHex())
@@ -157,12 +157,12 @@ export function handleDCAPaused(event: DCAPaused): void {
 export function handleDCAResumed(event: DCAResumed): void {
 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    let txn = new CaskDCAEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'DCAResumed'
     txn.dcaId = event.params.dcaId
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
-    txn.consumer = consumer.id
+    txn.user = consumer.id
     txn.save()
 
     let dca = CaskDCA.load(event.params.dcaId.toHex())
@@ -188,12 +188,12 @@ export function handleDCAResumed(event: DCAResumed): void {
 export function handleDCASkipped(event: DCASkipped): void {
 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    let txn = new CaskDCAEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'DCASkipped'
     txn.dcaId = event.params.dcaId
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
-    txn.consumer = consumer.id
+    txn.user = consumer.id
     txn.skipReason = dcaSkipReason(event.params.skipReason)
     txn.save()
 
@@ -219,12 +219,14 @@ export function handleDCASkipped(event: DCASkipped): void {
 export function handleDCAProcessed(event: DCAProcessed): void {
 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    let txn = new CaskDCAEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'DCAProcessed'
     txn.dcaId = event.params.dcaId
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
-    txn.consumer = consumer.id
+    txn.amount = scaleDown(event.params.amount, VAULT_DECIMALS)
+    txn.buyQty = event.params.buyQty
+    txn.user = consumer.id
     txn.save()
 
     let dca = findOrCreateDCA(event.params.dcaId)
@@ -250,12 +252,12 @@ export function handleDCAProcessed(event: DCAProcessed): void {
 export function handleDCACanceled(event: DCACanceled): void {
 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    let txn = new CaskDCAEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'DCACanceled'
     txn.dcaId = event.params.dcaId
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
-    txn.consumer = consumer.id
+    txn.user = consumer.id
     txn.save()
 
     let dca = CaskDCA.load(event.params.dcaId.toHex())
@@ -281,12 +283,12 @@ export function handleDCACanceled(event: DCACanceled): void {
 export function handleDCAComplete(event: DCACompleted): void {
 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    let txn = new CaskDCAEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'DCACanceled'
     txn.dcaId = event.params.dcaId
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
-    txn.consumer = consumer.id
+    txn.user = consumer.id
     txn.save()
 
     let dca = CaskDCA.load(event.params.dcaId.toHex())
