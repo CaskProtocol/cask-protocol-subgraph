@@ -18,9 +18,17 @@ type CaskMetric @entity {
   value: BigDecimal!
 }
 
+enum FundingSource {
+    Cask
+    Personal
+}
+
 type CaskUser @entity {
   id: ID!
   appearedAt: Int!
+
+  fundingSource: FundingSource!
+  fundingAsset: Bytes
 
   balance: BigDecimal!
   depositCount: BigInt!
@@ -263,6 +271,7 @@ enum WalletTransactionType {
  Payment
  TransferValue
  Transfer
+ SetFundingSource
 }
 
 enum DCATransactionType {
@@ -301,7 +310,10 @@ type CaskWalletEvent @entity {
   type: WalletTransactionType!
   txnId: Bytes!
   timestamp: Int!
+
+  fundingSource: FundingSource
   user: CaskConsumer
+  to: CaskConsumer
   assetAddress: Bytes
   assetName: String
   amount: BigDecimal

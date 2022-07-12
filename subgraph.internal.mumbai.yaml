@@ -80,6 +80,8 @@ dataSources:
           handler: handlePayment
         - event: TransferValue(indexed address,indexed address,uint256,uint256)
           handler: handleTransferValue
+        - event: SetFundingSource(indexed address,uint8,address)
+          handler: handleSetFundingSource
   - kind: ethereum/contract
     name: CaskDCA
     network: mumbai

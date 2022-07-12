@@ -24,7 +24,8 @@ import {
     CaskSubscriptionPlan,
     CaskSubscription,
     CaskTransaction,
-    CaskDiscount, CaskSubscriptionEvent
+    CaskDiscount,
+    CaskSubscriptionEvent
 } from "../types/schema"
 import {
     addressMetricName,
