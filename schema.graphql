@@ -39,7 +39,6 @@ type CaskUser @entity {
 
 type CaskConsumer @entity {
   id: ID!
-  subscriptionCount: BigInt!
   appearedAt: Int!
 
   balance: BigDecimal!
@@ -70,7 +69,7 @@ type CaskProvider @entity {
 type CaskSubscriptionPlan @entity {
   id: ID!
   provider: CaskProvider!
-  planId: Int!
+  planId: BigInt!
 
   totalSubscriptionCount: BigInt!
   activeSubscriptionCount: BigInt!
@@ -302,7 +301,7 @@ type CaskSubscriptionEvent @entity {
   consumer: CaskConsumer
   provider: CaskProvider
   subscriptionId: BigInt
-  planId: Int!
+  planId: BigInt!
 }
 
 type CaskWalletEvent @entity {
