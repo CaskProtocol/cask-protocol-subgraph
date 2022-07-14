@@ -27,7 +27,7 @@ type CaskUser @entity {
   id: ID!
   appearedAt: Int!
 
-  fundingSource: FundingSource!
+  fundingSource: FundingSource
   fundingAsset: Bytes
 
   balance: BigDecimal!

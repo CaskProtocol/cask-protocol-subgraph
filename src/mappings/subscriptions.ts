@@ -159,9 +159,9 @@ export function handleSubscriptionCreated(event: SubscriptionCreated): void {
         plan.trialingSubscriptionCount = plan.trialingSubscriptionCount.plus(BigInt.fromI32(1))
     }
 
-    plan.save()
     consumer.save()
     provider.save()
+    plan.save()
 
     if (subscriptionInfo.value0.discountId.toHex() != "0x0000000000000000000000000000000000000000000000000000000000000000") {
         const discount = findOrCreateDiscount(provider, subscriptionInfo.value0.discountId);
@@ -321,12 +321,12 @@ export function handleSubscriptionPaused(event: SubscriptionPaused): void {
         plan.pausedSubscriptionCount = plan.pausedSubscriptionCount.plus(BigInt.fromI32(1))
     }
 
-    subscription.status = 'Paused'
-    subscription.save()
-
     consumer.save()
     provider.save()
     plan.save()
+
+    subscription.status = 'Paused'
+    subscription.save()
 }
 
 export function handleSubscriptionPendingPause(event: SubscriptionPendingPause): void {
@@ -392,12 +392,12 @@ export function handleSubscriptionResumed(event: SubscriptionResumed): void {
         plan.pausedSubscriptionCount = plan.pausedSubscriptionCount.minus(BigInt.fromI32(1))
     }
 
-    subscription.status = 'Active'
-    subscription.save()
-
     consumer.save()
     provider.save()
     plan.save()
+
+    subscription.status = 'Active'
+    subscription.save()
 }
 
 export function handleSubscriptionRenewed(event: SubscriptionRenewed): void {
@@ -507,6 +507,8 @@ export function handleSubscriptionPastDue(event: SubscriptionPastDue): void {
         plan.pastDueSubscriptionCount = plan.pastDueSubscriptionCount.plus(BigInt.fromI32(1))
     }
 
+    consumer.save()
+    provider.save()
     plan.save()
 
     subscription.status = 'PastDue'
@@ -590,9 +592,9 @@ export function handleSubscriptionCanceled(event: SubscriptionCanceled): void {
         plan.canceledSubscriptionCount = plan.canceledSubscriptionCount.plus(BigInt.fromI32(1))
     }
 
+    consumer.save()
     provider.save()
     plan.save()
-    consumer.save()
 
     subscription.status = 'Canceled'
     subscription.save()
