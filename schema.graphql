@@ -62,8 +62,14 @@ type CaskProvider @entity {
   appearedAt: Int!
 
   totalPaymentsReceived: BigDecimal!
+
   totalSubscriptionCount: BigInt!
   activeSubscriptionCount: BigInt!
+  trialingSubscriptionCount: BigInt!
+  convertedSubscriptionCount: BigInt!
+  canceledSubscriptionCount: BigInt!
+  pausedSubscriptionCount: BigInt!
+  pastDueSubscriptionCount: BigInt!
 }
 
 type CaskSubscriptionPlan @entity {
