@@ -22,6 +22,8 @@ dataSources:
         - CaskConsumer
         - CaskProvider
         - CaskSubscriptionPlan
+        - CaskDiscount
+        - CaskMetric
       abis:
         - name: CaskSubscriptions
           file: ./abis/CaskSubscriptions.json
@@ -65,6 +67,7 @@ dataSources:
       entities:
         - Cask
         - CaskUser
+        - CaskMetric
       abis:
         - name: CaskVault
           file: ./abis/CaskVault.json
@@ -77,3 +80,5 @@ dataSources:
           handler: handlePayment
         - event: TransferValue(indexed address,indexed address,uint256,uint256)
           handler: handleTransferValue
+        - event: SetFundingSource(indexed address,uint8,address)
+          handler: handleSetFundingSource

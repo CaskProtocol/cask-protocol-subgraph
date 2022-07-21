@@ -10,9 +10,25 @@ type Cask @entity {
   totalNetworkFees: BigDecimal!
 }
 
+type CaskMetric @entity {
+  id: ID!
+
+  name: String
+  date: Int!
+  value: BigDecimal!
+}
+
+enum FundingSource {
+    Cask
+    Personal
+}
+
 type CaskUser @entity {
   id: ID!
   appearedAt: Int!
+
+  fundingSource: FundingSource
+  fundingAsset: Bytes
 
   balance: BigDecimal!
   depositCount: BigInt!
@@ -23,11 +39,20 @@ type CaskUser @entity {
 
 type CaskConsumer @entity {
   id: ID!
-  subscriptionCount: BigInt!
   appearedAt: Int!
+
+  balance: BigDecimal!
+  depositCount: BigInt!
+  depositAmount: BigDecimal!
+  withdrawCount: BigInt!
+  withdrawAmount: BigDecimal!
 
   totalSubscriptionCount: BigInt!
   activeSubscriptionCount: BigInt!
+  totalDCACount: BigInt!
+  activeDCACount: BigInt!
+  totalP2PCount: BigInt!
+  activeP2PCount: BigInt!
 }
 
 type CaskProvider @entity {
@@ -37,14 +62,20 @@ type CaskProvider @entity {
   appearedAt: Int!
 
   totalPaymentsReceived: BigDecimal!
+
   totalSubscriptionCount: BigInt!
   activeSubscriptionCount: BigInt!
+  trialingSubscriptionCount: BigInt!
+  convertedSubscriptionCount: BigInt!
+  canceledSubscriptionCount: BigInt!
+  pausedSubscriptionCount: BigInt!
+  pastDueSubscriptionCount: BigInt!
 }
 
 type CaskSubscriptionPlan @entity {
   id: ID!
   provider: CaskProvider!
-  planId: Int!
+  planId: BigInt!
 
   totalSubscriptionCount: BigInt!
   activeSubscriptionCount: BigInt!
@@ -56,7 +87,7 @@ type CaskSubscriptionPlan @entity {
 }
 
 enum SubscriptionStatus {
-  None,
+  None
   Trialing
   Active
   Paused
@@ -89,6 +120,87 @@ type CaskSubscription @entity {
   transferCount: BigInt!
 }
 
+type CaskDiscount @entity {
+    id: ID!
+
+    provider: CaskProvider!
+    discountId: Bytes!
+    redemptions: BigInt!
+}
+
+enum DCAStatus {
+  None
+  Active
+  Paused
+  Canceled
+  Complete
+}
+
+enum DCASkipReason {
+  None
+  AssetNotAllowed
+  PaymentFailed
+  OutsideLimits
+  SwapFailed
+}
+
+type CaskDCA @entity {
+  id: ID!
+
+  user: CaskConsumer!
+  to: Bytes!
+
+  router: Bytes!
+  priceFeed: Bytes
+  inputAsset: Bytes!
+  outputAsset: Bytes!
+  amount: BigDecimal!
+  totalAmount: BigDecimal!
+  currentAmount: BigDecimal!
+  currentQty: BigInt!
+  period: Int!
+  slippageBps: BigInt!
+  minPrice: BigInt
+  maxPrice: BigInt
+
+  createdAt: Int!
+  processAt: Int!
+  cancelAt: Int!
+
+  status: DCAStatus!
+
+  numBuys: BigInt!
+  numSkips: BigInt!
+}
+
+enum P2PStatus {
+  None
+  Active
+  Paused
+  Canceled
+  Complete
+}
+
+type CaskP2P @entity {
+  id: ID!
+
+  user: CaskConsumer!
+  to: Bytes!
+
+  amount: BigDecimal!
+  totalAmount: BigDecimal!
+  currentAmount: BigDecimal!
+  period: Int!
+
+  createdAt: Int!
+  processAt: Int!
+  cancelAt: Int!
+
+  status: P2PStatus!
+
+  numPayments: BigInt!
+  numSkips: BigInt!
+}
 
 enum TransactionType {
  SubscriptionCreated
@@ -107,21 +219,130 @@ enum TransactionType {
  Payment
  TransferValue
  Transfer
+ DCACreated
+ DCAPaused
+ DCAResumed
+ DCASkipped
+ DCAProcessed
+ DCACanceled
+ DCACompleted
+ P2PCreated
+ P2PPaused
+ P2PResumed
+ P2PSkipped
+ P2PProcessed
+ P2PCanceled
+ P2PCompleted
 }
 
 type CaskTransaction @entity {
   id: ID!
   type: TransactionType!
+  txnId: Bytes!
   timestamp: Int!
 
   consumer: CaskConsumer
   provider: CaskProvider
 
   subscriptionId: BigInt
+  dcaId: Bytes
+  p2pId: Bytes
 
   assetAddress: Bytes
   assetName: String
 
   amount: BigDecimal
 
+  skipReason: DCASkipReason
+}
+
+enum SubscriptionTransactionType {
+ SubscriptionCreated
+ SubscriptionPlanChanged
+ SubscriptionPendingChangePlan
+ SubscriptionPendingPause
+ SubscriptionPaused
+ SubscriptionResumed
+ SubscriptionPendingCancel
+ SubscriptionCanceled
+ SubscriptionRenewed
+ SubscriptionTrialEnded
+ SubscriptionPastDue
+ }
+
+enum WalletTransactionType {
+ AssetDeposit
+ AssetWithdrawal
+ Payment
+ TransferValue
+ Transfer
+ SetFundingSource
+}
+
+enum DCATransactionType {
+ DCACreated
+ DCAPaused
+ DCAResumed
+ DCASkipped
+ DCAProcessed
+ DCACanceled
+ DCACompleted
+}
+
+enum P2PTransactionType {
+ P2PCreated
+ P2PPaused
+ P2PResumed
+ P2PSkipped
+ P2PProcessed
+ P2PCanceled
+ P2PCompleted
+}
+
+type CaskSubscriptionEvent @entity {
+  id: ID!
+  type: SubscriptionTransactionType!
+  txnId: Bytes!
+  timestamp: Int!
+  consumer: CaskConsumer
+  provider: CaskProvider
+  subscriptionId: BigInt
+  planId: BigInt!
+}
+
+type CaskWalletEvent @entity {
+  id: ID!
+  type: WalletTransactionType!
+  txnId: Bytes!
+  timestamp: Int!
+
+  fundingSource: FundingSource
+  user: CaskConsumer
+  to: CaskConsumer
+  assetAddress: Bytes
+  assetName: String
+  amount: BigDecimal
+}
+
+type CaskDCAEvent @entity {
+  id: ID!
+  type: DCATransactionType!
+  txnId: Bytes!
+  timestamp: Int!
+  dcaId: Bytes
+  user: CaskConsumer
+  assetAddress: Bytes
+  amount: BigDecimal
+  buyQty: BigInt
+  skipReason: DCASkipReason
+}
+
+type CaskP2PEvent @entity {
+  id: ID!
+  type: P2PTransactionType!
+  txnId: Bytes!
+  timestamp: Int!
+  p2pId: Bytes
+  user: CaskConsumer
+  amount: BigDecimal
 }

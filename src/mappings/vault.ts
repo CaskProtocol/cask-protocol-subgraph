@@ -10,7 +10,8 @@ import {
     AssetDeposited,
     AssetWithdrawn,
     Payment,
-    TransferValue
+    TransferValue,
+    SetFundingSource
 } from "../types/CaskVault/CaskVault"
 import {
     VAULT_DECIMALS,
@@ -21,7 +22,8 @@ import {
     CaskConsumer,
     CaskProvider,
     CaskTransaction,
-    CaskUser
+    CaskWalletEvent,
+    CaskUser,
 } from "../types/schema"
 
 
@@ -57,6 +59,15 @@ function findOrCreateProvider(providerAddress: Bytes, appearedAt: i32): CaskProv
     return provider
 }
 
+function fundingSource(fundingSourceId: i32): string {
+    if (fundingSourceId == 0) {
+        return 'Cask'
+    } else if (fundingSourceId == 1) {
+        return 'Personal'
+    }
+    return 'Cask'
+}
+
 function loadCask(): Cask {
     let cask = Cask.load(CASK_ID)
     if (cask == null) {
@@ -81,10 +92,18 @@ export function handleAssetDeposited(event: AssetDeposited): void {
     user.save()
 
     const consumer = findOrCreateConsumer(event.params.participant, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    let oldTxn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    oldTxn.type = 'AssetDeposit'
+    oldTxn.timestamp = event.block.timestamp.toI32();
+    oldTxn.consumer = consumer.id
+    oldTxn.assetAddress = event.params.asset
+    oldTxn.amount = depositAmount
+    oldTxn.save()
+
+    let txn = new CaskWalletEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'AssetDeposit'
     txn.timestamp = event.block.timestamp.toI32();
-    txn.consumer = consumer.id
+    txn.user = consumer.id
     txn.assetAddress = event.params.asset
     txn.amount = depositAmount
     txn.save()
@@ -106,10 +125,18 @@ export function handleAssetWithdrawn(event: AssetWithdrawn): void {
     user.save()
 
     const consumer = findOrCreateConsumer(event.params.participant, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    let oldTxn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    oldTxn.type = 'AssetWithdrawal'
+    oldTxn.timestamp = event.block.timestamp.toI32();
+    oldTxn.consumer = consumer.id
+    oldTxn.assetAddress = event.params.asset
+    oldTxn.amount = withdrawAmount
+    oldTxn.save()
+
+    let txn = new CaskWalletEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'AssetWithdrawal'
     txn.timestamp = event.block.timestamp.toI32();
-    txn.consumer = consumer.id
+    txn.user = consumer.id
     txn.assetAddress = event.params.asset
     txn.amount = withdrawAmount
     txn.save()
@@ -142,11 +169,19 @@ export function handlePayment(event: Payment): void {
     provider.totalPaymentsReceived = provider.totalPaymentsReceived.plus(amount)
     provider.save()
 
-    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    let oldTxn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    oldTxn.type = 'Payment'
+    oldTxn.timestamp = event.block.timestamp.toI32();
+    oldTxn.consumer = consumer.id
+    oldTxn.provider = provider.id
+    oldTxn.amount = amount
+    oldTxn.save()
+
+    let txn = new CaskWalletEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'Payment'
     txn.timestamp = event.block.timestamp.toI32();
-    txn.consumer = consumer.id
-    txn.provider = provider.id
+    txn.user = consumer.id
+    txn.to = provider.id
     txn.amount = amount
     txn.save()
 }
@@ -166,11 +201,37 @@ export function handleTransferValue(event: TransferValue): void {
 
     const consumer = findOrCreateConsumer(event.params.from, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.to, event.block.timestamp.toI32())
-    let txn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    let oldTxn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    oldTxn.type = 'TransferValue'
+    oldTxn.timestamp = event.block.timestamp.toI32();
+    oldTxn.consumer = consumer.id
+    oldTxn.provider = provider.id
+    oldTxn.amount = amount
+    oldTxn.save()
+
+    let txn = new CaskWalletEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'TransferValue'
     txn.timestamp = event.block.timestamp.toI32();
-    txn.consumer = consumer.id
-    txn.provider = provider.id
+    txn.user = consumer.id
+    txn.to = provider.id
     txn.amount = amount
+    txn.save()
+}
+
+
+export function handleSetFundingSource(event: SetFundingSource): void {
+
+    const user = findOrCreateUser(event.params.participant, event.block.timestamp.toI32())
+    user.fundingSource = fundingSource(event.params.fundingSource)
+    user.fundingAsset = event.params.fundingAsset
+    user.save()
+
+    const consumer = findOrCreateConsumer(event.params.participant, event.block.timestamp.toI32())
+    let txn = new CaskWalletEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    txn.type = 'SetFundingSource'
+    txn.timestamp = event.block.timestamp.toI32();
+    txn.user = consumer.id
+    txn.fundingSource = fundingSource(event.params.fundingSource)
+    txn.assetAddress = event.params.fundingAsset
     txn.save()
 }

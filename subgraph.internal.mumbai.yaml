@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: CaskSubscriptions
-    network: {{network}}
+    network: mumbai
     source:
-      address: "{{CaskSubscriptions.address}}"
+      address: "0xaC7331DF9CB75beC251b75647AEccdeA8d336e33"
       abi: CaskSubscriptions
-      startBlock: {{CaskSubscriptions.startBlock}}
+      startBlock: 26026884
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -54,11 +54,11 @@ dataSources:
           handler: handleTransfer
   - kind: ethereum/contract
     name: CaskVault
-    network: {{network}}
+    network: mumbai
     source:
-      address: "{{CaskVault.address}}"
+      address: "0xC040BDBBb2b1AdDaa7586962e9Fcb5585D7e66a9"
       abi: CaskVault
-      startBlock: {{CaskVault.startBlock}}
+      startBlock: 26026872
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -82,14 +82,13 @@ dataSources:
           handler: handleTransferValue
         - event: SetFundingSource(indexed address,uint8,address)
           handler: handleSetFundingSource
-{{#if CaskDCA.address}}
   - kind: ethereum/contract
     name: CaskDCA
-    network: {{network}}
+    network: mumbai
     source:
-      address: "{{CaskDCA.address}}"
+      address: "0x41Eb18BA90c2c955f1987BD3AeA6feb0F70e0e49"
       abi: CaskDCA
-      startBlock: {{CaskDCA.startBlock}}
+      startBlock: 26974719
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -118,15 +117,13 @@ dataSources:
           handler: handleDCACanceled
         - event: DCACompleted(indexed bytes32,indexed address)
           handler: handleDCACompleted
-{{/if}}
-{{#if CaskP2P.address}}
   - kind: ethereum/contract
     name: CaskP2P
-    network: {{network}}
+    network: mumbai
     source:
-      address: "{{CaskP2P.address}}"
+      address: "0x92b34C07bD6B77A88d91919469c540a7e1b269e4"
       abi: CaskP2P
-      startBlock: {{CaskP2P.startBlock}}
+      startBlock: 26974686
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -155,4 +152,3 @@ dataSources:
           handler: handleP2PCanceled
         - event: P2PCompleted(indexed bytes32,indexed address)
           handler: handleP2PCompleted
-{{~/if~}}
