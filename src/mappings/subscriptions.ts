@@ -599,6 +599,9 @@ export function handleSubscriptionCanceled(event: SubscriptionCanceled): void {
     } else if (subscription.status == 'Trialing') {
         provider.trialingSubscriptionCount = provider.trialingSubscriptionCount.minus(BigInt.fromI32(1))
         plan.trialingSubscriptionCount = plan.trialingSubscriptionCount.minus(BigInt.fromI32(1))
+    } else if (subscription.status == 'PastDue') {
+        provider.pastDueSubscriptionCount = provider.pastDueSubscriptionCount.minus(BigInt.fromI32(1))
+        plan.pastDueSubscriptionCount = plan.pastDueSubscriptionCount.minus(BigInt.fromI32(1))
     }
 
     if (subscription.status != 'Canceled') {
