@@ -357,6 +357,15 @@ export function handleSubscriptionPendingPause(event: SubscriptionPendingPause):
     txn.subscriptionId = event.params.subscriptionId
     txn.planId = event.params.planId
     txn.save()
+
+    let subscription = CaskSubscription.load(event.params.subscriptionId.toHex())
+    if (subscription == null) {
+        log.warning('Subscription not found: {}', [event.params.subscriptionId.toHex()])
+        return;
+    }
+
+    subscription.status = 'PendingPause'
+    subscription.save()
 }
 
 export function handleSubscriptionResumed(event: SubscriptionResumed): void {
