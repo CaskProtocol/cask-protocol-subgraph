@@ -399,7 +399,7 @@ export function handleSubscriptionResumed(event: SubscriptionResumed): void {
         return;
     }
 
-    if (subscription.status != 'Active') {
+    if (subscription.status == 'Paused') {
         consumer.activeSubscriptionCount = consumer.activeSubscriptionCount.plus(BigInt.fromI32(1))
         provider.activeSubscriptionCount = provider.activeSubscriptionCount.plus(BigInt.fromI32(1))
         plan.activeSubscriptionCount = plan.activeSubscriptionCount.plus(BigInt.fromI32(1))
