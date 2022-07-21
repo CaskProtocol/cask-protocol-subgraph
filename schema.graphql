@@ -93,6 +93,7 @@ enum SubscriptionStatus {
   Paused
   Canceled
   PastDue
+  PendingPause
 }
 
 type CaskSubscription @entity {
