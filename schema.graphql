@@ -59,6 +59,7 @@ type CaskProvider @entity {
   id: ID!
   paymentAddress: Bytes
   profileCid: String
+  profileNonce: BigInt
   appearedAt: Int!
 
   totalPaymentsReceived: BigDecimal!
@@ -72,10 +73,17 @@ type CaskProvider @entity {
   pastDueSubscriptionCount: BigInt!
 }
 
+enum SubscriptionPlanStatus {
+    Enabled
+    Disabled
+    EndOfLife
+}
+
 type CaskSubscriptionPlan @entity {
   id: ID!
   provider: CaskProvider!
   planId: BigInt!
+  status: SubscriptionPlanStatus!
 
   totalSubscriptionCount: BigInt!
   activeSubscriptionCount: BigInt!

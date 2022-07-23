@@ -3,6 +3,9 @@ polygon:
   CaskSubscriptions:
     address: "0x4A6f232552E0fd76787006Bb688bFBCB931cc3d0"
     startBlock: 28174407
+  CaskSubscriptionPlans:
+    address: "0x78B5882b81AF02ebb0803eAFb4A4bf27fe35470e"
+    startBlock: 28174407
   CaskVault:
     address: "0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff"
     startBlock: 28174388
@@ -10,6 +13,9 @@ avalanche:
   network: avalanche
   CaskSubscriptions:
     address: "0x4A6f232552E0fd76787006Bb688bFBCB931cc3d0"
+    startBlock: 15521672
+  CaskSubscriptionPlans:
+    address: "0x78B5882b81AF02ebb0803eAFb4A4bf27fe35470e"
     startBlock: 15521672
   CaskVault:
     address: "0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff"
@@ -19,6 +25,9 @@ mumbai:
   CaskSubscriptions:
     address: "0x7899118A8A3EAe4cDd97Cb2Ea9E52a5b78da3cB6"
     startBlock: 26201935
+  CaskSubscriptionPlans:
+    address: "0x3E9B8E9D60Abc50b032cdc42Ef2F6CBaBce17983"
+    startBlock: 26201935
   CaskVault:
     address: "0xc924CaAFe6759F92215Dadf326FF4fAb158f6C41"
     startBlock: 26201929
@@ -27,6 +36,9 @@ fuji:
   CaskSubscriptions:
     address: "0x28E372eff469b18Bc86Fb9f0C496b219bde39E81"
     startBlock: 9261115
+  CaskSubscriptionPlans:
+    address: "0x06bd2FD3784E1cEe11969caA67CDb0803DcF5869"
+    startBlock: 9261115
   CaskVault:
     address: "0x9d628d298D917BF9642Bb45D594B2075f661373D"
     startBlock: 9261101
@@ -34,6 +46,9 @@ internal.mumbai:
   network: mumbai
   CaskSubscriptions:
     address: "0xaC7331DF9CB75beC251b75647AEccdeA8d336e33"
+    startBlock: 26026884
+  CaskSubscriptionPlans:
+    address: "0x2236aFa60774a79EC15BF399767EEC87F5aeE607"
     startBlock: 26026884
   CaskVault:
     address: "0xC040BDBBb2b1AdDaa7586962e9Fcb5585D7e66a9"
@@ -48,6 +63,9 @@ internal.fuji:
   network: fuji
   CaskSubscriptions:
     address: "0x921ec72BEf414D75F0C6fFee37975BB3ae80d41C"
+    startBlock: 8799480
+  CaskSubscriptionPlans:
+    address: "0x7d722482Cc143364B31366a2EEF0a1f096AB4BB4"
     startBlock: 8799480
   CaskVault:
     address: "0x5e8C289404E9B17be7FfE7FcBa673f5AC802cc06"

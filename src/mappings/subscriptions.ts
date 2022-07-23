@@ -35,6 +35,13 @@ import {
     parsePlanData
 } from "./helpers/plans"
 
+import {
+    ProviderSetProfile,
+    PlanDisabled,
+    PlanEnabled,
+    PlanRetired
+} from "../types/CaskSubscriptionPlans/CaskSubscriptionPlans";
+
 function findOrCreateProvider(providerAddress: Bytes, appearedAt: i32): CaskProvider {
     let provider = CaskProvider.load(providerAddress.toHex())
     if (!provider) {
@@ -50,6 +57,7 @@ function findOrCreateSubscriptionPlan(providerAddress: Bytes, planId: BigInt): C
     if (!subscriptionPlan) {
         subscriptionPlan = new CaskSubscriptionPlan(providerAddress.toHex()+'-'+planId.toString())
         subscriptionPlan.planId = planId
+        subscriptionPlan.status = 'Enabled'
         subscriptionPlan.save()
     }
     return subscriptionPlan
@@ -91,6 +99,16 @@ function subscriptionStatus(statusId: i32): string {
         return 'PendingPause'
     } else {
         return 'None'
+    }
+}
+
+function subscriptionPlanStatus(statusId: i32): string {
+    if (statusId == 1) {
+        return 'Disabled'
+    } else if (statusId == 2) {
+        return 'EndOfLife'
+    } else {
+        return 'Enabled'
     }
 }
 
@@ -690,3 +708,35 @@ export function handleTransfer(event: Transfer): void {
     subscription.save()
 }
 
+export function handleProviderSetProfile(event: ProviderSetProfile): void {
+    const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
+
+    provider.profileCid = event.params.cid
+    provider.profileNonce = event.params.nonce
+    provider.paymentAddress = event.params.paymentAddress
+    provider.save()
+}
+
+export function handlePlanDisabled(event: PlanDisabled): void {
+    const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
+    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId)
+
+    plan.status = 'Disabled'
+    plan.save()
+}
+
+export function handlePlanEnabled(event: PlanEnabled): void {
+    const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
+    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId)
+
+    plan.status = 'Enabled'
+    plan.save()
+}
+
+export function handlePlanRetired(event: PlanRetired): void {
+    const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
+    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId)
+
+    plan.status = 'EndOfLife'
+    plan.save()
+}
