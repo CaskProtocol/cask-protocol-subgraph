@@ -52,10 +52,11 @@ function findOrCreateProvider(providerAddress: Bytes, appearedAt: i32): CaskProv
     return provider
 }
 
-function findOrCreateSubscriptionPlan(providerAddress: Bytes, planId: BigInt): CaskSubscriptionPlan {
-    let subscriptionPlan = CaskSubscriptionPlan.load(providerAddress.toHex()+'-'+planId.toString())
+function findOrCreateSubscriptionPlan(provider: CaskProvider, planId: BigInt): CaskSubscriptionPlan {
+    let subscriptionPlan = CaskSubscriptionPlan.load(provider.id+'-'+planId.toString())
     if (!subscriptionPlan) {
-        subscriptionPlan = new CaskSubscriptionPlan(providerAddress.toHex()+'-'+planId.toString())
+        subscriptionPlan = new CaskSubscriptionPlan(provider.id+'-'+planId.toString())
+        subscriptionPlan.provider = provider.id
         subscriptionPlan.planId = planId
         subscriptionPlan.status = 'Enabled'
         subscriptionPlan.save()
@@ -116,7 +117,7 @@ export function handleSubscriptionCreated(event: SubscriptionCreated): void {
 
     const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
-    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId)
+    const plan = findOrCreateSubscriptionPlan(provider, event.params.planId)
 
     let oldTxn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     oldTxn.type = 'SubscriptionCreated'
@@ -240,8 +241,8 @@ export function handleSubscriptionChangedPlan(event: SubscriptionChangedPlan): v
 
     const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
-    const prevPlan = findOrCreateSubscriptionPlan(event.params.provider, event.params.prevPlanId)
-    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId)
+    const prevPlan = findOrCreateSubscriptionPlan(provider, event.params.prevPlanId)
+    const plan = findOrCreateSubscriptionPlan(provider, event.params.planId)
 
     let oldTxn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     oldTxn.type = 'SubscriptionChangedPlan'
@@ -308,7 +309,7 @@ export function handleSubscriptionPaused(event: SubscriptionPaused): void {
 
     const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
-    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId)
+    const plan = findOrCreateSubscriptionPlan(provider, event.params.planId)
 
     let oldTxn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     oldTxn.type = 'SubscriptionPaused'
@@ -390,7 +391,7 @@ export function handleSubscriptionResumed(event: SubscriptionResumed): void {
 
     const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
-    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId)
+    const plan = findOrCreateSubscriptionPlan(provider, event.params.planId)
 
     let oldTxn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     oldTxn.type = 'SubscriptionResumed'
@@ -438,7 +439,7 @@ export function handleSubscriptionRenewed(event: SubscriptionRenewed): void {
 
     const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
-    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId)
+    const plan = findOrCreateSubscriptionPlan(provider, event.params.planId)
 
     let oldTxn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     oldTxn.type = 'SubscriptionRenewed'
@@ -505,7 +506,7 @@ export function handleSubscriptionPastDue(event: SubscriptionPastDue): void {
 
     const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
-    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId)
+    const plan = findOrCreateSubscriptionPlan(provider, event.params.planId)
 
     let oldTxn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     oldTxn.type = 'SubscriptionPastDue'
@@ -592,7 +593,7 @@ export function handleSubscriptionCanceled(event: SubscriptionCanceled): void {
 
     const consumer = findOrCreateConsumer(event.params.consumer, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
-    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId)
+    const plan = findOrCreateSubscriptionPlan(provider, event.params.planId)
 
     let oldTxn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     oldTxn.type = 'SubscriptionCanceled'
@@ -719,7 +720,7 @@ export function handleProviderSetProfile(event: ProviderSetProfile): void {
 
 export function handlePlanDisabled(event: PlanDisabled): void {
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
-    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId)
+    const plan = findOrCreateSubscriptionPlan(provider, event.params.planId)
 
     plan.status = 'Disabled'
     plan.save()
@@ -727,7 +728,7 @@ export function handlePlanDisabled(event: PlanDisabled): void {
 
 export function handlePlanEnabled(event: PlanEnabled): void {
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
-    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId)
+    const plan = findOrCreateSubscriptionPlan(provider, event.params.planId)
 
     plan.status = 'Enabled'
     plan.save()
@@ -735,7 +736,7 @@ export function handlePlanEnabled(event: PlanEnabled): void {
 
 export function handlePlanRetired(event: PlanRetired): void {
     const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
-    const plan = findOrCreateSubscriptionPlan(event.params.provider, event.params.planId)
+    const plan = findOrCreateSubscriptionPlan(provider, event.params.planId)
 
     plan.status = 'EndOfLife'
     plan.save()
