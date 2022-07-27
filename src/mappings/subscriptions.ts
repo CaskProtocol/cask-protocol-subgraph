@@ -153,12 +153,21 @@ export function handleSubscriptionCreated(event: SubscriptionCreated): void {
     subscription.currentOwner = consumer.id
     subscription.provider = provider.id
     subscription.ref = subscriptionInfo.value0.ref.toHex()
+
     subscription.plan = plan.id
     subscription.planData = subscriptionInfo.value0.planData
     subscription.price = planInfo.price
     subscription.period = planInfo.period
-    subscription.discountId = subscriptionInfo.value0.discountId
+    subscription.freeTrial = planInfo.freeTrial
+    subscription.maxActive = planInfo.maxActive
+    subscription.minPeriods = planInfo.minPeriods
+    subscription.gracePeriod = planInfo.gracePeriod
+    subscription.canPause = planInfo.canPause
+    subscription.canTransfer = planInfo.canTransfer
+
     subscription.discountData = subscriptionInfo.value0.discountData
+    subscription.discountId = subscriptionInfo.value0.discountId
+
     subscription.cid = subscriptionInfo.value0.cid
     subscription.createdAt = subscriptionInfo.value0.createdAt.toI32()
     subscription.renewAt = subscriptionInfo.value0.renewAt.toI32()
@@ -297,9 +306,24 @@ export function handleSubscriptionChangedPlan(event: SubscriptionChangedPlan): v
         discount.save()
     }
 
+    let planInfo = parsePlanData(subscriptionInfo.value0.planData)
+
     subscription.status = subscriptionStatus(subscriptionInfo.value0.status)
+
     subscription.plan = plan.id
+    subscription.planData = subscriptionInfo.value0.planData
+    subscription.price = planInfo.price
+    subscription.period = planInfo.period
+    subscription.freeTrial = planInfo.freeTrial
+    subscription.maxActive = planInfo.maxActive
+    subscription.minPeriods = planInfo.minPeriods
+    subscription.gracePeriod = planInfo.gracePeriod
+    subscription.canPause = planInfo.canPause
+    subscription.canTransfer = planInfo.canTransfer
+
+    subscription.discountData = subscriptionInfo.value0.discountData
     subscription.discountId = subscriptionInfo.value0.discountId
+
     subscription.cid = subscriptionInfo.value0.cid
     subscription.renewAt = subscriptionInfo.value0.renewAt.toI32()
     subscription.save()

@@ -114,8 +114,15 @@ type CaskSubscription @entity {
 
   plan: CaskSubscriptionPlan!
   planData: Bytes!
-  period: Int!
   price: BigDecimal!
+  period: Int!
+  freeTrial: Int!
+  maxActive: Int!
+  minPeriods: Int!
+  gracePeriod: Int!
+  canPause: Boolean!
+  canTransfer: Boolean!
+
   discountId: Bytes
   discountData: Bytes
 
