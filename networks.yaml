@@ -20,6 +20,12 @@ avalanche:
   CaskVault:
     address: "0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff"
     startBlock: 15521652
+  CaskDCA:
+    address: "0xb8A52a086262E1d6c7494bDCb824f884f41FC5f8"
+    startBlock: 17633716
+  CaskP2P:
+    address: "0x28418B0AB2C00142a865971dcC6a4b1154DaD19E"
+    startBlock: 17633716
 mumbai:
   network: mumbai
   CaskSubscriptions:
