@@ -226,6 +226,7 @@ export function handleDCAProcessed(event: DCAProcessed): void {
     txn.timestamp = event.block.timestamp.toI32();
     txn.amount = scaleDown(event.params.amount, VAULT_DECIMALS)
     txn.buyQty = event.params.buyQty
+    txn.fee = scaleDown(event.params.fee, VAULT_DECIMALS)
     txn.user = consumer.id
     txn.save()
 

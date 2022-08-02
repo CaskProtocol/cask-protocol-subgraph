@@ -200,6 +200,7 @@ export function handleP2PProcessed(event: P2PProcessed): void {
     txn.timestamp = event.block.timestamp.toI32();
     txn.user = consumer.id
     txn.amount = scaleDown(event.params.amount, VAULT_DECIMALS)
+    txn.fee = scaleDown(event.params.fee, VAULT_DECIMALS)
     txn.save()
 
     let p2p = findOrCreateP2P(event.params.p2pId);

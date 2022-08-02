@@ -350,6 +350,7 @@ type CaskDCAEvent @entity {
   assetAddress: Bytes
   amount: BigDecimal
   buyQty: BigInt
+  fee: BigDecimal
   skipReason: DCASkipReason
 }
 
@@ -361,4 +362,5 @@ type CaskP2PEvent @entity {
   p2pId: Bytes
   user: CaskConsumer
   amount: BigDecimal
+  fee: BigDecimal
 }
