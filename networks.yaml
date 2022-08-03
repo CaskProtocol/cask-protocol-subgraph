@@ -26,6 +26,57 @@ avalanche:
   CaskP2P:
     address: "0x28418B0AB2C00142a865971dcC6a4b1154DaD19E"
     startBlock: 17633716
+celo:
+  network: celo
+  CaskSubscriptions:
+    address: "0x7DaF9a1744Df00d0473A9A920B6A4Ea33B665360"
+    startBlock: 14364229
+  CaskSubscriptionPlans:
+    address: "0xF76BF31f0b56BD6f72E1aFeB83a51F191ec2291B"
+    startBlock: 14364229
+  CaskVault:
+    address: "0xBCcDbB0806Acc914F6746DE592f924B374190710"
+    startBlock: 14364229
+  CaskDCA:
+    address: "0x4C17e4F40262108F06375d727f1353e1D592B1Bf"
+    startBlock: 14364229
+  CaskP2P:
+    address: "0x1A4620123cfD10c73D9Cdd65879c1Fb6312ef654"
+    startBlock: 14364229
+fantom:
+  network: fantom
+  CaskSubscriptions:
+    address: "0x7DaF9a1744Df00d0473A9A920B6A4Ea33B665360"
+    startBlock: 44074874
+  CaskSubscriptionPlans:
+    address: "0xF76BF31f0b56BD6f72E1aFeB83a51F191ec2291B"
+    startBlock: 44074874
+  CaskVault:
+    address: "0xBCcDbB0806Acc914F6746DE592f924B374190710"
+    startBlock: 44074874
+  CaskDCA:
+    address: "0x4C17e4F40262108F06375d727f1353e1D592B1Bf"
+    startBlock: 44074874
+  CaskP2P:
+    address: "0x1A4620123cfD10c73D9Cdd65879c1Fb6312ef654"
+    startBlock: 44074874
+aurora:
+  network: aurora
+  CaskSubscriptions:
+    address: "0xD054F8866fc45c4387d56D2340dCA08d83E14A5e"
+    startBlock: 71199296
+  CaskSubscriptionPlans:
+    address: "0xD252A4C836C75063867f0193325b328CCe6B7306"
+    startBlock: 71199296
+  CaskVault:
+    address: "0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff"
+    startBlock: 71199296
+  CaskDCA:
+    address: "0x96d59127cCD1c0e3749E733Ee04F0DfbD2f808c8"
+    startBlock: 71199296
+  CaskP2P:
+    address: "0xccB54bF4171bc8C11e78ca40f3a3bd3B721EF361"
+    startBlock: 71199296
 mumbai:
   network: mumbai
   CaskSubscriptions:
