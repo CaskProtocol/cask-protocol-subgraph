@@ -9,6 +9,7 @@
     "deploy:internal:mumbai": "graph deploy CaskProtocol/cask-protocol-mumbai-internal subgraph.internal.mumbai.yaml --node https://api.thegraph.com/deploy/",
     "deploy:testnet:fuji": "graph deploy CaskProtocol/cask-protocol-fuji subgraph.fuji.yaml --node https://api.thegraph.com/deploy/",
     "deploy:internal:fuji": "graph deploy CaskProtocol/cask-protocol-fuji-internal subgraph.internal.fuji.yaml --node https://api.thegraph.com/deploy/",
+    "deploy:testnet:alfajores": "graph deploy CaskProtocol/cask-protocol-alfajores subgraph.alfajores.yaml --node https://api.thegraph.com/deploy/",
     "deploy:polygon": "graph deploy CaskProtocol/cask-protocol-polygon subgraph.polygon.yaml --node https://api.thegraph.com/deploy/",
     "deploy:avalanche": "graph deploy CaskProtocol/cask-protocol-avalanche subgraph.avalanche.yaml --node https://api.thegraph.com/deploy/",
     "deploy:fantom": "graph deploy CaskProtocol/cask-protocol-fantom subgraph.fantom.yaml --node https://api.thegraph.com/deploy/",

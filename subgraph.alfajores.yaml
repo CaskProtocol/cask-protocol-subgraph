@@ -1,0 +1,180 @@
+specVersion: 0.0.2
+description: Cask is a decentralized non-custodial protocol for managing recurring payment agreements.
+repository: https://github.com/CaskProtocol/cask-protocol-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: CaskSubscriptions
+    network: celo-alfajores
+    source:
+      address: "0xB844AFd937717bf117CaE2467B12f2922afa68dB"
+      abi: CaskSubscriptions
+      startBlock: 12769438
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/subscriptions.ts
+      entities:
+        - CaskSubscription
+        - CaskTransaction
+        - CaskConsumer
+        - CaskProvider
+        - CaskSubscriptionPlan
+        - CaskDiscount
+        - CaskMetric
+      abis:
+        - name: CaskSubscriptions
+          file: ./abis/CaskSubscriptions.json
+      eventHandlers:
+        - event: SubscriptionCanceled(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionCanceled
+        - event: SubscriptionChangedPlan(indexed address,indexed address,indexed uint256,bytes32,uint32,uint32,bytes32)
+          handler: handleSubscriptionChangedPlan
+        - event: SubscriptionCreated(indexed address,indexed address,indexed uint256,bytes32,uint32,bytes32)
+          handler: handleSubscriptionCreated
+        - event: SubscriptionPastDue(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionPastDue
+        - event: SubscriptionPaused(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionPaused
+        - event: SubscriptionPendingPause(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionPendingPause
+        - event: SubscriptionPendingCancel(indexed address,indexed address,indexed uint256,bytes32,uint32,uint32)
+          handler: handleSubscriptionPendingCancel
+        - event: SubscriptionPendingChangePlan(indexed address,indexed address,indexed uint256,bytes32,uint32,uint32)
+          handler: handleSubscriptionPendingChangePlan
+        - event: SubscriptionRenewed(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionRenewed
+        - event: SubscriptionResumed(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionResumed
+        - event: SubscriptionTrialEnded(indexed address,indexed address,indexed uint256,bytes32,uint32)
+          handler: handleSubscriptionTrialEnded
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+  - kind: ethereum/contract
+    name: CaskSubscriptionPlans
+    network: celo-alfajores
+    source:
+      address: "0x6FF7EB600f4BF68e0A3f35ba2D4825BfcA031A1b"
+      abi: CaskSubscriptionPlans
+      startBlock: 12769438
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/subscriptions.ts
+      entities:
+        - CaskSubscriptionPlan
+      abis:
+        - name: CaskSubscriptionPlans
+          file: ./abis/CaskSubscriptionPlans.json
+      eventHandlers:
+        - event: ProviderSetProfile(indexed address,indexed address,uint256,string)
+          handler: handleProviderSetProfile
+        - event: PlanDisabled(indexed address,indexed uint32)
+          handler: handlePlanDisabled
+        - event: PlanEnabled(indexed address,indexed uint32)
+          handler: handlePlanEnabled
+        - event: PlanRetired(indexed address,indexed uint32,uint32)
+          handler: handlePlanRetired
+  - kind: ethereum/contract
+    name: CaskVault
+    network: celo-alfajores
+    source:
+      address: "0xC48f1deb2E6d68aD620cA38927F4d8b1923555d0"
+      abi: CaskVault
+      startBlock: 12769438
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/vault.ts
+      entities:
+        - Cask
+        - CaskUser
+        - CaskMetric
+      abis:
+        - name: CaskVault
+          file: ./abis/CaskVault.json
+      eventHandlers:
+        - event: AssetDeposited(indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleAssetDeposited
+        - event: AssetWithdrawn(indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleAssetWithdrawn
+        - event: Payment(indexed address,indexed address,uint256,uint256,uint256,uint256,indexed address,uint256,uint256)
+          handler: handlePayment
+        - event: TransferValue(indexed address,indexed address,uint256,uint256)
+          handler: handleTransferValue
+        - event: SetFundingSource(indexed address,uint8,address)
+          handler: handleSetFundingSource
+  - kind: ethereum/contract
+    name: CaskDCA
+    network: celo-alfajores
+    source:
+      address: "0x2A591f416EecEfF7C29436957b53736826D0BCD3"
+      abi: CaskDCA
+      startBlock: 12769438
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/dca.ts
+      entities:
+        - CaskTransaction
+        - CaskDCA
+        - CaskConsumer
+        - CaskMetric
+      abis:
+        - name: CaskDCA
+          file: ./abis/CaskDCA.json
+      eventHandlers:
+        - event: DCACreated(indexed bytes32,indexed address,indexed address,address,address,uint256,uint256,uint32)
+          handler: handleDCACreated
+        - event: DCAPaused(indexed bytes32,indexed address)
+          handler: handleDCAPaused
+        - event: DCAResumed(indexed bytes32,indexed address)
+          handler: handleDCAResumed
+        - event: DCASkipped(indexed bytes32,indexed address,uint8)
+          handler: handleDCASkipped
+        - event: DCAProcessed(indexed bytes32,indexed address,uint256,uint256,uint256)
+          handler: handleDCAProcessed
+        - event: DCACanceled(indexed bytes32,indexed address)
+          handler: handleDCACanceled
+        - event: DCACompleted(indexed bytes32,indexed address)
+          handler: handleDCACompleted
+  - kind: ethereum/contract
+    name: CaskP2P
+    network: celo-alfajores
+    source:
+      address: "0x4aAdCe807bcd419fACea62b56E084Ce54e32c312"
+      abi: CaskP2P
+      startBlock: 12769438
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/p2p.ts
+      entities:
+        - CaskTransaction
+        - CaskP2P
+        - CaskConsumer
+        - CaskMetric
+      abis:
+        - name: CaskP2P
+          file: ./abis/CaskP2P.json
+      eventHandlers:
+        - event: P2PCreated(indexed bytes32,indexed address,indexed address,uint256,uint256,uint32)
+          handler: handleP2PCreated
+        - event: P2PPaused(indexed bytes32,indexed address)
+          handler: handleP2PPaused
+        - event: P2PResumed(indexed bytes32,indexed address)
+          handler: handleP2PResumed
+        - event: P2PSkipped(indexed bytes32,indexed address)
+          handler: handleP2PSkipped
+        - event: P2PProcessed(indexed bytes32,indexed address,uint256,uint256)
+          handler: handleP2PProcessed
+        - event: P2PCanceled(indexed bytes32,indexed address)
+          handler: handleP2PCanceled
+        - event: P2PCompleted(indexed bytes32,indexed address)
+          handler: handleP2PCompleted

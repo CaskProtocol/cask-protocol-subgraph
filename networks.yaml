@@ -99,6 +99,23 @@ fuji:
   CaskVault:
     address: "0x9d628d298D917BF9642Bb45D594B2075f661373D"
     startBlock: 9261101
+alfajores:
+  network: celo-alfajores
+  CaskSubscriptions:
+    address: "0xB844AFd937717bf117CaE2467B12f2922afa68dB"
+    startBlock: 12769438
+  CaskSubscriptionPlans:
+    address: "0x6FF7EB600f4BF68e0A3f35ba2D4825BfcA031A1b"
+    startBlock: 12769438
+  CaskVault:
+    address: "0xC48f1deb2E6d68aD620cA38927F4d8b1923555d0"
+    startBlock: 12769438
+  CaskDCA:
+    address: "0x2A591f416EecEfF7C29436957b53736826D0BCD3"
+    startBlock: 12769438
+  CaskP2P:
+    address: "0x4aAdCe807bcd419fACea62b56E084Ce54e32c312"
+    startBlock: 12769438
 internal.mumbai:
   network: mumbai
   CaskSubscriptions:
