@@ -281,11 +281,11 @@ export function handleDCACanceled(event: DCACanceled): void {
     consumer.save()
 }
 
-export function handleDCAComplete(event: DCACompleted): void {
+export function handleDCACompleted(event: DCACompleted): void {
 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
     let txn = new CaskDCAEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
-    txn.type = 'DCACanceled'
+    txn.type = 'DCACompleted'
     txn.dcaId = event.params.dcaId
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32();
