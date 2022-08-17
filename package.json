@@ -16,6 +16,7 @@
     "deploy:celo": "graph deploy CaskProtocol/cask-protocol-celo subgraph.celo.yaml --node https://api.thegraph.com/deploy/",
     "deploy:aurora": "graph deploy CaskProtocol/cask-protocol-aurora subgraph.aurora.yaml --node https://api.thegraph.com/deploy/",
     "deploy:moonbeam": "graph deploy CaskProtocol/cask-protocol-moonbeam subgraph.moonbeam.yaml --node https://api.thegraph.com/deploy/",
+    "deploy:gnosis": "graph deploy CaskProtocol/cask-protocol-gnosis subgraph.gnosis.yaml --node https://api.thegraph.com/deploy/",
     "create-local": "graph create --node http://localhost:8020/ CaskProtocol/cask-protocol-subgraph",
     "remove-local": "graph remove --node http://localhost:8020/ CaskProtocol/cask-protocol-subgraph",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 CaskProtocol/cask-protocol-subgraph",
