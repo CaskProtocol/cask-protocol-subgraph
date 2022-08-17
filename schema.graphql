@@ -209,7 +209,6 @@ type CaskP2P @entity {
 
   createdAt: Int!
   processAt: Int!
-  cancelAt: Int!
 
   status: P2PStatus!
 
