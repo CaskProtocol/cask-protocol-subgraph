@@ -76,15 +76,15 @@ function dcaSkipReason(reasonId: i32): string {
 
 export function handleDCACreated(event: DCACreated): void {
 
-    let dcaAmount: BigDecimal = scaleDown(event.params.amount, VAULT_DECIMALS);
-    let dcaTotalAmount: BigDecimal = scaleDown(event.params.totalAmount, VAULT_DECIMALS);
+    let dcaAmount: BigDecimal = scaleDown(event.params.amount, VAULT_DECIMALS)
+    let dcaTotalAmount: BigDecimal = scaleDown(event.params.totalAmount, VAULT_DECIMALS)
 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
     let txn = new CaskDCAEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'DCACreated'
     txn.dcaId = event.params.dcaId
     txn.txnId = event.transaction.hash
-    txn.timestamp = event.block.timestamp.toI32();
+    txn.timestamp = event.block.timestamp.toI32()
     txn.user = consumer.id
     txn.assetAddress = event.params.outputAsset
     txn.amount = dcaAmount
@@ -96,7 +96,7 @@ export function handleDCACreated(event: DCACreated): void {
     let dcaInfo = contract.getDCA(event.params.dcaId)
     if (dcaInfo == null) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
-        return;
+        return
     }
 
     dca.user = consumer.id
@@ -130,21 +130,21 @@ export function handleDCAPaused(event: DCAPaused): void {
     txn.type = 'DCAPaused'
     txn.dcaId = event.params.dcaId
     txn.txnId = event.transaction.hash
-    txn.timestamp = event.block.timestamp.toI32();
+    txn.timestamp = event.block.timestamp.toI32()
     txn.user = consumer.id
     txn.save()
 
     let dca = CaskDCA.load(event.params.dcaId.toHex())
     if (dca == null) {
         log.warning('DCA not found: {}', [event.params.dcaId.toHex()])
-        return;
+        return
     }
 
     let contract = CaskDCAContract.bind(event.address)
     let dcaInfo = contract.getDCA(event.params.dcaId)
     if (dcaInfo == null) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
-        return;
+        return
     }
 
     dca.status = dcaStatus(dcaInfo.status)
@@ -161,21 +161,21 @@ export function handleDCAResumed(event: DCAResumed): void {
     txn.type = 'DCAResumed'
     txn.dcaId = event.params.dcaId
     txn.txnId = event.transaction.hash
-    txn.timestamp = event.block.timestamp.toI32();
+    txn.timestamp = event.block.timestamp.toI32()
     txn.user = consumer.id
     txn.save()
 
     let dca = CaskDCA.load(event.params.dcaId.toHex())
     if (dca == null) {
         log.warning('DCA not found: {}', [event.params.dcaId.toHex()])
-        return;
+        return
     }
 
     let contract = CaskDCAContract.bind(event.address)
     let dcaInfo = contract.getDCA(event.params.dcaId)
     if (dcaInfo == null) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
-        return;
+        return
     }
 
     dca.status = dcaStatus(dcaInfo.status)
@@ -192,7 +192,7 @@ export function handleDCASkipped(event: DCASkipped): void {
     txn.type = 'DCASkipped'
     txn.dcaId = event.params.dcaId
     txn.txnId = event.transaction.hash
-    txn.timestamp = event.block.timestamp.toI32();
+    txn.timestamp = event.block.timestamp.toI32()
     txn.user = consumer.id
     txn.skipReason = dcaSkipReason(event.params.skipReason)
     txn.save()
@@ -200,18 +200,19 @@ export function handleDCASkipped(event: DCASkipped): void {
     let dca = CaskDCA.load(event.params.dcaId.toHex())
     if (dca == null) {
         log.warning('DCA not found: {}', [event.params.dcaId.toHex()])
-        return;
+        return
     }
 
     let contract = CaskDCAContract.bind(event.address)
     let dcaInfo = contract.getDCA(event.params.dcaId)
     if (dcaInfo == null) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
-        return;
+        return
     }
 
     dca.status = dcaStatus(dcaInfo.status)
     dca.numSkips = dcaInfo.numSkips
+    dca.lastSkippedAt = event.block.timestamp.toI32()
 
     dca.save()
 }
@@ -223,7 +224,7 @@ export function handleDCAProcessed(event: DCAProcessed): void {
     txn.type = 'DCAProcessed'
     txn.dcaId = event.params.dcaId
     txn.txnId = event.transaction.hash
-    txn.timestamp = event.block.timestamp.toI32();
+    txn.timestamp = event.block.timestamp.toI32()
     txn.amount = scaleDown(event.params.amount, VAULT_DECIMALS)
     txn.buyQty = event.params.buyQty
     txn.fee = scaleDown(event.params.fee, VAULT_DECIMALS)
@@ -236,7 +237,7 @@ export function handleDCAProcessed(event: DCAProcessed): void {
     let dcaInfo = contract.getDCA(event.params.dcaId)
     if (dcaInfo == null) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
-        return;
+        return
     }
 
     dca.status = dcaStatus(dcaInfo.status)
@@ -245,6 +246,7 @@ export function handleDCAProcessed(event: DCAProcessed): void {
     dca.processAt = dcaInfo.processAt.toI32()
     dca.currentAmount = scaleDown(dcaInfo.currentAmount, VAULT_DECIMALS)
     dca.currentQty = dcaInfo.currentQty
+    dca.lastProcessedAt = event.block.timestamp.toI32()
     dca.save()
 
     incrementMetric('dca.processed', event.block.timestamp)
@@ -257,21 +259,21 @@ export function handleDCACanceled(event: DCACanceled): void {
     txn.type = 'DCACanceled'
     txn.dcaId = event.params.dcaId
     txn.txnId = event.transaction.hash
-    txn.timestamp = event.block.timestamp.toI32();
+    txn.timestamp = event.block.timestamp.toI32()
     txn.user = consumer.id
     txn.save()
 
     let dca = CaskDCA.load(event.params.dcaId.toHex())
     if (dca == null) {
         log.warning('DCA not found: {}', [event.params.dcaId.toHex()])
-        return;
+        return
     }
 
     let contract = CaskDCAContract.bind(event.address)
     let dcaInfo = contract.getDCA(event.params.dcaId)
     if (dcaInfo == null) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
-        return;
+        return
     }
 
     dca.status = dcaStatus(dcaInfo.status)
@@ -288,21 +290,21 @@ export function handleDCACompleted(event: DCACompleted): void {
     txn.type = 'DCACompleted'
     txn.dcaId = event.params.dcaId
     txn.txnId = event.transaction.hash
-    txn.timestamp = event.block.timestamp.toI32();
+    txn.timestamp = event.block.timestamp.toI32()
     txn.user = consumer.id
     txn.save()
 
     let dca = CaskDCA.load(event.params.dcaId.toHex())
     if (dca == null) {
         log.warning('DCA not found: {}', [event.params.dcaId.toHex()])
-        return;
+        return
     }
 
     let contract = CaskDCAContract.bind(event.address)
     let dcaInfo = contract.getDCA(event.params.dcaId)
     if (dcaInfo == null) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
-        return;
+        return
     }
 
     dca.status = dcaStatus(dcaInfo.status)

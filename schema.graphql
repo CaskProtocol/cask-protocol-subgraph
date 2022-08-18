@@ -129,6 +129,8 @@ type CaskSubscription @entity {
   createdAt: Int!
   renewAt: Int!
   cancelAt: Int!
+  lastRenewedAt: Int
+  pastDueAt: Int
 
   status: SubscriptionStatus!
 
@@ -181,6 +183,8 @@ type CaskDCA @entity {
 
   createdAt: Int!
   processAt: Int!
+  lastProcessedAt: Int
+  lastSkippedAt: Int
 
   status: DCAStatus!
 
@@ -209,6 +213,8 @@ type CaskP2P @entity {
 
   createdAt: Int!
   processAt: Int!
+  lastProcessedAt: Int
+  lastSkippedAt: Int
 
   status: P2PStatus!
 
