@@ -68,6 +68,8 @@ function dcaSkipReason(reasonId: i32): string {
     } else if (reasonId == 3) {
         return 'OutsideLimits'
     } else if (reasonId == 4) {
+        return 'ExcessiveSlippage'
+    } else if (reasonId == 5) {
         return 'SwapFailed'
     } else {
         return 'None'
