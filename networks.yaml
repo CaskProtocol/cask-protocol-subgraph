@@ -128,6 +128,12 @@ mumbai:
   CaskVault:
     address: "0xc924CaAFe6759F92215Dadf326FF4fAb158f6C41"
     startBlock: 26201929
+  CaskDCA:
+    address: "0xE9E994bdaeB77B06E8b31457BAE341D8C4F081ab"
+    startBlock: 27639106
+  CaskP2P:
+    address: "0x2068607e74B3ED913F920A4e9Fc922067dD825BB"
+    startBlock: 27639106
 fuji:
   network: fuji
   CaskSubscriptions:
@@ -139,6 +145,12 @@ fuji:
   CaskVault:
     address: "0x9d628d298D917BF9642Bb45D594B2075f661373D"
     startBlock: 9261101
+  CaskDCA:
+    address: "0x74708050c23850FDdDbd357fE504b93d4f06E901"
+    startBlock: 12571711
+  CaskP2P:
+    address: "0x4Deb1AAe96809Fc8f05859f7A9F21F7e59e30186"
+    startBlock: 12571846
 alfajores:
   network: celo-alfajores
   CaskSubscriptions:
@@ -168,11 +180,11 @@ internal.mumbai:
     address: "0xC040BDBBb2b1AdDaa7586962e9Fcb5585D7e66a9"
     startBlock: 26026872
   CaskDCA:
-    address: "0x41Eb18BA90c2c955f1987BD3AeA6feb0F70e0e49"
-    startBlock: 26974719
+    address: "0x3183C5F1951437180A84bD005e3975C66E71b977"
+    startBlock: 27638210
   CaskP2P:
-    address: "0x92b34C07bD6B77A88d91919469c540a7e1b269e4"
-    startBlock: 26974686
+    address: "0x96636D895605c1bc5069af3c880853D6D806e259"
+    startBlock: 27638402
 internal.fuji:
   network: fuji
   CaskSubscriptions:
@@ -185,8 +197,8 @@ internal.fuji:
     address: "0x5e8C289404E9B17be7FfE7FcBa673f5AC802cc06"
     startBlock: 8799462
   CaskDCA:
-    address: "0x02b5953b90087d5e0A8e9a74364a3e60cfbc9872"
-    startBlock: 11126437
+    address: "0xdDCEfdE530930c573D27E4f04b7E87A2e88981B8"
+    startBlock: 12569866
   CaskP2P:
-    address: "0xDa70B55FEF2Ad61a289eC57d27E8e9f85144A298"
-    startBlock: 11126564
+    address: "0x2e0B0616C5feBFa0C9f8F9DeE4c6E07A1ecCfCB8"
+    startBlock: 12569922
