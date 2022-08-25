@@ -669,6 +669,7 @@ export function handleSubscriptionCanceled(event: SubscriptionCanceled): void {
     plan.save()
 
     subscription.status = 'Canceled'
+    subscription.canceledAt = event.block.timestamp.toI32()
     subscription.save()
 }
 

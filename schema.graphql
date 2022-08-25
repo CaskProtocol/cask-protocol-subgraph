@@ -131,6 +131,7 @@ type CaskSubscription @entity {
   cancelAt: Int!
   lastRenewedAt: Int
   pastDueAt: Int
+  canceledAt: Int
 
   status: SubscriptionStatus!
 
