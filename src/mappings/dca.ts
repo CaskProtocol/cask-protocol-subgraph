@@ -150,6 +150,7 @@ export function handleDCAPaused(event: DCAPaused): void {
     }
 
     dca.status = dcaStatus(dcaInfo.status)
+    dca.pausedAt = event.block.timestamp.toI32()
     dca.save()
 
     consumer.activeDCACount = consumer.activeDCACount.minus(BigInt.fromI32(1))
@@ -279,6 +280,7 @@ export function handleDCACanceled(event: DCACanceled): void {
     }
 
     dca.status = dcaStatus(dcaInfo.status)
+    dca.canceledAt = event.block.timestamp.toI32()
     dca.save()
 
     consumer.activeDCACount = consumer.activeDCACount.minus(BigInt.fromI32(1))
@@ -310,6 +312,7 @@ export function handleDCACompleted(event: DCACompleted): void {
     }
 
     dca.status = dcaStatus(dcaInfo.status)
+    dca.completedAt = event.block.timestamp.toI32()
     dca.save()
 
     consumer.activeDCACount = consumer.activeDCACount.minus(BigInt.fromI32(1))

@@ -124,6 +124,7 @@ export function handleP2PPaused(event: P2PPaused): void {
     }
 
     p2p.status = p2pStatus(p2pInfo.status)
+    p2p.pausedAt = event.block.timestamp.toI32()
     p2p.save()
 
     consumer.activeP2PCount = consumer.activeP2PCount.minus(BigInt.fromI32(1))
@@ -249,6 +250,7 @@ export function handleP2PCanceled(event: P2PCanceled): void {
     }
 
     p2p.status = p2pStatus(p2pInfo.status)
+    p2p.canceledAt = event.block.timestamp.toI32()
     p2p.save()
 
     consumer.activeP2PCount = consumer.activeP2PCount.minus(BigInt.fromI32(1))
@@ -280,6 +282,7 @@ export function handleP2PComplete(event: P2PCompleted): void {
     }
 
     p2p.status = p2pStatus(p2pInfo.status)
+    p2p.completedAt = event.block.timestamp.toI32()
     p2p.save()
 
     consumer.activeP2PCount = consumer.activeP2PCount.minus(BigInt.fromI32(1))

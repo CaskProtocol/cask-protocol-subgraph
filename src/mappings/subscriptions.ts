@@ -375,6 +375,7 @@ export function handleSubscriptionPaused(event: SubscriptionPaused): void {
     plan.save()
 
     subscription.status = 'Paused'
+    subscription.pausedAt = event.block.timestamp.toI32()
     subscription.save()
 }
 
