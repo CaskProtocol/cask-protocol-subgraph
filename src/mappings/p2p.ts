@@ -257,7 +257,7 @@ export function handleP2PCanceled(event: P2PCanceled): void {
     consumer.save()
 }
 
-export function handleP2PComplete(event: P2PCompleted): void {
+export function handleP2PCompleted(event: P2PCompleted): void {
 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
     let txn = new CaskP2PEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
