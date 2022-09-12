@@ -219,6 +219,7 @@ export function handleP2PProcessed(event: P2PProcessed): void {
     p2p.numSkips = p2pInfo.numSkips
     p2p.processAt = p2pInfo.processAt.toI32()
     p2p.currentAmount = scaleDown(p2pInfo.currentAmount, VAULT_DECIMALS)
+    p2p.currentFees = p2p.currentFees.plus(scaleDown(event.params.fee, VAULT_DECIMALS))
     p2p.lastProcessedAt = event.block.timestamp.toI32()
     p2p.save()
 

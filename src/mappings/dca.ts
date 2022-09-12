@@ -248,6 +248,7 @@ export function handleDCAProcessed(event: DCAProcessed): void {
     dca.numSkips = dcaInfo.numSkips
     dca.processAt = dcaInfo.processAt.toI32()
     dca.currentAmount = scaleDown(dcaInfo.currentAmount, VAULT_DECIMALS)
+    dca.currentFees = dca.currentFees.plus(scaleDown(event.params.fee, VAULT_DECIMALS))
     dca.currentQty = dcaInfo.currentQty
     dca.lastProcessedAt = event.block.timestamp.toI32()
     dca.save()

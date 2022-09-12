@@ -178,6 +178,7 @@ type CaskDCA @entity {
   amount: BigDecimal!
   totalAmount: BigDecimal!
   currentAmount: BigDecimal!
+  currentFees: BigDecimal!
   currentQty: BigInt!
   period: Int!
   slippageBps: BigInt!
@@ -215,6 +216,7 @@ type CaskP2P @entity {
   amount: BigDecimal!
   totalAmount: BigDecimal!
   currentAmount: BigDecimal!
+  currentFees: BigDecimal!
   period: Int!
 
   createdAt: Int!
