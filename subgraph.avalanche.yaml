@@ -147,7 +147,7 @@ dataSources:
     name: CaskP2P
     network: avalanche
     source:
-      address: "0x28418B0AB2C00142a865971dcC6a4b1154DaD19E"
+      address: "0xe2d24801A9b790f1168cCB7caBdAdC6A071912F3"
       abi: CaskP2P
       startBlock: 17633716
     mapping:

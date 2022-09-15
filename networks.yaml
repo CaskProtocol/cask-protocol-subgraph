@@ -13,7 +13,7 @@ polygon:
     address: "0x733Ec5A72c38f2f3c75E98b28DffC1885aB04AF1"
     startBlock: 30990095
   CaskP2P:
-    address: "0x28bc3F4C21504c4686f88238cF424c353e3E628E"
+    address: "0xB80376507Dd5d561AD3A6aB452FE17e782220501"
     startBlock: 30990383
 avalanche:
   network: avalanche
@@ -30,7 +30,7 @@ avalanche:
     address: "0xb8A52a086262E1d6c7494bDCb824f884f41FC5f8"
     startBlock: 17633716
   CaskP2P:
-    address: "0x28418B0AB2C00142a865971dcC6a4b1154DaD19E"
+    address: "0xe2d24801A9b790f1168cCB7caBdAdC6A071912F3"
     startBlock: 17633716
 celo:
   network: celo

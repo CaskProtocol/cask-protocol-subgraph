@@ -147,7 +147,7 @@ dataSources:
     name: CaskP2P
     network: matic
     source:
-      address: "0x28bc3F4C21504c4686f88238cF424c353e3E628E"
+      address: "0xB80376507Dd5d561AD3A6aB452FE17e782220501"
       abi: CaskP2P
       startBlock: 30990383
     mapping:
