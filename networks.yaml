@@ -79,10 +79,10 @@ aurora:
     startBlock: 71199296
   CaskDCA:
     address: "0x96d59127cCD1c0e3749E733Ee04F0DfbD2f808c8"
-    startBlock: 71199296
+    startBlock: 73354799
   CaskP2P:
     address: "0xccB54bF4171bc8C11e78ca40f3a3bd3B721EF361"
-    startBlock: 71199296
+    startBlock: 73354834
 moonbeam:
   network: moonbeam
   CaskSubscriptions:
