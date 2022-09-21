@@ -23,8 +23,8 @@
     "import-abis": "ts-node ./scripts/update-abis.ts"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.28.0",
-    "@graphprotocol/graph-ts": "0.26.0"
+    "@graphprotocol/graph-cli": "^0.33.1",
+    "@graphprotocol/graph-ts": "^0.27.0"
   },
   "devDependencies": {
     "handlebars": "^4.7.7"

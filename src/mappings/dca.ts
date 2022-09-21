@@ -2,6 +2,7 @@ import {
     BigInt,
     BigDecimal,
     Bytes,
+    Address,
     log
 } from "@graphprotocol/graph-ts"
 import {
@@ -19,19 +20,19 @@ import {
     scaleDown,
 } from './helpers/units'
 import {
+    CaskConsumer,
+    CaskDCA,
+    CaskDCAEvent,
+} from "../types/schema"
+import {
     incrementMetric
 } from "./helpers/metrics"
-import {
-    CaskTransaction,
-    CaskConsumer,
-    CaskDCA, CaskDCAEvent,
-} from "../types/schema"
 
 function findOrCreateDCA(dcaId: Bytes): CaskDCA {
     let dca = CaskDCA.load(dcaId.toHex())
     if (!dca) {
         dca = new CaskDCA(dcaId.toHex())
-        dca.save()
+        dca.currentFees = BigDecimal.zero()
     }
     return dca
 }
@@ -41,7 +42,17 @@ function findOrCreateConsumer(consumerAddress: Bytes, appearedAt: i32): CaskCons
     if (!consumer) {
         consumer = new CaskConsumer(consumerAddress.toHex())
         consumer.appearedAt = appearedAt
-        consumer.save()
+        consumer.balance = BigDecimal.zero()
+        consumer.depositCount = BigInt.zero()
+        consumer.depositAmount = BigDecimal.zero()
+        consumer.withdrawCount = BigInt.zero()
+        consumer.withdrawAmount = BigDecimal.zero()
+        consumer.totalSubscriptionCount = BigInt.zero()
+        consumer.activeSubscriptionCount = BigInt.zero()
+        consumer.totalDCACount = BigInt.zero()
+        consumer.activeDCACount = BigInt.zero()
+        consumer.totalP2PCount = BigInt.zero()
+        consumer.activeP2PCount = BigInt.zero()
     }
     return consumer
 }
@@ -96,7 +107,7 @@ export function handleDCACreated(event: DCACreated): void {
 
     let contract = CaskDCAContract.bind(event.address)
     let dcaInfo = contract.getDCA(event.params.dcaId)
-    if (dcaInfo == null) {
+    if (dcaInfo == null || dcaInfo.user == Address.zero()) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
         return
     }
@@ -144,7 +155,7 @@ export function handleDCAPaused(event: DCAPaused): void {
 
     let contract = CaskDCAContract.bind(event.address)
     let dcaInfo = contract.getDCA(event.params.dcaId)
-    if (dcaInfo == null) {
+    if (dcaInfo == null || dcaInfo.user == Address.zero()) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
         return
     }
@@ -176,7 +187,7 @@ export function handleDCAResumed(event: DCAResumed): void {
 
     let contract = CaskDCAContract.bind(event.address)
     let dcaInfo = contract.getDCA(event.params.dcaId)
-    if (dcaInfo == null) {
+    if (dcaInfo == null || dcaInfo.user == Address.zero()) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
         return
     }
@@ -208,7 +219,7 @@ export function handleDCASkipped(event: DCASkipped): void {
 
     let contract = CaskDCAContract.bind(event.address)
     let dcaInfo = contract.getDCA(event.params.dcaId)
-    if (dcaInfo == null) {
+    if (dcaInfo == null || dcaInfo.user == Address.zero()) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
         return
     }
@@ -238,7 +249,7 @@ export function handleDCAProcessed(event: DCAProcessed): void {
 
     let contract = CaskDCAContract.bind(event.address)
     let dcaInfo = contract.getDCA(event.params.dcaId)
-    if (dcaInfo == null) {
+    if (dcaInfo == null || dcaInfo.user == Address.zero()) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
         return
     }
@@ -275,7 +286,7 @@ export function handleDCACanceled(event: DCACanceled): void {
 
     let contract = CaskDCAContract.bind(event.address)
     let dcaInfo = contract.getDCA(event.params.dcaId)
-    if (dcaInfo == null) {
+    if (dcaInfo == null || dcaInfo.user == Address.zero()) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
         return
     }
@@ -307,7 +318,7 @@ export function handleDCACompleted(event: DCACompleted): void {
 
     let contract = CaskDCAContract.bind(event.address)
     let dcaInfo = contract.getDCA(event.params.dcaId)
-    if (dcaInfo == null) {
+    if (dcaInfo == null || dcaInfo.user == Address.zero()) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
         return
     }

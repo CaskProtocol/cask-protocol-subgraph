@@ -2,6 +2,7 @@ import {
     BigInt,
     BigDecimal,
     Bytes,
+    Address,
     log
 } from "@graphprotocol/graph-ts"
 import {
@@ -19,17 +20,19 @@ import {
     scaleDown,
 } from './helpers/units'
 import {
-    CaskTransaction,
     CaskConsumer,
-    CaskP2P, CaskP2PEvent,
+    CaskP2P,
+    CaskP2PEvent,
 } from "../types/schema"
-import {incrementMetric} from "./helpers/metrics"
+import {
+    incrementMetric
+} from "./helpers/metrics"
 
 function findOrCreateP2P(p2pId: Bytes): CaskP2P {
     let p2p = CaskP2P.load(p2pId.toHex())
     if (!p2p) {
         p2p = new CaskP2P(p2pId.toHex())
-        p2p.save()
+        p2p.currentFees = BigDecimal.zero()
     }
     return p2p
 }
@@ -39,7 +42,17 @@ function findOrCreateConsumer(consumerAddress: Bytes, appearedAt: i32): CaskCons
     if (!consumer) {
         consumer = new CaskConsumer(consumerAddress.toHex())
         consumer.appearedAt = appearedAt
-        consumer.save()
+        consumer.balance = BigDecimal.zero()
+        consumer.depositCount = BigInt.zero()
+        consumer.depositAmount = BigDecimal.zero()
+        consumer.withdrawCount = BigInt.zero()
+        consumer.withdrawAmount = BigDecimal.zero()
+        consumer.totalSubscriptionCount = BigInt.zero()
+        consumer.activeSubscriptionCount = BigInt.zero()
+        consumer.totalDCACount = BigInt.zero()
+        consumer.activeDCACount = BigInt.zero()
+        consumer.totalP2PCount = BigInt.zero()
+        consumer.activeP2PCount = BigInt.zero()
     }
     return consumer
 }
@@ -73,21 +86,24 @@ export function handleP2PCreated(event: P2PCreated): void {
     txn.amount = p2pAmount
     txn.save()
 
-    let p2p = findOrCreateP2P(event.params.p2pId)
-
     let contract = CaskP2PContract.bind(event.address)
     let p2pInfo = contract.getP2P(event.params.p2pId)
-    if (p2pInfo == null) {
+    if (p2pInfo == null || p2pInfo.user == Address.zero()) {
         log.warning('P2P Info not found: {}', [event.params.p2pId.toHex()])
         return
     }
 
+    let p2p = findOrCreateP2P(event.params.p2pId)
     p2p.user = consumer.id
     p2p.to = p2pInfo.to
     p2p.amount = p2pAmount
     p2p.period = p2pInfo.period.toI32()
+    p2p.numPayments = p2pInfo.numPayments
+    p2p.numSkips = p2pInfo.numSkips
+    p2p.currentAmount = scaleDown(p2pInfo.currentAmount, VAULT_DECIMALS)
     p2p.totalAmount = p2pTotalAmount
     p2p.createdAt = p2pInfo.createdAt.toI32()
+    p2p.lastProcessedAt = event.block.timestamp.toI32()
     p2p.processAt = p2pInfo.processAt.toI32()
     p2p.status = 'Active'
     p2p.save()
@@ -110,19 +126,18 @@ export function handleP2PPaused(event: P2PPaused): void {
     txn.user = consumer.id
     txn.save()
 
+    let contract = CaskP2PContract.bind(event.address)
+    let p2pInfo = contract.getP2P(event.params.p2pId)
+    if (p2pInfo == null || p2pInfo.user == Address.zero()) {
+        log.warning('P2P Info not found: {}', [event.params.p2pId.toHex()])
+        return
+    }
+
     let p2p = CaskP2P.load(event.params.p2pId.toHex())
     if (p2p == null) {
         log.warning('P2P not found: {}', [event.params.p2pId.toHex()])
         return
     }
-
-    let contract = CaskP2PContract.bind(event.address)
-    let p2pInfo = contract.getP2P(event.params.p2pId)
-    if (p2pInfo == null) {
-        log.warning('P2P Info not found: {}', [event.params.p2pId.toHex()])
-        return
-    }
-
     p2p.status = p2pStatus(p2pInfo.status)
     p2p.pausedAt = event.block.timestamp.toI32()
     p2p.save()
@@ -142,19 +157,18 @@ export function handleP2PResumed(event: P2PResumed): void {
     txn.user = consumer.id
     txn.save()
 
+    let contract = CaskP2PContract.bind(event.address)
+    let p2pInfo = contract.getP2P(event.params.p2pId)
+    if (p2pInfo == null || p2pInfo.user == Address.zero()) {
+        log.warning('P2P Info not found: {}', [event.params.p2pId.toHex()])
+        return
+    }
+
     let p2p = CaskP2P.load(event.params.p2pId.toHex())
     if (p2p == null) {
         log.warning('P2P not found: {}', [event.params.p2pId.toHex()])
         return
     }
-
-    let contract = CaskP2PContract.bind(event.address)
-    let p2pInfo = contract.getP2P(event.params.p2pId)
-    if (p2pInfo == null) {
-        log.warning('P2P Info not found: {}', [event.params.p2pId.toHex()])
-        return
-    }
-
     p2p.status = p2pStatus(p2pInfo.status)
     p2p.save()
 
@@ -173,19 +187,18 @@ export function handleP2PSkipped(event: P2PSkipped): void {
     txn.user = consumer.id
     txn.save()
 
+    let contract = CaskP2PContract.bind(event.address)
+    let p2pInfo = contract.getP2P(event.params.p2pId)
+    if (p2pInfo == null || p2pInfo.user == Address.zero()) {
+        log.warning('P2P Info not found: {}', [event.params.p2pId.toHex()])
+        return
+    }
+
     let p2p = CaskP2P.load(event.params.p2pId.toHex())
     if (p2p == null) {
         log.warning('P2P not found: {}', [event.params.p2pId.toHex()])
         return
     }
-
-    let contract = CaskP2PContract.bind(event.address)
-    let p2pInfo = contract.getP2P(event.params.p2pId)
-    if (p2pInfo == null) {
-        log.warning('P2P Info not found: {}', [event.params.p2pId.toHex()])
-        return
-    }
-
     p2p.status = p2pStatus(p2pInfo.status)
     p2p.numSkips = p2pInfo.numSkips
     p2p.lastSkippedAt = event.block.timestamp.toI32()
@@ -205,15 +218,14 @@ export function handleP2PProcessed(event: P2PProcessed): void {
     txn.fee = scaleDown(event.params.fee, VAULT_DECIMALS)
     txn.save()
 
-    let p2p = findOrCreateP2P(event.params.p2pId)
-
     let contract = CaskP2PContract.bind(event.address)
     let p2pInfo = contract.getP2P(event.params.p2pId)
-    if (p2pInfo == null) {
+    if (p2pInfo == null || p2pInfo.user == Address.zero()) {
         log.warning('P2P Info not found: {}', [event.params.p2pId.toHex()])
         return
     }
 
+    let p2p = findOrCreateP2P(event.params.p2pId)
     p2p.status = p2pStatus(p2pInfo.status)
     p2p.numPayments = p2pInfo.numPayments
     p2p.numSkips = p2pInfo.numSkips
@@ -237,19 +249,18 @@ export function handleP2PCanceled(event: P2PCanceled): void {
     txn.user = consumer.id
     txn.save()
 
+    let contract = CaskP2PContract.bind(event.address)
+    let p2pInfo = contract.getP2P(event.params.p2pId)
+    if (p2pInfo == null || p2pInfo.user == Address.zero()) {
+        log.warning('P2P Info not found: {}', [event.params.p2pId.toHex()])
+        return
+    }
+
     let p2p = CaskP2P.load(event.params.p2pId.toHex())
     if (p2p == null) {
         log.warning('P2P not found: {}', [event.params.p2pId.toHex()])
         return
     }
-
-    let contract = CaskP2PContract.bind(event.address)
-    let p2pInfo = contract.getP2P(event.params.p2pId)
-    if (p2pInfo == null) {
-        log.warning('P2P Info not found: {}', [event.params.p2pId.toHex()])
-        return
-    }
-
     p2p.status = p2pStatus(p2pInfo.status)
     p2p.canceledAt = event.block.timestamp.toI32()
     p2p.save()
@@ -269,19 +280,18 @@ export function handleP2PCompleted(event: P2PCompleted): void {
     txn.user = consumer.id
     txn.save()
 
+    let contract = CaskP2PContract.bind(event.address)
+    let p2pInfo = contract.getP2P(event.params.p2pId)
+    if (p2pInfo == null || p2pInfo.user == Address.zero()) {
+        log.warning('P2P Info not found: {}', [event.params.p2pId.toHex()])
+        return
+    }
+
     let p2p = CaskP2P.load(event.params.p2pId.toHex())
     if (p2p == null) {
         log.warning('P2P not found: {}', [event.params.p2pId.toHex()])
         return
     }
-
-    let contract = CaskP2PContract.bind(event.address)
-    let p2pInfo = contract.getP2P(event.params.p2pId)
-    if (p2pInfo == null) {
-        log.warning('P2P Info not found: {}', [event.params.p2pId.toHex()])
-        return
-    }
-
     p2p.status = p2pStatus(p2pInfo.status)
     p2p.completedAt = event.block.timestamp.toI32()
     p2p.save()

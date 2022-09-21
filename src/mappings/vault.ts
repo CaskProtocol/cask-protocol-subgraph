@@ -1,12 +1,10 @@
 import {
     BigInt,
-    Address,
     BigDecimal,
     Bytes,
     log
 } from "@graphprotocol/graph-ts"
 import {
-    CaskVault,
     AssetDeposited,
     AssetWithdrawn,
     Payment,
@@ -21,7 +19,6 @@ import {
     Cask,
     CaskConsumer,
     CaskProvider,
-    CaskTransaction,
     CaskWalletEvent,
     CaskUser,
 } from "../types/schema"
@@ -34,7 +31,11 @@ function findOrCreateUser(userAddress: Bytes, appearedAt: i32): CaskUser {
     if (!user) {
         user = new CaskUser(userAddress.toHex())
         user.appearedAt = appearedAt
-        user.save()
+        user.balance = BigDecimal.zero()
+        user.depositCount = BigInt.zero()
+        user.depositAmount = BigDecimal.zero()
+        user.withdrawCount = BigInt.zero()
+        user.withdrawAmount = BigDecimal.zero()
     }
     return user
 }
@@ -44,7 +45,17 @@ function findOrCreateConsumer(consumerAddress: Bytes, appearedAt: i32): CaskCons
     if (!consumer) {
         consumer = new CaskConsumer(consumerAddress.toHex())
         consumer.appearedAt = appearedAt
-        consumer.save()
+        consumer.balance = BigDecimal.zero()
+        consumer.depositCount = BigInt.zero()
+        consumer.depositAmount = BigDecimal.zero()
+        consumer.withdrawCount = BigInt.zero()
+        consumer.withdrawAmount = BigDecimal.zero()
+        consumer.totalSubscriptionCount = BigInt.zero()
+        consumer.activeSubscriptionCount = BigInt.zero()
+        consumer.totalDCACount = BigInt.zero()
+        consumer.activeDCACount = BigInt.zero()
+        consumer.totalP2PCount = BigInt.zero()
+        consumer.activeP2PCount = BigInt.zero()
     }
     return consumer
 }
@@ -54,7 +65,14 @@ function findOrCreateProvider(providerAddress: Bytes, appearedAt: i32): CaskProv
     if (!provider) {
         provider = new CaskProvider(providerAddress.toHex())
         provider.appearedAt = appearedAt
-        provider.save()
+        provider.totalPaymentsReceived = BigDecimal.zero()
+        provider.totalSubscriptionCount = BigInt.zero()
+        provider.activeSubscriptionCount = BigInt.zero()
+        provider.trialingSubscriptionCount = BigInt.zero()
+        provider.convertedSubscriptionCount = BigInt.zero()
+        provider.canceledSubscriptionCount = BigInt.zero()
+        provider.pausedSubscriptionCount = BigInt.zero()
+        provider.pastDueSubscriptionCount = BigInt.zero()
     }
     return provider
 }
@@ -72,6 +90,13 @@ function loadCask(): Cask {
     let cask = Cask.load(CASK_ID)
     if (cask == null) {
         cask = new Cask(CASK_ID)
+        cask.totalDepositCount = BigInt.zero()
+        cask.totalDepositAmount = BigDecimal.zero()
+        cask.totalWithdrawCount = BigInt.zero()
+        cask.totalWithdrawAmount = BigDecimal.zero()
+        cask.totalProtocolPayments = BigDecimal.zero()
+        cask.totalProtocolFees = BigDecimal.zero()
+        cask.totalNetworkFees = BigDecimal.zero()
     }
     return cask
 }
@@ -92,13 +117,6 @@ export function handleAssetDeposited(event: AssetDeposited): void {
     user.save()
 
     const consumer = findOrCreateConsumer(event.params.participant, event.block.timestamp.toI32())
-    let oldTxn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
-    oldTxn.type = 'AssetDeposit'
-    oldTxn.timestamp = event.block.timestamp.toI32()
-    oldTxn.consumer = consumer.id
-    oldTxn.assetAddress = event.params.asset
-    oldTxn.amount = depositAmount
-    oldTxn.save()
 
     let txn = new CaskWalletEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.txnId = event.transaction.hash
@@ -126,13 +144,6 @@ export function handleAssetWithdrawn(event: AssetWithdrawn): void {
     user.save()
 
     const consumer = findOrCreateConsumer(event.params.participant, event.block.timestamp.toI32())
-    let oldTxn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
-    oldTxn.type = 'AssetWithdrawal'
-    oldTxn.timestamp = event.block.timestamp.toI32()
-    oldTxn.consumer = consumer.id
-    oldTxn.assetAddress = event.params.asset
-    oldTxn.amount = withdrawAmount
-    oldTxn.save()
 
     let txn = new CaskWalletEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.txnId = event.transaction.hash
@@ -171,14 +182,6 @@ export function handlePayment(event: Payment): void {
     provider.totalPaymentsReceived = provider.totalPaymentsReceived.plus(amount)
     provider.save()
 
-    let oldTxn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
-    oldTxn.type = 'Payment'
-    oldTxn.timestamp = event.block.timestamp.toI32()
-    oldTxn.consumer = consumer.id
-    oldTxn.provider = provider.id
-    oldTxn.amount = amount
-    oldTxn.save()
-
     let txn = new CaskWalletEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.txnId = event.transaction.hash
     txn.type = 'Payment'
@@ -204,13 +207,6 @@ export function handleTransferValue(event: TransferValue): void {
 
     const consumer = findOrCreateConsumer(event.params.from, event.block.timestamp.toI32())
     const provider = findOrCreateProvider(event.params.to, event.block.timestamp.toI32())
-    let oldTxn = new CaskTransaction(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
-    oldTxn.type = 'TransferValue'
-    oldTxn.timestamp = event.block.timestamp.toI32()
-    oldTxn.consumer = consumer.id
-    oldTxn.provider = provider.id
-    oldTxn.amount = amount
-    oldTxn.save()
 
     let txn = new CaskWalletEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.txnId = event.transaction.hash

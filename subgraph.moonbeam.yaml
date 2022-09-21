@@ -1,4 +1,4 @@
-specVersion: 0.0.2
+specVersion: 0.0.4
 description: Cask is a decentralized non-custodial protocol for managing recurring payment agreements.
 repository: https://github.com/CaskProtocol/cask-protocol-subgraph
 schema:
@@ -13,7 +13,7 @@ dataSources:
       startBlock: 1667146
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/subscriptions.ts
       entities:
@@ -61,7 +61,7 @@ dataSources:
       startBlock: 1667141
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/subscriptions.ts
       entities:
@@ -87,7 +87,7 @@ dataSources:
       startBlock: 1667127
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/vault.ts
       entities:
@@ -117,7 +117,7 @@ dataSources:
       startBlock: 1667189
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/dca.ts
       entities:
@@ -152,7 +152,7 @@ dataSources:
       startBlock: 1667214
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/p2p.ts
       entities:

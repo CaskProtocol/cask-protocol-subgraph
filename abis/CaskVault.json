@@ -569,16 +569,6 @@
             "internalType": "bool",
             "name": "allowed",
             "type": "bool"
-          },
-          {
-            "internalType": "enum ICaskVault.PriceFeedType",
-            "name": "priceFeedType",
-            "type": "uint8"
-          },
-          {
-            "internalType": "string",
-            "name": "bandSymbol",
-            "type": "string"
           }
         ],
         "internalType": "struct ICaskVault.Asset",

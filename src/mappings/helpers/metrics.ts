@@ -15,6 +15,7 @@ function findOrCreateMetricDate(name: string, timestamp: BigInt): CaskMetric {
         metric = new CaskMetric(metricId)
         metric.name = name
         metric.date = date
+        metric.value = BigDecimal.zero()
     }
     return metric
 }
