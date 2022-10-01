@@ -117,6 +117,23 @@ gnosis:
   CaskP2P:
     address: "0xccB54bF4171bc8C11e78ca40f3a3bd3B721EF361"
     startBlock: 23548912
+arbitrum:
+  network: arbitrum-one
+  CaskSubscriptions:
+    address: "0xF76BF31f0b56BD6f72E1aFeB83a51F191ec2291B"
+    startBlock: 27859867
+  CaskSubscriptionPlans:
+    address: "0xfA07af9E5835D720b3798a37f716749252F94D71"
+    startBlock: 27859867
+  CaskVault:
+    address: "0x20151fF7fDd720b85063D02081aa5B7876aDff7B"
+    startBlock: 27859867
+  CaskDCA:
+    address: "0xf89418E3A57189692ADe9A25792fD986fb99C5Ca"
+    startBlock: 27859867
+  CaskP2P:
+    address: "0x775Df9836945B0E95eD5F6A3269Bf22F6b426e85"
+    startBlock: 27859867
 mumbai:
   network: mumbai
   CaskSubscriptions:
