@@ -181,4 +181,39 @@ dataSources:
           handler: handleP2PCanceled
         - event: P2PCompleted(indexed bytes32,indexed address)
           handler: handleP2PCompleted
+{{/if}}
+{{#if CaskChainlinkTopup.address}}
+  - kind: ethereum/contract
+    name: CaskChainlinkTopup
+    network: {{network}}
+    source:
+      address: "{{CaskChainlinkTopup.address}}"
+      abi: CaskChainlinkTopup
+      startBlock: {{CaskChainlinkTopup.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/chainlinkTopup.ts
+      entities:
+        - CaskChainlinkTopup
+        - CaskChainlinkTopupEvent
+        - CaskConsumer
+        - CaskMetric
+      abis:
+        - name: CaskChainlinkTopup
+          file: ./abis/CaskChainlinkTopup.json
+      eventHandlers:
+        - event: ChainlinkTopupCreated(indexed bytes32,indexed address,uint256,uint256,uint256,address,uint8)
+          handler: handleChainlinkTopupCreated
+        - event: ChainlinkTopupPaused(indexed bytes32,indexed address,uint256,address,uint8)
+          handler: handleChainlinkTopupPaused
+        - event: ChainlinkTopupResumed(indexed bytes32,indexed address,uint256,address,uint8)
+          handler: handleChainlinkTopupResumed
+        - event: ChainlinkTopupSkipped(indexed bytes32,indexed address,uint256,address,uint8,uint8)
+          handler: handleChainlinkTopupSkipped
+        - event: ChainlinkTopupProcessed(indexed bytes32,indexed address,uint256,address,uint8,uint256,uint256,uint256)
+          handler: handleChainlinkTopupProcessed
+        - event: ChainlinkTopupCanceled(indexed bytes32,indexed address,uint256,address,uint8)
+          handler: handleChainlinkTopupCanceled
 {{~/if~}}

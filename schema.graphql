@@ -53,6 +53,8 @@ type CaskConsumer @entity {
   activeDCACount: BigInt!
   totalP2PCount: BigInt!
   activeP2PCount: BigInt!
+  totalChainlinkTopupCount: BigInt!
+  activeChainlinkTopupCount: BigInt!
 }
 
 type CaskProvider @entity {
@@ -233,6 +235,51 @@ type CaskP2P @entity {
   currentFees: BigDecimal!
 }
 
+enum ChainlinkTopupStatus {
+  None
+  Active
+  Paused
+  Canceled
+}
+
+enum ChainlinkTopupType {
+  None
+  Automation
+  VRF
+}
+
+enum ChainlinkTopupSkipReason {
+  None
+  PaymentFailed
+  SwapFailed
+}
+
+type CaskChainlinkTopup @entity {
+  id: ID!
+
+  user: CaskConsumer
+  registry: Bytes
+  targetId: BigInt
+  topupType: ChainlinkTopupType!
+
+  lowBalance: BigInt
+  topupAmount: BigDecimal
+  currentAmount: BigDecimal
+  currentBuyQty: BigInt
+
+  createdAt: Int
+  lastProcessedAt: Int
+  lastSkippedAt: Int
+  pausedAt: Int
+  canceledAt: Int
+  numTopups: BigInt
+  numSkips: BigInt
+
+  status: ChainlinkTopupStatus!
+
+  currentFees: BigDecimal!
+}
+
 enum SubscriptionTransactionType {
  SubscriptionCreated
  SubscriptionPlanChanged
@@ -274,6 +321,15 @@ enum P2PTransactionType {
  P2PProcessed
  P2PCanceled
  P2PCompleted
+}
+
+enum ChainlinkTopupTransactionType {
+ ChainlinkTopupCreated
+ ChainlinkTopupPaused
+ ChainlinkTopupResumed
+ ChainlinkTopupSkipped
+ ChainlinkTopupProcessed
+ ChainlinkTopupCanceled
 }
 
 type CaskSubscriptionEvent @entity {
@@ -324,4 +380,18 @@ type CaskP2PEvent @entity {
   user: CaskConsumer
   amount: BigDecimal
   fee: BigDecimal
+}
+
+
+type CaskChainlinkTopupEvent @entity {
+  id: ID!
+  type: ChainlinkTopupTransactionType!
+  txnId: Bytes!
+  timestamp: Int!
+  cltuId: Bytes
+  user: CaskConsumer
+  amount: BigDecimal
+  buyQty: BigInt
+  fee: BigDecimal
+  skipReason: ChainlinkTopupSkipReason
 }

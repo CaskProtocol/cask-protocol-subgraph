@@ -202,6 +202,9 @@ internal.mumbai:
   CaskP2P:
     address: "0x96636D895605c1bc5069af3c880853D6D806e259"
     startBlock: 27638402
+  CaskChainlinkTopup:
+    address: "0x2068607e74B3ED913F920A4e9Fc922067dD825BB"
+    startBlock: 27638402
 internal.fuji:
   network: fuji
   CaskSubscriptions:

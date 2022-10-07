@@ -1,31 +1,25 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import * as glob from 'glob';
 
-const artifactPath = path.resolve(__dirname, '../../cask-contracts/artifacts/contracts/interfaces');
+const artifactPath = path.resolve(__dirname, '../../cask-contracts/artifacts/contracts');
 const outputPath = path.resolve(__dirname, '../abis');
 
+const abiJSONfilenames = [
+    'vault/CaskVault.sol/CaskVault.json',
+    'subscriptions/CaskSubscriptions.sol/CaskSubscriptions.json',
+    'subscriptions/CaskSubscriptionPlans.sol/CaskSubscriptionPlans.json',
+    'dca/CaskDCA.sol/CaskDCA.json',
+    'p2p/CaskP2P.sol/CaskP2P.json',
+    'chainlink_topup/CaskChainlinkTopup.sol/CaskChainlinkTopup.json',
+];
 
-const abiJSONfilenames = {
-    'ICaskVault.json': 'CaskVault.json',
-    'ICaskSubscriptions.json': 'CaskSubscriptions.json',
-    'ICaskSubscriptionPlans.json': 'CaskSubscriptionPlans.json',
-    'ICaskDCA.json': 'CaskDCA.json',
-    'ICaskP2P.json': 'CaskP2P.json',
-};
+for (const filename of abiJSONfilenames) {
+    const fullPath = `${artifactPath}/${filename}`;
+    const split = fullPath.split('/');
+    const contractFileName = split[split.length - 1];
+    const contractName = contractFileName.split('.json')[0];
+    console.log(`Writing ABI for ${contractName} to ${outputPath+'/'+contractName}.json`);
+    const json = JSON.parse(fs.readFileSync(path.resolve(fullPath), 'utf8'));
+    fs.writeFileSync(outputPath + '/' + contractName+'.json', JSON.stringify(json, null, 2));
+}
 
-glob(artifactPath + '/**/!(*dbg).json', {}, (err, files) => {
-    if (err) {
-        console.error(err);
-    }
-    for (const filename of files) {
-        const split = filename.split('/');
-        const contractName = split[split.length - 1];
-        const outputName = abiJSONfilenames[contractName];
-        if (outputName) {
-            console.log(`Writing contract ${contractName} to ${outputPath+'/'+outputName}`);
-            const abi = JSON.parse(fs.readFileSync(path.resolve(filename), 'utf8')).abi;
-            fs.writeFileSync(outputPath + '/' + outputName, JSON.stringify(abi, null, 2));
-        }
-    }
-});
