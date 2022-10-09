@@ -53,6 +53,8 @@ function findOrCreateConsumer(consumerAddress: Bytes, appearedAt: i32): CaskCons
         consumer.activeDCACount = BigInt.zero()
         consumer.totalP2PCount = BigInt.zero()
         consumer.activeP2PCount = BigInt.zero()
+        consumer.totalChainlinkTopupCount = BigInt.zero()
+        consumer.activeChainlinkTopupCount = BigInt.zero()
     }
     return consumer
 }

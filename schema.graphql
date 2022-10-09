@@ -388,7 +388,10 @@ type CaskChainlinkTopupEvent @entity {
   type: ChainlinkTopupTransactionType!
   txnId: Bytes!
   timestamp: Int!
-  cltuId: Bytes
+  chainlinkTopupId: Bytes
+  targetId: BigInt
+  registry: Bytes
+  topupType: ChainlinkTopupType
   user: CaskConsumer
   amount: BigDecimal
   buyQty: BigInt

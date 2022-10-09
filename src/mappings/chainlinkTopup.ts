@@ -27,10 +27,10 @@ import {
     incrementMetric
 } from "./helpers/metrics"
 
-function findOrCreateChainlinkTopup(cltuId: Bytes): CaskChainlinkTopup {
-    let cltu = CaskChainlinkTopup.load(cltuId.toHex())
+function findOrCreateChainlinkTopup(chainlinkTopupId: Bytes): CaskChainlinkTopup {
+    let cltu = CaskChainlinkTopup.load(chainlinkTopupId.toHex())
     if (!cltu) {
-        cltu = new CaskChainlinkTopup(cltuId.toHex())
+        cltu = new CaskChainlinkTopup(chainlinkTopupId.toHex())
         cltu.currentFees = BigDecimal.zero()
     }
     return cltu
@@ -95,7 +95,10 @@ export function handleChainlinkTopupCreated(event: ChainlinkTopupCreated): void 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
     let txn = new CaskChainlinkTopupEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'ChainlinkTopupCreated'
-    txn.cltuId = event.params.chainlinkTopupId
+    txn.chainlinkTopupId = event.params.chainlinkTopupId
+    txn.targetId = event.params.targetId
+    txn.registry = event.params.registry
+    txn.topupType = cltuTopupType(event.params.topupType)
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32()
     txn.user = consumer.id
@@ -112,7 +115,7 @@ export function handleChainlinkTopupCreated(event: ChainlinkTopupCreated): void 
 
     cltu.user = consumer.id
     cltu.lowBalance = cltuInfo.lowBalance
-    cltu.topupAmount = scaleDown(cltuInfo.lowBalance, VAULT_DECIMALS)
+    cltu.topupAmount = scaleDown(cltuInfo.topupAmount, VAULT_DECIMALS)
     cltu.currentAmount = BigDecimal.zero()
     cltu.currentBuyQty = BigInt.zero()
     cltu.currentFees = BigDecimal.zero()
@@ -136,7 +139,10 @@ export function handleChainlinkTopupPaused(event: ChainlinkTopupPaused): void {
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
     let txn = new CaskChainlinkTopupEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'ChainlinkTopupPaused'
-    txn.cltuId = event.params.chainlinkTopupId
+    txn.chainlinkTopupId = event.params.chainlinkTopupId
+    txn.targetId = event.params.targetId
+    txn.registry = event.params.registry
+    txn.topupType = cltuTopupType(event.params.topupType)
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32()
     txn.user = consumer.id
@@ -168,7 +174,10 @@ export function handleChainlinkTopupResumed(event: ChainlinkTopupResumed): void 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
     let txn = new CaskChainlinkTopupEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'ChainlinkTopupResumed'
-    txn.cltuId = event.params.chainlinkTopupId
+    txn.chainlinkTopupId = event.params.chainlinkTopupId
+    txn.targetId = event.params.targetId
+    txn.registry = event.params.registry
+    txn.topupType = cltuTopupType(event.params.topupType)
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32()
     txn.user = consumer.id
@@ -199,7 +208,10 @@ export function handleChainlinkTopupSkipped(event: ChainlinkTopupSkipped): void 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
     let txn = new CaskChainlinkTopupEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'ChainlinkTopupSkipped'
-    txn.cltuId = event.params.chainlinkTopupId
+    txn.chainlinkTopupId = event.params.chainlinkTopupId
+    txn.targetId = event.params.targetId
+    txn.registry = event.params.registry
+    txn.topupType = cltuTopupType(event.params.topupType)
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32()
     txn.user = consumer.id
@@ -231,7 +243,10 @@ export function handleChainlinkTopupProcessed(event: ChainlinkTopupProcessed): v
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
     let txn = new CaskChainlinkTopupEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'ChainlinkTopupProcessed'
-    txn.cltuId = event.params.chainlinkTopupId
+    txn.chainlinkTopupId = event.params.chainlinkTopupId
+    txn.targetId = event.params.targetId
+    txn.registry = event.params.registry
+    txn.topupType = cltuTopupType(event.params.topupType)
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32()
     txn.amount = scaleDown(event.params.amount, VAULT_DECIMALS)
@@ -266,7 +281,10 @@ export function handleChainlinkTopupCanceled(event: ChainlinkTopupCanceled): voi
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
     let txn = new CaskChainlinkTopupEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
     txn.type = 'ChainlinkTopupCanceled'
-    txn.cltuId = event.params.chainlinkTopupId
+    txn.chainlinkTopupId = event.params.chainlinkTopupId
+    txn.targetId = event.params.targetId
+    txn.registry = event.params.registry
+    txn.topupType = cltuTopupType(event.params.topupType)
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32()
     txn.user = consumer.id
