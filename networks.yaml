@@ -151,6 +151,9 @@ mumbai:
   CaskP2P:
     address: "0x2068607e74B3ED913F920A4e9Fc922067dD825BB"
     startBlock: 27639106
+  CaskChainlinkTopup:
+    address: "0xFB6edCa5E31e43572233212D3FB285465C969832"
+    startBlock: 28548633
 fuji:
   network: fuji
   CaskSubscriptions:
@@ -168,6 +171,9 @@ fuji:
   CaskP2P:
     address: "0x4Deb1AAe96809Fc8f05859f7A9F21F7e59e30186"
     startBlock: 12571846
+  CaskChainlinkTopup:
+    address: "0x7823a600dE066e3F037396D2A4840EeA22F1361f"
+    startBlock: 14504041
 alfajores:
   network: celo-alfajores
   CaskSubscriptions:
