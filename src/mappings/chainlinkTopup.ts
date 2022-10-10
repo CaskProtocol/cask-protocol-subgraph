@@ -123,7 +123,6 @@ export function handleChainlinkTopupCreated(event: ChainlinkTopupCreated): void 
     cltu.targetId = cltuInfo.targetId
     cltu.topupType = cltuTopupType(cltuInfo.topupType)
     cltu.createdAt = cltuInfo.createdAt.toI32()
-    cltu.lastProcessedAt = event.block.timestamp.toI32()
     cltu.status = 'Active'
     cltu.save()
 
