@@ -228,6 +228,7 @@ export function handleDCASkipped(event: DCASkipped): void {
 
     dca.status = dcaStatus(dcaInfo.status)
     dca.numSkips = dcaInfo.numSkips
+    dca.processAt = dcaInfo.processAt.toI32()
     dca.lastSkippedAt = event.block.timestamp.toI32()
 
     dca.save()

@@ -203,6 +203,7 @@ export function handleP2PSkipped(event: P2PSkipped): void {
     }
     p2p.status = p2pStatus(p2pInfo.status)
     p2p.numSkips = p2pInfo.numSkips
+    p2p.processAt = p2pInfo.processAt.toI32()
     p2p.lastSkippedAt = event.block.timestamp.toI32()
     p2p.save()
 }
