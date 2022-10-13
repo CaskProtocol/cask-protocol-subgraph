@@ -32,6 +32,7 @@ function findOrCreateChainlinkTopup(chainlinkTopupId: Bytes): CaskChainlinkTopup
     if (!cltu) {
         cltu = new CaskChainlinkTopup(chainlinkTopupId.toHex())
         cltu.currentFees = BigDecimal.zero()
+        cltu.topupType = cltuTopupType(0)
     }
     return cltu
 }
