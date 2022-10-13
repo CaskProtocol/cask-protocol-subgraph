@@ -5,15 +5,18 @@ import {
     log
 } from "@graphprotocol/graph-ts"
 import {
+    CaskVault,
     AssetDeposited,
     AssetWithdrawn,
     Payment,
     TransferValue,
+    Transfer,
     SetFundingSource
 } from "../types/CaskVault/CaskVault"
 import {
     VAULT_DECIMALS,
     scaleDown,
+    sharesToValue,
 } from './helpers/units'
 import {
     Cask,
@@ -194,7 +197,6 @@ export function handlePayment(event: Payment): void {
     txn.save()
 }
 
-
 export function handleTransferValue(event: TransferValue): void {
 
     let amount: BigDecimal = scaleDown(event.params.baseAssetAmount, VAULT_DECIMALS)
@@ -220,6 +222,32 @@ export function handleTransferValue(event: TransferValue): void {
     txn.save()
 }
 
+export function handleTransfer(event: Transfer): void {
+
+    let vaultContract = CaskVault.bind(event.address)
+
+    let amount = scaleDown(sharesToValue(event.params.value, vaultContract.pricePerShare()), VAULT_DECIMALS)
+
+    const fromUser = findOrCreateUser(event.params.from, event.block.timestamp.toI32())
+    fromUser.balance = fromUser.balance.minus(amount)
+    fromUser.save()
+
+    const toUser = findOrCreateUser(event.params.to, event.block.timestamp.toI32())
+    toUser.balance = toUser.balance.plus(amount)
+    toUser.save()
+
+    const consumer = findOrCreateConsumer(event.params.from, event.block.timestamp.toI32())
+    const provider = findOrCreateProvider(event.params.to, event.block.timestamp.toI32())
+
+    let txn = new CaskWalletEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+    txn.txnId = event.transaction.hash
+    txn.type = 'Transfer'
+    txn.timestamp = event.block.timestamp.toI32()
+    txn.user = consumer.id
+    txn.to = provider.id
+    txn.amount = amount
+    txn.save()
+}
 
 export function handleSetFundingSource(event: SetFundingSource): void {
 
