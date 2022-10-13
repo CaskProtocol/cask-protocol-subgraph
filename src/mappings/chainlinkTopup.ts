@@ -117,14 +117,11 @@ export function handleChainlinkTopupCreated(event: ChainlinkTopupCreated): void 
     cltu.user = consumer.id
     cltu.lowBalance = cltuInfo.lowBalance
     cltu.topupAmount = scaleDown(cltuInfo.topupAmount, VAULT_DECIMALS)
-    cltu.currentAmount = BigDecimal.zero()
-    cltu.currentBuyQty = BigInt.zero()
-    cltu.currentFees = BigDecimal.zero()
     cltu.registry = cltuInfo.registry
     cltu.targetId = cltuInfo.targetId
     cltu.topupType = cltuTopupType(cltuInfo.topupType)
     cltu.createdAt = cltuInfo.createdAt.toI32()
-    cltu.status = 'Active'
+    cltu.status = cltuStatus(cltuInfo.status)
     cltu.save()
 
     incrementMetric('cltu.created', event.block.timestamp)
