@@ -76,6 +76,8 @@ function cltuTopupType(topupTypeId: i32): string {
         return 'Automation'
     } else if (topupTypeId == 2) {
         return 'VRF'
+    } else if (topupTypeId == 3) {
+        return 'Direct'
     } else {
         return 'None'
     }
@@ -194,6 +196,7 @@ export function handleChainlinkTopupResumed(event: ChainlinkTopupResumed): void 
     }
 
     cltu.status = cltuStatus(cltuInfo.status)
+    cltu.numSkips = cltuInfo.numSkips
     cltu.save()
 
     consumer.activeChainlinkTopupCount = consumer.activeChainlinkTopupCount.plus(BigInt.fromI32(1))

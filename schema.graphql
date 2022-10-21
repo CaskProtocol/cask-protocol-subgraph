@@ -246,6 +246,7 @@ enum ChainlinkTopupType {
   None
   Automation
   VRF
+  Direct
 }
 
 enum ChainlinkTopupSkipReason {
