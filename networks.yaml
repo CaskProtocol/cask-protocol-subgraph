@@ -15,6 +15,9 @@ polygon:
   CaskP2P:
     address: "0xB80376507Dd5d561AD3A6aB452FE17e782220501"
     startBlock: 30990383
+  CaskChainlinkTopup:
+    address: "0xD621F2C0374d32771d7Cfbec348a63F26f9d7c4F"
+    startBlock: 34822011
 avalanche:
   network: avalanche
   CaskSubscriptions:
