@@ -182,7 +182,7 @@ type CaskDCA @entity {
   currentAmount: BigDecimal
   currentQty: BigInt
   period: Int
-  slippageBps: BigInt
+  maxSlippageBps: BigInt
   minPrice: BigInt
   maxPrice: BigInt
 

@@ -125,7 +125,7 @@ export function handleDCACreated(event: DCACreated): void {
     dca.totalAmount = dcaTotalAmount
     dca.minPrice = dcaInfo.minPrice
     dca.maxPrice = dcaInfo.maxPrice
-    dca.slippageBps = dcaInfo.slippageBps
+    dca.maxSlippageBps = dcaInfo.maxSlippageBps
     dca.createdAt = dcaInfo.createdAt.toI32()
     dca.processAt = dcaInfo.processAt.toI32()
     dca.status = 'Active'
