@@ -17,14 +17,16 @@
     "deploy:aurora": "graph deploy caskprotocol/cask-protocol-aurora subgraph.aurora.yaml --node https://api.thegraph.com/deploy/",
     "deploy:moonbeam": "graph deploy caskprotocol/cask-protocol-moonbeam subgraph.moonbeam.yaml --node https://api.thegraph.com/deploy/",
     "deploy:gnosis": "graph deploy caskprotocol/cask-protocol-gnosis subgraph.gnosis.yaml --node https://api.thegraph.com/deploy/",
+    "deploy:arbitrum": "graph deploy caskprotocol/cask-protocol-arbitrum subgraph.arbitrum.yaml --node https://api.thegraph.com/deploy/",
+    "deploy:optimism": "graph deploy caskprotocol/cask-protocol-optimism subgraph.optimism.yaml --node https://api.thegraph.com/deploy/",
     "create-local": "graph create --node http://localhost:8020/ caskprotocol/cask-protocol-subgraph",
     "remove-local": "graph remove --node http://localhost:8020/ caskprotocol/cask-protocol-subgraph",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 caskprotocol/cask-protocol-subgraph",
     "import-abis": "ts-node ./scripts/update-abis.ts"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.28.0",
-    "@graphprotocol/graph-ts": "0.26.0"
+    "@graphprotocol/graph-cli": "^0.33.1",
+    "@graphprotocol/graph-ts": "^0.27.0"
   },
   "devDependencies": {
     "handlebars": "^4.7.7"
