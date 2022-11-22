@@ -42,6 +42,7 @@ import {
     PlanEnabled,
     PlanRetired
 } from "../types/CaskSubscriptionPlans/CaskSubscriptionPlans"
+import {CaskP2P as CaskP2PContract} from "../types/CaskP2P/CaskP2P";
 
 function findOrCreateProvider(providerAddress: Bytes, appearedAt: i32): CaskProvider {
     let provider = CaskProvider.load(providerAddress.toHex())
@@ -158,7 +159,12 @@ export function handleSubscriptionCreated(event: SubscriptionCreated): void {
     let subscription = new CaskSubscription(event.params.subscriptionId.toHex())
 
     let contract = CaskSubscriptions.bind(event.address)
-    let subscriptionInfo = contract.getSubscription(event.params.subscriptionId)
+    let callResult = contract.try_getSubscription(event.params.subscriptionId)
+    if (callResult.reverted) {
+        log.warning('Subscription call reverted for: {}', [event.params.subscriptionId.toHex()])
+        return
+    }
+    let subscriptionInfo = callResult.value
     if (subscriptionInfo == null || subscriptionInfo.getSubscription().provider == Address.zero()) {
         log.warning('Subscription Info not found: {}', [event.params.subscriptionId.toHex()])
         return
@@ -245,7 +251,12 @@ export function handleSubscriptionPendingChangePlan(event: SubscriptionPendingCh
     }
 
     let contract = CaskSubscriptions.bind(event.address)
-    let subscriptionInfo = contract.getSubscription(event.params.subscriptionId)
+    let callResult = contract.try_getSubscription(event.params.subscriptionId)
+    if (callResult.reverted) {
+        log.warning('Subscription call reverted for: {}', [event.params.subscriptionId.toHex()])
+        return
+    }
+    let subscriptionInfo = callResult.value
     if (subscriptionInfo == null || subscriptionInfo.getSubscription().provider == Address.zero()) {
         log.warning('Subscription Info not found: {}', [event.params.subscriptionId.toHex()])
         return
@@ -280,7 +291,12 @@ export function handleSubscriptionChangedPlan(event: SubscriptionChangedPlan): v
     }
 
     let contract = CaskSubscriptions.bind(event.address)
-    let subscriptionInfo = contract.getSubscription(event.params.subscriptionId)
+    let callResult = contract.try_getSubscription(event.params.subscriptionId)
+    if (callResult.reverted) {
+        log.warning('Subscription call reverted for: {}', [event.params.subscriptionId.toHex()])
+        return
+    }
+    let subscriptionInfo = callResult.value
     if (subscriptionInfo == null || subscriptionInfo.getSubscription().provider == Address.zero()) {
         log.warning('Subscription Info not found: {}', [event.params.subscriptionId.toHex()])
         return
@@ -457,7 +473,12 @@ export function handleSubscriptionRenewed(event: SubscriptionRenewed): void {
     }
 
     let contract = CaskSubscriptions.bind(event.address)
-    let subscriptionInfo = contract.getSubscription(event.params.subscriptionId)
+    let callResult = contract.try_getSubscription(event.params.subscriptionId)
+    if (callResult.reverted) {
+        log.warning('Subscription call reverted for: {}', [event.params.subscriptionId.toHex()])
+        return
+    }
+    let subscriptionInfo = callResult.value
     if (subscriptionInfo == null || subscriptionInfo.getSubscription().provider == Address.zero()) {
         log.warning('Subscription Info not found: {}', [event.params.subscriptionId.toHex()])
         return

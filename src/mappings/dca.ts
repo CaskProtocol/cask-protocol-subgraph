@@ -108,7 +108,12 @@ export function handleDCACreated(event: DCACreated): void {
     let dca = findOrCreateDCA(event.params.dcaId)
 
     let contract = CaskDCAContract.bind(event.address)
-    let dcaInfo = contract.getDCA(event.params.dcaId)
+    let callResult = contract.try_getDCA(event.params.dcaId)
+    if (callResult.reverted) {
+        log.warning('DCA call reverted for: {}', [event.params.dcaId.toHex()])
+        return
+    }
+    let dcaInfo = callResult.value
     if (dcaInfo == null || dcaInfo.user == Address.zero()) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
         return
@@ -156,7 +161,12 @@ export function handleDCAPaused(event: DCAPaused): void {
     }
 
     let contract = CaskDCAContract.bind(event.address)
-    let dcaInfo = contract.getDCA(event.params.dcaId)
+    let callResult = contract.try_getDCA(event.params.dcaId)
+    if (callResult.reverted) {
+        log.warning('DCA call reverted for: {}', [event.params.dcaId.toHex()])
+        return
+    }
+    let dcaInfo = callResult.value
     if (dcaInfo == null || dcaInfo.user == Address.zero()) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
         return
@@ -188,7 +198,12 @@ export function handleDCAResumed(event: DCAResumed): void {
     }
 
     let contract = CaskDCAContract.bind(event.address)
-    let dcaInfo = contract.getDCA(event.params.dcaId)
+    let callResult = contract.try_getDCA(event.params.dcaId)
+    if (callResult.reverted) {
+        log.warning('DCA call reverted for: {}', [event.params.dcaId.toHex()])
+        return
+    }
+    let dcaInfo = callResult.value
     if (dcaInfo == null || dcaInfo.user == Address.zero()) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
         return
@@ -220,7 +235,12 @@ export function handleDCASkipped(event: DCASkipped): void {
     }
 
     let contract = CaskDCAContract.bind(event.address)
-    let dcaInfo = contract.getDCA(event.params.dcaId)
+    let callResult = contract.try_getDCA(event.params.dcaId)
+    if (callResult.reverted) {
+        log.warning('DCA call reverted for: {}', [event.params.dcaId.toHex()])
+        return
+    }
+    let dcaInfo = callResult.value
     if (dcaInfo == null || dcaInfo.user == Address.zero()) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
         return
@@ -251,7 +271,12 @@ export function handleDCAProcessed(event: DCAProcessed): void {
     let dca = findOrCreateDCA(event.params.dcaId)
 
     let contract = CaskDCAContract.bind(event.address)
-    let dcaInfo = contract.getDCA(event.params.dcaId)
+    let callResult = contract.try_getDCA(event.params.dcaId)
+    if (callResult.reverted) {
+        log.warning('DCA call reverted for: {}', [event.params.dcaId.toHex()])
+        return
+    }
+    let dcaInfo = callResult.value
     if (dcaInfo == null || dcaInfo.user == Address.zero()) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
         return
@@ -288,7 +313,12 @@ export function handleDCACanceled(event: DCACanceled): void {
     }
 
     let contract = CaskDCAContract.bind(event.address)
-    let dcaInfo = contract.getDCA(event.params.dcaId)
+    let callResult = contract.try_getDCA(event.params.dcaId)
+    if (callResult.reverted) {
+        log.warning('DCA call reverted for: {}', [event.params.dcaId.toHex()])
+        return
+    }
+    let dcaInfo = callResult.value
     if (dcaInfo == null || dcaInfo.user == Address.zero()) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
         return
@@ -320,7 +350,12 @@ export function handleDCACompleted(event: DCACompleted): void {
     }
 
     let contract = CaskDCAContract.bind(event.address)
-    let dcaInfo = contract.getDCA(event.params.dcaId)
+    let callResult = contract.try_getDCA(event.params.dcaId)
+    if (callResult.reverted) {
+        log.warning('DCA call reverted for: {}', [event.params.dcaId.toHex()])
+        return
+    }
+    let dcaInfo = callResult.value
     if (dcaInfo == null || dcaInfo.user == Address.zero()) {
         log.warning('DCA Info not found: {}', [event.params.dcaId.toHex()])
         return

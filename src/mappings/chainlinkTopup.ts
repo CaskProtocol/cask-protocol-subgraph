@@ -110,7 +110,12 @@ export function handleChainlinkTopupCreated(event: ChainlinkTopupCreated): void 
     let cltu = findOrCreateChainlinkTopup(event.params.chainlinkTopupId)
 
     let contract = CaskChainlinkTopupContract.bind(event.address)
-    let cltuInfo = contract.getChainlinkTopup(event.params.chainlinkTopupId)
+    let callResult = contract.try_getChainlinkTopup(event.params.chainlinkTopupId)
+    if (callResult.reverted) {
+        log.warning('ChainlinkTopup call reverted for: {}', [event.params.chainlinkTopupId.toHex()])
+        return
+    }
+    let cltuInfo = callResult.value
     if (cltuInfo == null || cltuInfo.user == Address.zero()) {
         log.warning('ChainlinkTopup Info not found: {}', [event.params.chainlinkTopupId.toHex()])
         return
@@ -154,7 +159,12 @@ export function handleChainlinkTopupPaused(event: ChainlinkTopupPaused): void {
     }
 
     let contract = CaskChainlinkTopupContract.bind(event.address)
-    let cltuInfo = contract.getChainlinkTopup(event.params.chainlinkTopupId)
+    let callResult = contract.try_getChainlinkTopup(event.params.chainlinkTopupId)
+    if (callResult.reverted) {
+        log.warning('ChainlinkTopup call reverted for: {}', [event.params.chainlinkTopupId.toHex()])
+        return
+    }
+    let cltuInfo = callResult.value
     if (cltuInfo == null || cltuInfo.user == Address.zero()) {
         log.warning('ChainlinkTopup Info not found: {}', [event.params.chainlinkTopupId.toHex()])
         return
@@ -189,7 +199,12 @@ export function handleChainlinkTopupResumed(event: ChainlinkTopupResumed): void 
     }
 
     let contract = CaskChainlinkTopupContract.bind(event.address)
-    let cltuInfo = contract.getChainlinkTopup(event.params.chainlinkTopupId)
+    let callResult = contract.try_getChainlinkTopup(event.params.chainlinkTopupId)
+    if (callResult.reverted) {
+        log.warning('ChainlinkTopup call reverted for: {}', [event.params.chainlinkTopupId.toHex()])
+        return
+    }
+    let cltuInfo = callResult.value
     if (cltuInfo == null || cltuInfo.user == Address.zero()) {
         log.warning('ChainlinkTopup Info not found: {}', [event.params.chainlinkTopupId.toHex()])
         return
@@ -225,7 +240,12 @@ export function handleChainlinkTopupSkipped(event: ChainlinkTopupSkipped): void 
     }
 
     let contract = CaskChainlinkTopupContract.bind(event.address)
-    let cltuInfo = contract.getChainlinkTopup(event.params.chainlinkTopupId)
+    let callResult = contract.try_getChainlinkTopup(event.params.chainlinkTopupId)
+    if (callResult.reverted) {
+        log.warning('ChainlinkTopup call reverted for: {}', [event.params.chainlinkTopupId.toHex()])
+        return
+    }
+    let cltuInfo = callResult.value
     if (cltuInfo == null || cltuInfo.user == Address.zero()) {
         log.warning('ChainlinkTopup Info not found: {}', [event.params.chainlinkTopupId.toHex()])
         return
@@ -258,7 +278,12 @@ export function handleChainlinkTopupProcessed(event: ChainlinkTopupProcessed): v
     let cltu = findOrCreateChainlinkTopup(event.params.chainlinkTopupId)
 
     let contract = CaskChainlinkTopupContract.bind(event.address)
-    let cltuInfo = contract.getChainlinkTopup(event.params.chainlinkTopupId)
+    let callResult = contract.try_getChainlinkTopup(event.params.chainlinkTopupId)
+    if (callResult.reverted) {
+        log.warning('ChainlinkTopup call reverted for: {}', [event.params.chainlinkTopupId.toHex()])
+        return
+    }
+    let cltuInfo = callResult.value
     if (cltuInfo == null || cltuInfo.user == Address.zero()) {
         log.warning('ChainlinkTopup Info not found: {}', [event.params.chainlinkTopupId.toHex()])
         return
@@ -297,7 +322,12 @@ export function handleChainlinkTopupCanceled(event: ChainlinkTopupCanceled): voi
     }
 
     let contract = CaskChainlinkTopupContract.bind(event.address)
-    let cltuInfo = contract.getChainlinkTopup(event.params.chainlinkTopupId)
+    let callResult = contract.try_getChainlinkTopup(event.params.chainlinkTopupId)
+    if (callResult.reverted) {
+        log.warning('ChainlinkTopup call reverted for: {}', [event.params.chainlinkTopupId.toHex()])
+        return
+    }
+    let cltuInfo = callResult.value
     if (cltuInfo == null || cltuInfo.user == Address.zero()) {
         log.warning('ChainlinkTopup Info not found: {}', [event.params.chainlinkTopupId.toHex()])
         return

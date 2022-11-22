@@ -89,7 +89,12 @@ export function handleP2PCreated(event: P2PCreated): void {
     txn.save()
 
     let contract = CaskP2PContract.bind(event.address)
-    let p2pInfo = contract.getP2P(event.params.p2pId)
+    let callResult = contract.try_getP2P(event.params.p2pId)
+    if (callResult.reverted) {
+        log.warning('P2P call reverted for: {}', [event.params.p2pId.toHex()])
+        return
+    }
+    let p2pInfo = callResult.value
     if (p2pInfo == null || p2pInfo.user == Address.zero()) {
         log.warning('P2P Info not found: {}', [event.params.p2pId.toHex()])
         return
@@ -129,7 +134,12 @@ export function handleP2PPaused(event: P2PPaused): void {
     txn.save()
 
     let contract = CaskP2PContract.bind(event.address)
-    let p2pInfo = contract.getP2P(event.params.p2pId)
+    let callResult = contract.try_getP2P(event.params.p2pId)
+    if (callResult.reverted) {
+        log.warning('P2P call reverted for: {}', [event.params.p2pId.toHex()])
+        return
+    }
+    let p2pInfo = callResult.value
     if (p2pInfo == null || p2pInfo.user == Address.zero()) {
         log.warning('P2P Info not found: {}', [event.params.p2pId.toHex()])
         return
@@ -160,7 +170,12 @@ export function handleP2PResumed(event: P2PResumed): void {
     txn.save()
 
     let contract = CaskP2PContract.bind(event.address)
-    let p2pInfo = contract.getP2P(event.params.p2pId)
+    let callResult = contract.try_getP2P(event.params.p2pId)
+    if (callResult.reverted) {
+        log.warning('P2P call reverted for: {}', [event.params.p2pId.toHex()])
+        return
+    }
+    let p2pInfo = callResult.value
     if (p2pInfo == null || p2pInfo.user == Address.zero()) {
         log.warning('P2P Info not found: {}', [event.params.p2pId.toHex()])
         return
@@ -190,7 +205,12 @@ export function handleP2PSkipped(event: P2PSkipped): void {
     txn.save()
 
     let contract = CaskP2PContract.bind(event.address)
-    let p2pInfo = contract.getP2P(event.params.p2pId)
+    let callResult = contract.try_getP2P(event.params.p2pId)
+    if (callResult.reverted) {
+        log.warning('P2P call reverted for: {}', [event.params.p2pId.toHex()])
+        return
+    }
+    let p2pInfo = callResult.value
     if (p2pInfo == null || p2pInfo.user == Address.zero()) {
         log.warning('P2P Info not found: {}', [event.params.p2pId.toHex()])
         return
@@ -222,7 +242,12 @@ export function handleP2PProcessed(event: P2PProcessed): void {
     txn.save()
 
     let contract = CaskP2PContract.bind(event.address)
-    let p2pInfo = contract.getP2P(event.params.p2pId)
+    let callResult = contract.try_getP2P(event.params.p2pId)
+    if (callResult.reverted) {
+        log.warning('P2P call reverted for: {}', [event.params.p2pId.toHex()])
+        return
+    }
+    let p2pInfo = callResult.value
     if (p2pInfo == null || p2pInfo.user == Address.zero()) {
         log.warning('P2P Info not found: {}', [event.params.p2pId.toHex()])
         return
@@ -253,7 +278,12 @@ export function handleP2PCanceled(event: P2PCanceled): void {
     txn.save()
 
     let contract = CaskP2PContract.bind(event.address)
-    let p2pInfo = contract.getP2P(event.params.p2pId)
+    let callResult = contract.try_getP2P(event.params.p2pId)
+    if (callResult.reverted) {
+        log.warning('P2P call reverted for: {}', [event.params.p2pId.toHex()])
+        return
+    }
+    let p2pInfo = callResult.value
     if (p2pInfo == null || p2pInfo.user == Address.zero()) {
         log.warning('P2P Info not found: {}', [event.params.p2pId.toHex()])
         return
@@ -284,7 +314,12 @@ export function handleP2PCompleted(event: P2PCompleted): void {
     txn.save()
 
     let contract = CaskP2PContract.bind(event.address)
-    let p2pInfo = contract.getP2P(event.params.p2pId)
+    let callResult = contract.try_getP2P(event.params.p2pId)
+    if (callResult.reverted) {
+        log.warning('P2P call reverted for: {}', [event.params.p2pId.toHex()])
+        return
+    }
+    let p2pInfo = callResult.value
     if (p2pInfo == null || p2pInfo.user == Address.zero()) {
         log.warning('P2P Info not found: {}', [event.params.p2pId.toHex()])
         return
