@@ -16,9 +16,11 @@ import {
     P2PCompleted
 } from "../types/CaskP2P/CaskP2P"
 import {
-    VAULT_DECIMALS,
     scaleDown,
 } from './helpers/units'
+import {
+    baseAssetDecimals
+} from './helpers/caskVault'
 import {
     CaskConsumer,
     CaskP2P,
@@ -75,8 +77,8 @@ function p2pStatus(statusId: i32): string {
 
 export function handleP2PCreated(event: P2PCreated): void {
 
-    let p2pAmount: BigDecimal = scaleDown(event.params.amount, VAULT_DECIMALS)
-    let p2pTotalAmount: BigDecimal = scaleDown(event.params.totalAmount, VAULT_DECIMALS)
+    let p2pAmount: BigDecimal = scaleDown(event.params.amount, baseAssetDecimals())
+    let p2pTotalAmount: BigDecimal = scaleDown(event.params.totalAmount, baseAssetDecimals())
 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
     let txn = new CaskP2PEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
@@ -107,7 +109,7 @@ export function handleP2PCreated(event: P2PCreated): void {
     p2p.period = p2pInfo.period.toI32()
     p2p.numPayments = p2pInfo.numPayments
     p2p.numSkips = p2pInfo.numSkips
-    p2p.currentAmount = scaleDown(p2pInfo.currentAmount, VAULT_DECIMALS)
+    p2p.currentAmount = scaleDown(p2pInfo.currentAmount, baseAssetDecimals())
     p2p.totalAmount = p2pTotalAmount
     p2p.createdAt = p2pInfo.createdAt.toI32()
     p2p.lastProcessedAt = event.block.timestamp.toI32()
@@ -237,8 +239,8 @@ export function handleP2PProcessed(event: P2PProcessed): void {
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32()
     txn.user = consumer.id
-    txn.amount = scaleDown(event.params.amount, VAULT_DECIMALS)
-    txn.fee = scaleDown(event.params.fee, VAULT_DECIMALS)
+    txn.amount = scaleDown(event.params.amount, baseAssetDecimals())
+    txn.fee = scaleDown(event.params.fee, baseAssetDecimals())
     txn.save()
 
     let contract = CaskP2PContract.bind(event.address)
@@ -258,8 +260,8 @@ export function handleP2PProcessed(event: P2PProcessed): void {
     p2p.numPayments = p2pInfo.numPayments
     p2p.numSkips = p2pInfo.numSkips
     p2p.processAt = p2pInfo.processAt.toI32()
-    p2p.currentAmount = scaleDown(p2pInfo.currentAmount, VAULT_DECIMALS)
-    p2p.currentFees = p2p.currentFees.plus(scaleDown(event.params.fee, VAULT_DECIMALS))
+    p2p.currentAmount = scaleDown(p2pInfo.currentAmount, baseAssetDecimals())
+    p2p.currentFees = p2p.currentFees.plus(scaleDown(event.params.fee, baseAssetDecimals()))
     p2p.lastProcessedAt = event.block.timestamp.toI32()
     p2p.save()
 

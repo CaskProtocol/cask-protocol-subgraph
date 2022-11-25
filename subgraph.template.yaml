@@ -27,6 +27,10 @@ dataSources:
       abis:
         - name: CaskSubscriptions
           file: ./abis/CaskSubscriptions.json
+        - name: CaskVault
+          file: ./abis/CaskVault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
       eventHandlers:
         - event: SubscriptionCanceled(indexed address,indexed address,indexed uint256,bytes32,uint32)
           handler: handleSubscriptionCanceled
@@ -69,6 +73,10 @@ dataSources:
       abis:
         - name: CaskSubscriptionPlans
           file: ./abis/CaskSubscriptionPlans.json
+        - name: CaskVault
+          file: ./abis/CaskVault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
       eventHandlers:
         - event: ProviderSetProfile(indexed address,indexed address,uint256,string)
           handler: handleProviderSetProfile
@@ -97,6 +105,8 @@ dataSources:
       abis:
         - name: CaskVault
           file: ./abis/CaskVault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
       eventHandlers:
         - event: AssetDeposited(indexed address,indexed address,uint256,uint256,uint256)
           handler: handleAssetDeposited
@@ -131,6 +141,10 @@ dataSources:
       abis:
         - name: CaskDCA
           file: ./abis/CaskDCA.json
+        - name: CaskVault
+          file: ./abis/CaskVault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
       eventHandlers:
         - event: DCACreated(indexed bytes32,indexed address,indexed address,address,address,uint256,uint256,uint32)
           handler: handleDCACreated
@@ -168,6 +182,10 @@ dataSources:
       abis:
         - name: CaskP2P
           file: ./abis/CaskP2P.json
+        - name: CaskVault
+          file: ./abis/CaskVault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
       eventHandlers:
         - event: P2PCreated(indexed bytes32,indexed address,indexed address,uint256,uint256,uint32)
           handler: handleP2PCreated
@@ -205,6 +223,10 @@ dataSources:
       abis:
         - name: CaskChainlinkTopup
           file: ./abis/CaskChainlinkTopup.json
+        - name: CaskVault
+          file: ./abis/CaskVault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
       eventHandlers:
         - event: ChainlinkTopupCreated(indexed bytes32,indexed address,uint256,uint256,uint256,address,uint8)
           handler: handleChainlinkTopupCreated

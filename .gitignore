@@ -1,6 +1,7 @@
 build/
 node_modules/
 src/types/
+src/mappings/helpers/addresses.ts
 .DS_STORE
 yarn-error.log
 .idea

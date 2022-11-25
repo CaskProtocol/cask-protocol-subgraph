@@ -16,9 +16,11 @@ import {
     DCACompleted
 } from "../types/CaskDCA/CaskDCA"
 import {
-    VAULT_DECIMALS,
     scaleDown,
 } from './helpers/units'
+import {
+    baseAssetDecimals
+} from './helpers/caskVault'
 import {
     CaskConsumer,
     CaskDCA,
@@ -91,8 +93,8 @@ function dcaSkipReason(reasonId: i32): string {
 
 export function handleDCACreated(event: DCACreated): void {
 
-    let dcaAmount: BigDecimal = scaleDown(event.params.amount, VAULT_DECIMALS)
-    let dcaTotalAmount: BigDecimal = scaleDown(event.params.totalAmount, VAULT_DECIMALS)
+    let dcaAmount: BigDecimal = scaleDown(event.params.amount, baseAssetDecimals())
+    let dcaTotalAmount: BigDecimal = scaleDown(event.params.totalAmount, baseAssetDecimals())
 
     const consumer = findOrCreateConsumer(event.params.user, event.block.timestamp.toI32())
     let txn = new CaskDCAEvent(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
@@ -262,9 +264,9 @@ export function handleDCAProcessed(event: DCAProcessed): void {
     txn.dcaId = event.params.dcaId
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32()
-    txn.amount = scaleDown(event.params.amount, VAULT_DECIMALS)
+    txn.amount = scaleDown(event.params.amount, baseAssetDecimals())
     txn.buyQty = event.params.buyQty
-    txn.fee = scaleDown(event.params.fee, VAULT_DECIMALS)
+    txn.fee = scaleDown(event.params.fee, baseAssetDecimals())
     txn.user = consumer.id
     txn.save()
 
@@ -286,8 +288,8 @@ export function handleDCAProcessed(event: DCAProcessed): void {
     dca.numBuys = dcaInfo.numBuys
     dca.numSkips = dcaInfo.numSkips
     dca.processAt = dcaInfo.processAt.toI32()
-    dca.currentAmount = scaleDown(dcaInfo.currentAmount, VAULT_DECIMALS)
-    dca.currentFees = dca.currentFees.plus(scaleDown(event.params.fee, VAULT_DECIMALS))
+    dca.currentAmount = scaleDown(dcaInfo.currentAmount, baseAssetDecimals())
+    dca.currentFees = dca.currentFees.plus(scaleDown(event.params.fee, baseAssetDecimals()))
     dca.currentQty = dcaInfo.currentQty
     dca.lastProcessedAt = event.block.timestamp.toI32()
     dca.save()

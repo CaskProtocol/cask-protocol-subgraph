@@ -14,10 +14,12 @@ import {
     SetFundingSource
 } from "../types/CaskVault/CaskVault"
 import {
-    VAULT_DECIMALS,
     scaleDown,
     sharesToValue,
 } from './helpers/units'
+import {
+    baseAssetDecimals
+} from './helpers/caskVault'
 import {
     Cask,
     CaskConsumer,
@@ -110,7 +112,7 @@ export function handleAssetDeposited(event: AssetDeposited): void {
 
     const cask = loadCask()
 
-    let depositAmount: BigDecimal = scaleDown(event.params.baseAssetAmount, VAULT_DECIMALS)
+    let depositAmount: BigDecimal = scaleDown(event.params.baseAssetAmount, baseAssetDecimals())
     cask.totalDepositAmount = cask.totalDepositAmount.plus(depositAmount)
     cask.totalDepositCount = cask.totalDepositCount.plus(BigInt.fromI32(1))
     cask.save()
@@ -137,7 +139,7 @@ export function handleAssetWithdrawn(event: AssetWithdrawn): void {
 
     const cask = loadCask()
 
-    let withdrawAmount: BigDecimal = scaleDown(event.params.baseAssetAmount, VAULT_DECIMALS)
+    let withdrawAmount: BigDecimal = scaleDown(event.params.baseAssetAmount, baseAssetDecimals())
     cask.totalWithdrawAmount = cask.totalWithdrawAmount.plus(withdrawAmount)
     cask.totalWithdrawCount = cask.totalWithdrawCount.plus(BigInt.fromI32(1))
     cask.save()
@@ -164,9 +166,9 @@ export function handlePayment(event: Payment): void {
 
     const cask = loadCask()
 
-    let amount: BigDecimal = scaleDown(event.params.baseAssetAmount, VAULT_DECIMALS)
-    let protocolFeeAmount: BigDecimal = scaleDown(event.params.protocolFee, VAULT_DECIMALS)
-    let networkFeeAmount: BigDecimal = scaleDown(event.params.networkFee, VAULT_DECIMALS)
+    let amount: BigDecimal = scaleDown(event.params.baseAssetAmount, baseAssetDecimals())
+    let protocolFeeAmount: BigDecimal = scaleDown(event.params.protocolFee, baseAssetDecimals())
+    let networkFeeAmount: BigDecimal = scaleDown(event.params.networkFee, baseAssetDecimals())
 
     cask.totalProtocolPayments = cask.totalProtocolPayments.plus(amount)
     cask.totalProtocolFees = cask.totalProtocolFees.plus(protocolFeeAmount)
@@ -199,7 +201,7 @@ export function handlePayment(event: Payment): void {
 
 export function handleTransferValue(event: TransferValue): void {
 
-    let amount: BigDecimal = scaleDown(event.params.baseAssetAmount, VAULT_DECIMALS)
+    let amount: BigDecimal = scaleDown(event.params.baseAssetAmount, baseAssetDecimals())
 
     const fromUser = findOrCreateUser(event.params.from, event.block.timestamp.toI32())
     fromUser.balance = fromUser.balance.minus(amount)
@@ -226,7 +228,8 @@ export function handleTransfer(event: Transfer): void {
 
     let vaultContract = CaskVault.bind(event.address)
 
-    let amount = scaleDown(sharesToValue(event.params.value, vaultContract.pricePerShare()), VAULT_DECIMALS)
+    let amount = scaleDown(sharesToValue(event.params.value, vaultContract.pricePerShare(), baseAssetDecimals()),
+        baseAssetDecimals())
 
     const fromUser = findOrCreateUser(event.params.from, event.block.timestamp.toI32())
     fromUser.balance = fromUser.balance.minus(amount)

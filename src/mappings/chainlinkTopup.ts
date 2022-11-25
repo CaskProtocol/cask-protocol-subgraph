@@ -15,9 +15,11 @@ import {
     ChainlinkTopupCanceled,
 } from "../types/CaskChainlinkTopup/CaskChainlinkTopup"
 import {
-    VAULT_DECIMALS,
     scaleDown,
 } from './helpers/units'
+import {
+    baseAssetDecimals
+} from './helpers/caskVault'
 import {
     CaskConsumer,
     CaskChainlinkTopup,
@@ -123,7 +125,7 @@ export function handleChainlinkTopupCreated(event: ChainlinkTopupCreated): void 
 
     cltu.user = consumer.id
     cltu.lowBalance = cltuInfo.lowBalance
-    cltu.topupAmount = scaleDown(cltuInfo.topupAmount, VAULT_DECIMALS)
+    cltu.topupAmount = scaleDown(cltuInfo.topupAmount, baseAssetDecimals())
     cltu.registry = cltuInfo.registry
     cltu.targetId = cltuInfo.targetId
     cltu.topupType = cltuTopupType(cltuInfo.topupType)
@@ -269,9 +271,9 @@ export function handleChainlinkTopupProcessed(event: ChainlinkTopupProcessed): v
     txn.topupType = cltuTopupType(event.params.topupType)
     txn.txnId = event.transaction.hash
     txn.timestamp = event.block.timestamp.toI32()
-    txn.amount = scaleDown(event.params.amount, VAULT_DECIMALS)
+    txn.amount = scaleDown(event.params.amount, baseAssetDecimals())
     txn.buyQty = event.params.buyQty
-    txn.fee = scaleDown(event.params.fee, VAULT_DECIMALS)
+    txn.fee = scaleDown(event.params.fee, baseAssetDecimals())
     txn.user = consumer.id
     txn.save()
 
@@ -292,9 +294,9 @@ export function handleChainlinkTopupProcessed(event: ChainlinkTopupProcessed): v
     cltu.status = cltuStatus(cltuInfo.status)
     cltu.numTopups = cltuInfo.numTopups
     cltu.numSkips = cltuInfo.numSkips
-    cltu.currentAmount = scaleDown(cltuInfo.currentAmount, VAULT_DECIMALS)
+    cltu.currentAmount = scaleDown(cltuInfo.currentAmount, baseAssetDecimals())
     cltu.currentBuyQty = cltuInfo.currentBuyQty
-    cltu.currentFees = cltu.currentFees.plus(scaleDown(event.params.fee, VAULT_DECIMALS))
+    cltu.currentFees = cltu.currentFees.plus(scaleDown(event.params.fee, baseAssetDecimals()))
     cltu.lastProcessedAt = event.block.timestamp.toI32()
     cltu.save()
 

@@ -6,9 +6,11 @@ import {
 } from "@graphprotocol/graph-ts";
 
 import {
-    VAULT_DECIMALS,
     scaleDown
 } from "./units";
+import {
+    baseAssetDecimals
+} from './caskVault'
 
 export class PlanInfo {
     public price: BigDecimal;
@@ -31,7 +33,7 @@ export function parsePlanData(planData: Bytes): PlanInfo {
     let options = Bytes.fromUint8Array(planData.slice(31, 32).reverse()).toI32()
 
     return {
-        price: scaleDown(BigInt.fromUnsignedBytes(Bytes.fromUint8Array(planData.slice(0, 12).reverse())), VAULT_DECIMALS),
+        price: scaleDown(BigInt.fromUnsignedBytes(Bytes.fromUint8Array(planData.slice(0, 12).reverse())), baseAssetDecimals()),
         planId: Bytes.fromUint8Array(planData.slice(12, 16).reverse()).toI32(),
         period: Bytes.fromUint8Array(planData.slice(16, 20).reverse()).toI32(),
         freeTrial: Bytes.fromUint8Array(planData.slice(20, 24).reverse()).toI32(),
