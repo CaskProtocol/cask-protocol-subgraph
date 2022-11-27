@@ -19,6 +19,7 @@
     "deploy:gnosis": "yarn generate-addresses gnosis && graph deploy caskprotocol/cask-protocol-gnosis subgraph.gnosis.yaml --node https://api.thegraph.com/deploy/",
     "deploy:arbitrum": "yarn generate-addresses arbitrum && graph deploy caskprotocol/cask-protocol-arbitrum subgraph.arbitrum.yaml --node https://api.thegraph.com/deploy/",
     "deploy:optimism": "yarn generate-addresses optimism && graph deploy caskprotocol/cask-protocol-optimism subgraph.optimism.yaml --node https://api.thegraph.com/deploy/",
+    "deploy:bsc": "yarn generate-addresses bsc && graph deploy caskprotocol/cask-protocol-bsc subgraph.bsc.yaml --node https://api.thegraph.com/deploy/",
     "create-local": "graph create --node http://localhost:8020/ caskprotocol/cask-protocol-subgraph",
     "remove-local": "graph remove --node http://localhost:8020/ caskprotocol/cask-protocol-subgraph",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 caskprotocol/cask-protocol-subgraph",

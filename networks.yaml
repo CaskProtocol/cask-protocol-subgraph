@@ -154,6 +154,23 @@ optimism:
   CaskP2P:
     address: "0xccB54bF4171bc8C11e78ca40f3a3bd3B721EF361"
     startBlock: 32938671
+bsc:
+  network: bsc
+  CaskSubscriptions:
+    address: "0xD054F8866fc45c4387d56D2340dCA08d83E14A5e"
+    startBlock: 23395063
+  CaskSubscriptionPlans:
+    address: "0xD252A4C836C75063867f0193325b328CCe6B7306"
+    startBlock: 23395063
+  CaskVault:
+    address: "0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff"
+    startBlock: 23395063
+  CaskDCA:
+    address: "0x96d59127cCD1c0e3749E733Ee04F0DfbD2f808c8"
+    startBlock: 23395063
+  CaskP2P:
+    address: "0x775Df9836945B0E95eD5F6A3269Bf22F6b426e85"
+    startBlock: 23395063
 mumbai:
   network: mumbai
   CaskSubscriptions:
