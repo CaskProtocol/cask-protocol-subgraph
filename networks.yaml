@@ -35,6 +35,9 @@ avalanche:
   CaskP2P:
     address: "0xe2d24801A9b790f1168cCB7caBdAdC6A071912F3"
     startBlock: 17633716
+  CaskChainlinkTopup:
+    address: "0xC787791a0d0122b9cCCD2cA9d9FEBcAC3831f0fc"
+    startBlock: 22427042
 celo:
   network: celo
   CaskSubscriptions:
@@ -137,6 +140,9 @@ arbitrum:
   CaskP2P:
     address: "0x775Df9836945B0E95eD5F6A3269Bf22F6b426e85"
     startBlock: 27859867
+  CaskChainlinkTopup:
+    address: "0xe465A32D2826dc5A42FDc75624a18Ee35A25a131"
+    startBlock: 38408578
 optimism:
   network: optimism
   CaskSubscriptions:
@@ -154,6 +160,9 @@ optimism:
   CaskP2P:
     address: "0xccB54bF4171bc8C11e78ca40f3a3bd3B721EF361"
     startBlock: 32938671
+  CaskChainlinkTopup:
+    address: "0x6deE81A058c48013686520Ac2f5E445dde645062"
+    startBlock: 46897164
 bsc:
   network: bsc
   CaskSubscriptions:
@@ -171,6 +180,9 @@ bsc:
   CaskP2P:
     address: "0x775Df9836945B0E95eD5F6A3269Bf22F6b426e85"
     startBlock: 23395063
+  CaskChainlinkTopup:
+    address: "0x28418B0AB2C00142a865971dcC6a4b1154DaD19E"
+    startBlock: 23395115
 mumbai:
   network: mumbai
   CaskSubscriptions:
