@@ -280,3 +280,23 @@ internal.fuji:
   CaskChainlinkTopup:
     address: "0xcdDdFfad20eAEeE9B77CB3EcEb79a05402d06c19"
     startBlock: 14403365
+goerlibase:
+  network: testnet-base
+  CaskSubscriptions:
+    address: "0x0D985780F56e47Fd271d1e4e7d39571A16Bd6f17"
+    startBlock: 989876
+  CaskSubscriptionPlans:
+    address: "0xA93D22f5AeDbEB8c8034Bb294dAA51Bc0Cb7e8f1"
+    startBlock: 989876
+  CaskVault:
+    address: "0xA4b47B472C0F2E6a35E502c32e225Ffc8eE1317E"
+    startBlock: 989876
+  CaskDCA:
+    address: "0xDdcE74C684282CDBEa9723EF715Ee43e24b3A434"
+    startBlock: 989876
+  CaskP2P:
+    address: "0xCf5EA5cBe519F7a6eEaD217c32df9E3b5E526841"
+    startBlock: 989876
+  CaskChainlinkTopup:
+    address: "0x8874d9328E646a80806619F3b61347be9F310923"
+    startBlock: 989876
