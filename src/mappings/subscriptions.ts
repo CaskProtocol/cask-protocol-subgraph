@@ -315,10 +315,10 @@ export function handleSubscriptionChangedPlan(event: SubscriptionChangedPlan): v
     prevPlan.save()
     plan.save()
 
-    if (subscriptionInfo.value0.discountId.toHex() != "0x0000000000000000000000000000000000000000000000000000000000000000" &&
-        subscription.discountId != subscriptionInfo.value0.discountId)
+    if (event.params.discountId.toHex() != "0x0000000000000000000000000000000000000000000000000000000000000000" &&
+        event.params.discountId != subscriptionInfo.value0.discountId)
     {
-        const discount = findOrCreateDiscount(provider, subscriptionInfo.value0.discountId)
+        const discount = findOrCreateDiscount(provider, event.params.discountId )
         discount.redemptions = discount.redemptions.plus(BigInt.fromI32(1))
         discount.save()
     }
@@ -705,9 +705,9 @@ export function handlePlanEnabled(event: PlanEnabled): void {
 }
 
 export function handlePlanRetired(event: PlanRetired): void {
-    const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
-    const plan = findOrCreateSubscriptionPlan(provider, event.params.planId)
-
-    plan.status = 'EndOfLife'
-    plan.save()
+    // const provider = findOrCreateProvider(event.params.provider, event.block.timestamp.toI32())
+    // const plan = findOrCreateSubscriptionPlan(provider, event.params.planId)
+    //
+    // plan.status = 'EndOfLife'
+    // plan.save()
 }

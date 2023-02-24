@@ -1,6 +1,7 @@
 {
   "name": "cask-protocol-subgraph",
   "license": "UNLICENSED",
+  "version": "1.1.0",
   "scripts": {
     "codegen": "yarn generate-manifests && graph codegen --output-dir src/types/ subgraph.internal.mumbai.yaml",
     "generate-manifests": "ts-node ./scripts/generate-manifests",
@@ -10,7 +11,7 @@
     "deploy:testnet:fuji": "yarn generate-addresses fuji && graph deploy caskprotocol/cask-protocol-fuji subgraph.fuji.yaml --node https://api.thegraph.com/deploy/",
     "deploy:internal:fuji": "yarn generate-addresses fuji-internal && graph deploy caskprotocol/cask-protocol-fuji-internal subgraph.internal.fuji.yaml --node https://api.thegraph.com/deploy/",
     "deploy:testnet:alfajores": "yarn generate-addresses alfajores && graph deploy caskprotocol/cask-protocol-alfajores subgraph.alfajores.yaml --node https://api.thegraph.com/deploy/",
-    "deploy:testnet:goerlibase": "yarn generate-addresses goerlibase && graph deploy caskprotocol/cask-protocol-goerlibase subgraph.goerlibase.yaml --node https://api.thegraph.com/deploy/",
+    "deploy:testnet:goerlibase": "yarn generate-addresses goerlibase && graph deploy --studio cask-protocol-goerlibase subgraph.goerlibase.yaml -l v$npm_package_version",
     "deploy:polygon": "yarn generate-addresses polygon && graph deploy caskprotocol/cask-protocol-polygon subgraph.polygon.yaml --node https://api.thegraph.com/deploy/",
     "deploy:avalanche": "yarn generate-addresses avalanche && graph deploy caskprotocol/cask-protocol-avalanche subgraph.avalanche.yaml --node https://api.thegraph.com/deploy/",
     "deploy:fantom": "yarn generate-addresses fantom && graph deploy caskprotocol/cask-protocol-fantom subgraph.fantom.yaml --node https://api.thegraph.com/deploy/",
@@ -25,13 +26,15 @@
     "remove-local": "graph remove --node http://localhost:8020/ caskprotocol/cask-protocol-subgraph",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 caskprotocol/cask-protocol-subgraph",
     "import-abis": "ts-node ./scripts/update-abis.ts",
-    "generate-addresses": "ts-node ./scripts/generate-addresses"
+    "generate-addresses": "ts-node ./scripts/generate-addresses",
+    "pver": "echo version is v$npm_package_version"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "^0.35.0",
-    "@graphprotocol/graph-ts": "^0.28.1"
+    "@graphprotocol/graph-cli": "^0.42.2",
+    "@graphprotocol/graph-ts": "^0.29.3"
   },
   "devDependencies": {
-    "handlebars": "^4.7.7"
+    "handlebars": "^4.7.7",
+    "source-map-support": "^0.5.21"
   }
 }

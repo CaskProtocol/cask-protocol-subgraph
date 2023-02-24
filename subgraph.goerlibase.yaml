@@ -6,7 +6,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: CaskSubscriptions
-    network: testnet-base
+    network: base-testnet
     source:
       address: "0x0D985780F56e47Fd271d1e4e7d39571A16Bd6f17"
       abi: CaskSubscriptions
@@ -58,7 +58,7 @@ dataSources:
           handler: handleTransfer
   - kind: ethereum/contract
     name: CaskSubscriptionPlans
-    network: testnet-base
+    network: base-testnet
     source:
       address: "0xA93D22f5AeDbEB8c8034Bb294dAA51Bc0Cb7e8f1"
       abi: CaskSubscriptionPlans
@@ -88,7 +88,7 @@ dataSources:
           handler: handlePlanRetired
   - kind: ethereum/contract
     name: CaskVault
-    network: testnet-base
+    network: base-testnet
     source:
       address: "0xA4b47B472C0F2E6a35E502c32e225Ffc8eE1317E"
       abi: CaskVault
@@ -122,7 +122,7 @@ dataSources:
           handler: handleSetFundingSource
   - kind: ethereum/contract
     name: CaskDCA
-    network: testnet-base
+    network: base-testnet
     source:
       address: "0xDdcE74C684282CDBEa9723EF715Ee43e24b3A434"
       abi: CaskDCA
@@ -161,7 +161,7 @@ dataSources:
           handler: handleDCACompleted
   - kind: ethereum/contract
     name: CaskP2P
-    network: testnet-base
+    network: base-testnet
     source:
       address: "0xCf5EA5cBe519F7a6eEaD217c32df9E3b5E526841"
       abi: CaskP2P
@@ -200,7 +200,7 @@ dataSources:
           handler: handleP2PCompleted
   - kind: ethereum/contract
     name: CaskChainlinkTopup
-    network: testnet-base
+    network: base-testnet
     source:
       address: "0x8874d9328E646a80806619F3b61347be9F310923"
       abi: CaskChainlinkTopup
